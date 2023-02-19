@@ -10,10 +10,14 @@
     
   </head>
   <body>
-	  <h1>SunPos 0.4</h1>
+	  <h1>SunPos 0.5</h1>
     <a-scene embedded arjs>
       <a-entity camera></a-entity>
       <a-sphere position="0 0 0" radius="0.5" color="red" sun-object-position></a-sphere>
+      <a-entity position="0 1.5 -3">
+        <a-cone color="yellow" height="2" radius-bottom="0.2" radius-top="0" look-at="[camera]"></a-cone>
+        <a-box color="yellow" height="0.4" width="0.4" depth="0.4"></a-box>
+      </a-entity>
     </a-scene>
 
     <script>
