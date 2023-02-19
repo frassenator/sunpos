@@ -3,19 +3,36 @@
   <head>
     <title>SunPos</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/suncalc/1.8.0/suncalc.min.js"></script>
+	  
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/suncalc/1.8.0/suncalc.min.js"></script>
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
+	<script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+    
+    <style>
+      .input-field {
+        margin: 10px;
+      }
+    </style>
   </head>
   <body>
-    <h1>SunPos 0.7</h1>
-	<a-scene embedded arjs>
-      		<a-entity camera></a-entity>
-      		<a-sphere position="0 0 0" radius="0.5" color="red" id="sun-object" sun-object-position></a-sphere>
-      		<a-cone position="0 1 0" radius-bottom="0.1" height="0.2" color="blue" look-at="#sun-object"></a-cone>
-    	</a-scene>
+    <h1>SunPos 0.8</h1>
+    <div class="input-field">
+      <label for="datetime">Date and Time:</label>
+      <input type="datetime-local" id="datetime" value="">
+    </div>
+    <a-scene embedded arjs>
+      <a-entity camera></a-entity>
+      <a-sphere position="0 0 0" radius="0.5" color="red" id="sun-object" sun-object-position></a-sphere>
+      <a-cone position="0 1 0" radius-bottom="0.1" height="0.2" color="blue" look-at="#sun-object"></a-cone>
+      <a-entity id="sun-trajectory" line="start: 0 0 0; end: 0 0 -10; color: yellow"></a-entity>
+    </a-scene>
 
     <script>
+      // get DOM elements
+      const datetimeInput = document.querySelector('#datetime');
+      const sunTrajectory = document.querySelector('#sun-trajectory');
+
+      // register sun object position component
       AFRAME.registerComponent('sun-object-position', {
         dependencies: ['position'],
         schema: {
@@ -23,22 +40,34 @@
           objWidth: {type: 'number', default: 1}
         },
         update: function () {
-          var sunPos = SunCalc.getPosition(new Date(), this.el.getAttribute('position').x, this.el.getAttribute('position').y);
-          var elevation = sunPos.altitude * 180 / Math.PI;
-          var azimuth = sunPos.azimuth * 180 / Math.PI;
-          var distance = sunPos.distance;
-          var radius = Math.tan(this.el.sceneEl.camera.fov / 2 * Math.PI / 180) * distance;
-          var scale = radius * this.data.objWidth * 2;
+          const datetime = new Date(datetimeInput.value);
+          const sunPos = SunCalc.getPosition(datetime, this.el.getAttribute('position').x, this.el.getAttribute('position').y);
+          const elevation = sunPos.altitude * 180 / Math.PI;
+          const azimuth = sunPos.azimuth * 180 / Math.PI;
+          const distance = sunPos.distance;
+          const radius = Math.tan(this.el.sceneEl.camera.fov / 2 * Math.PI / 180) * distance;
+          const scale = radius * this.data.objWidth * 2;
 
           this.el.setAttribute('rotation', {x: -elevation, y: azimuth, z: 0});
           this.el.setAttribute('scale', {x: scale, y: scale * this.data.objHeight, z: scale});
 
-          var arrow = document.querySelector('a-cone');
-          if (arrow) {
-            arrow.setAttribute('visible', true);
-          }
+          // calculate sun position 3 hours before and after
+          const beforeTime = new Date(datetime.getTime() - (3 * 60 * 60 * 1000));
+          const beforeSunPos = SunCalc.getPosition(beforeTime, this.el.getAttribute('position').x, this.el.getAttribute('position').y);
+          const beforeX = beforeSunPos.azimuth / Math.PI * -10;
+          const beforeY = beforeSunPos.altitude / Math.PI * -10;
+
+          const afterTime = new Date(datetime.getTime() + (3 * 60 * 60 * 1000));
+          const afterSunPos = SunCalc.getPosition(afterTime, this.el.getAttribute('position').x, this.el.getAttribute('position').y);
+          const afterX = afterSunPos.azimuth / Math.PI * -10;
+          const afterY = afterSunPos.altitude / Math.PI * -10;
+
+          // update sun trajectory
+          sunTrajectory.setAttribute('line', `start: ${beforeX} ${beforeY} -10; end: 0 0 -10; color: yellow;`);
+          sunTrajectory.setAttribute('line__2', `start: 0 0 -10; end: ${afterX} ${afterY} -10; color: yellow;`);
         }
       });
     </script>
   </body>
 </html>
+
