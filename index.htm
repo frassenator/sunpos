@@ -13,10 +13,7 @@
 	  <h1>SunPos 0.3</h1>
     <a-scene embedded arjs>
       <a-entity camera></a-entity>
-      <a-assets>
-        <a-asset-item id="my-model" src="sun.gltf"></a-asset-item>
-      </a-assets>
-      <a-entity id="my-object" gltf-model="#my-model" sun-object-position></a-entity>
+      <a-sphere position="0 0 0" radius="0.5" color="red" sun-object-position></a-sphere>
     </a-scene>
 
     <script>
