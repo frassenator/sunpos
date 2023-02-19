@@ -3,43 +3,43 @@
   <head>
     <title>SunPos</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	  
-	<script src="suncalc.js"></script>
-    	<script src="aframe.js"></script>
-	<script src="ar.js"></script>
     
+    <script src="suncalc.js"></script>
+    <script src="aframe.js"></script>
+    <script src="ar.js"></script>
   </head>
   <body>
-	  <h1>SunPos 0.5</h1>
-    <a-scene embedded arjs>
-      <a-entity camera></a-entity>
-      <a-sphere position="0 0 0" radius="0.5" color="red" sun-object-position></a-sphere>
-      <a-entity position="0 1.5 -3">
-        <a-cone color="yellow" height="2" radius-bottom="0.2" radius-top="0" look-at="[camera]"></a-cone>
-        <a-box color="yellow" height="0.4" width="0.4" depth="0.4"></a-box>
-      </a-entity>
-    </a-scene>
+    <h1>SunPos 0.6</h1>
+	<a-scene embedded arjs>
+      		<a-entity camera></a-entity>
+      		<a-sphere position="0 0 0" radius="0.5" color="red" id="sun-object" sun-object-position></a-sphere>
+      		<a-cone position="0 1 0" radius-bottom="0.1" height="0.2" color="blue" look-at="#sun-object"></a-cone>
+    	</a-scene>
 
     <script>
-	    console.log(SunCalc);
       AFRAME.registerComponent('sun-object-position', {
-  dependencies: ['position'],
-  schema: {
-    objHeight: {type: 'number', default: 1},
-    objWidth: {type: 'number', default: 1}
-  },
-  update: function () {
-    var sunPos = SunCalc.getPosition(new Date(), this.el.getAttribute('position').x, this.el.getAttribute('position').y);
-    var elevation = sunPos.altitude * 180 / Math.PI;
-    var azimuth = sunPos.azimuth * 180 / Math.PI;
-    var distance = sunPos.distance;
-    var radius = Math.tan(this.el.sceneEl.camera.fov / 2 * Math.PI / 180) * distance;
-    var scale = radius * this.data.objWidth * 2;
+        dependencies: ['position'],
+        schema: {
+          objHeight: {type: 'number', default: 1},
+          objWidth: {type: 'number', default: 1}
+        },
+        update: function () {
+          var sunPos = SunCalc.getPosition(new Date(), this.el.getAttribute('position').x, this.el.getAttribute('position').y);
+          var elevation = sunPos.altitude * 180 / Math.PI;
+          var azimuth = sunPos.azimuth * 180 / Math.PI;
+          var distance = sunPos.distance;
+          var radius = Math.tan(this.el.sceneEl.camera.fov / 2 * Math.PI / 180) * distance;
+          var scale = radius * this.data.objWidth * 2;
 
-    this.el.setAttribute('rotation', {x: -elevation, y: azimuth, z: 0});
-    this.el.setAttribute('scale', {x: scale, y: scale * this.data.objHeight, z: scale});
-  }
-});
+          this.el.setAttribute('rotation', {x: -elevation, y: azimuth, z: 0});
+          this.el.setAttribute('scale', {x: scale, y: scale * this.data.objHeight, z: scale});
+
+          var arrow = document.querySelector('a-cone');
+          if (arrow) {
+            arrow.setAttribute('visible', true);
+          }
+        }
+      });
     </script>
   </body>
 </html>
