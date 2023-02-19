@@ -22,23 +22,23 @@
     <script>
 	    console.log(SunCalc);
       AFRAME.registerComponent('sun-object-position', {
-        dependencies: ['position'],
-        schema: {
-          objHeight: {type: 'number', default: 1},
-          objWidth: {type: 'number', default: 1}
-        },
-        update: function () {
-          var sunPos = SunCalc.getPosition(new Date(), this.el.getAttribute('position').x, this.el.getAttribute('position').y);
-          var elevation = sunPos.altitude * 180 / Math.PI;
-          var azimuth = sunPos.azimuth * 180 / Math.PI;
-          var distance = SunCalc.getDistance(new Date(), this.el.getAttribute('position').x, this.el.getAttribute('position').y);
-          var radius = Math.tan(this.el.sceneEl.camera.fov / 2 * Math.PI / 180) * distance;
-          var scale = radius * this.data.objWidth * 2;
+  dependencies: ['position'],
+  schema: {
+    objHeight: {type: 'number', default: 1},
+    objWidth: {type: 'number', default: 1}
+  },
+  update: function () {
+    var sunPos = SunCalc.getPosition(new Date(), this.el.getAttribute('position').x, this.el.getAttribute('position').y);
+    var elevation = sunPos.altitude * 180 / Math.PI;
+    var azimuth = sunPos.azimuth * 180 / Math.PI;
+    var distance = sunPos.distance;
+    var radius = Math.tan(this.el.sceneEl.camera.fov / 2 * Math.PI / 180) * distance;
+    var scale = radius * this.data.objWidth * 2;
 
-          this.el.setAttribute('rotation', {x: -elevation, y: azimuth, z: 0});
-          this.el.setAttribute('scale', {x: scale, y: scale * this.data.objHeight, z: scale});
-        }
-      });
+    this.el.setAttribute('rotation', {x: -elevation, y: azimuth, z: 0});
+    this.el.setAttribute('scale', {x: scale, y: scale * this.data.objHeight, z: scale});
+  }
+});
     </script>
 
     <script>
