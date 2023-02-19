@@ -1,51 +1,48 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Sunpos</title>
+    <title>SunPos</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+	<script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/suncalc@1.8.0/suncalc.min.js"></script>
-     <script>
+  </head>
+  <body>
+	  <h1>SunPos</h1>
+    <a-scene embedded arjs>
+      <a-entity camera></a-entity>
+      <a-assets>
+        <a-asset-item id="my-model" src="sun.gltf"></a-asset-item>
+      </a-assets>
+      <a-entity id="my-object" gltf-model="#my-model" sun-object-position></a-entity>
+    </a-scene>
+
+    <script>
       AFRAME.registerComponent('sun-object-position', {
-        init: function() {
-          var self = this;
+        dependencies: ['position'],
+        schema: {
+          objHeight: {type: 'number', default: 1},
+          objWidth: {type: 'number', default: 1}
+        },
+        update: function () {
+          var sunPos = SunCalc.getPosition(new Date(), this.el.getAttribute('position').x, this.el.getAttribute('position').y);
+          var elevation = sunPos.altitude * 180 / Math.PI;
+          var azimuth = sunPos.azimuth * 180 / Math.PI;
+          var distance = SunCalc.getDistance(new Date(), this.el.getAttribute('position').x, this.el.getAttribute('position').y);
+          var radius = Math.tan(this.el.sceneEl.camera.fov / 2 * Math.PI / 180) * distance;
+          var scale = radius * this.data.objWidth * 2;
 
-          // Get the user's current location, including the altitude
-          navigator.geolocation.getCurrentPosition(function(position) {
-            // Extract the latitude, longitude, and altitude from the GeolocationPosition object
-            var latitude = position.coords.latitude;
-            var longitude = position.coords.longitude;
-            var altitude = position.coords.altitude;
-
-            // Get the current time
-            var now = new Date();
-
-            // Calculate the position of the sun in 3D space
-            var sunPosition = SunCalc.getPosition(now, latitude, longitude);
-            var x = -sunPosition.azimuth / 180 * Math.PI; // Convert azimuth to radians and negate for A-Frame coordinates
-            var y = sunPosition.altitude / 180 * Math.PI; // Convert altitude to radians
-            var z = -10 - altitude / 1000; // Set the object 10 units away from the camera and adjust for the altitude
-            self.el.setAttribute('position', {x: x, y: y, z: z});
-
-            // Calculate the relative size of the sun from the user's viewpoint
-            var userHeight = 1.6; // Average human height in meters
-            var sunPositionNow = SunCalc.getPosition(now, latitude, longitude); // Get the position of the sun
-            var sunDistance = 1 / Math.tan(Math.PI / 2 - sunPositionNow.altitude); // Distance from the user to the sun in km
-            var sunRadius = sunPositionNow.radius; // Angular radius of the sun in radians
-            var relativeSize = Math.tan(sunRadius) * sunDistance * 1000 / userHeight; // Size of the sun relative to the user's height
-
-            // Adjust the size of the object to match the relative size of the sun
-            self.el.setAttribute('scale', {x: relativeSize, y: relativeSize, z: relativeSize});
-          });
+          this.el.setAttribute('rotation', {x: -elevation, y: azimuth, z: 0});
+          this.el.setAttribute('scale', {x: scale, y: scale * this.data.objHeight, z: scale});
         }
       });
     </script>
-  </head>
-  <body>
-	<h1>SunPos 0.1</h1>
-    <a-scene embedded arjs>
-      <a-entity camera></a-entity>
-      <a-entity sun-object-position gltf-model="url(sun.gltf)"></a-entity>
-    </a-scene>
+
+    <script>
+      document.querySelector('#my-object').addEventListener('loaded', function () {
+        var myObject = document.querySelector('#my-object');
+        myObject.setAttribute('position', '0 0 0');
+      });
+    </script>
   </body>
 </html>
