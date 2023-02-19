@@ -29,7 +29,7 @@
 
             // Calculate the relative size of the sun from the user's viewpoint
             var userHeight = 1.6; // Average human height in meters
-            var sunPositionNow = SunCalc.getSunPosition(now, latitude, longitude); // Get the position of the sun
+            var sunPositionNow = SunCalc.getPosition(now, latitude, longitude); // Get the position of the sun
             var sunDistance = 1 / Math.tan(Math.PI / 2 - sunPositionNow.altitude); // Distance from the user to the sun in km
             var sunRadius = sunPositionNow.radius; // Angular radius of the sun in radians
             var relativeSize = Math.tan(sunRadius) * sunDistance * 1000 / userHeight; // Size of the sun relative to the user's height
