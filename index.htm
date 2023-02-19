@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>AR object positioned based on sun position and user's location</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/suncalc@1.8.0/suncalc.min.js"></script>
+    <script>
+      AFRAME.registerComponent('sun-object-position', {
+        init: function() {
+          var self = this;
+
+          // Get the user's current location, including the altitude
+          navigator.geolocation.getCurrentPosition(function(position) {
+            // Extract the latitude, longitude, and altitude from the GeolocationPosition object
+            var latitude = position.coords.latitude;
+            var longitude = position.coords.longitude;
+            var altitude = position.coords.altitude;
+
+            // Get the current time
+            var now = new Date();
+
+            // Calculate the position of the sun in 3D space
+            var sunPosition = SunCalc.getPosition(now, latitude, longitude);
+            var x = -sunPosition.azimuth / 180 * Math.PI; // Convert azimuth to radians and negate for A-Frame coordinates
+            var y = sunPosition.altitude / 180 * Math.PI; // Convert altitude to radians
+            var z = -10 - altitude / 1000; // Set the object 10 units away from the camera and adjust for the altitude
+            self.el.setAttribute('position', {x: x, y: y, z: z});
+
+            // Calculate the relative size of the sun from the user's viewpoint
+            var userHeight = 1.6; // Average human height in meters
+            var sunDistance = SunCalc.getDistance(now, latitude, longitude); // Distance from the user to the sun in km
+            var sunRadius = SunCalc.getSunPosition(now, latitude, longitude).altitude; // Angular radius of the sun in radians
+            var relativeSize = Math.tan(sunRadius) * sunDistance * 1000 / userHeight; // Size of the sun relative to the user's height
+
+            // Adjust the size of the object to match the relative size of the sun
+            self.el.setAttribute('scale', {x: relativeSize, y: relativeSize, z: relativeSize});
+          });
+        }
+      });
+    </script>
+  </head>
+  <body>
+	<h1>SunPos</h1>
+    <a-scene embedded arjs>
+      <a-entity camera></a-entity>
+      <a-entity sun-object-position gltf-model="url(img/sun.glb)"></a-entity>
+    </a-scene>
+  </body>
+</html>
