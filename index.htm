@@ -1,3 +1,35 @@
+
+Skip to content
+Pull requests
+Issues
+Codespaces
+Marketplace
+Explore
+@frassenator
+frassenator /
+sunpos
+Public
+
+Cannot fork because you own this repository and are not a member of any organizations.
+
+Code
+Issues
+Pull requests
+Actions
+Projects
+Wiki
+Security
+Insights
+
+    Settings
+
+sunpos/index.htm
+@frassenator
+frassenator Update index.htm
+Latest commit d1f66c0 Feb 20, 2023
+History
+1 contributor
+56 lines (47 sloc) 1.87 KB
 <!DOCTYPE html>
 <html>
 	<head>
@@ -35,13 +67,18 @@
 						// Calculate the position of the sun
 						const sunPosition = SunCalc.getPosition(currentdate, position.coords.latitude, position.coords.longitude);
 
-						// Update the position of the sun marker
+						// Update the position and rotation of the sun marker
 						const sunEl = document.querySelector('#sun');
 						sunEl.setAttribute('position', {
-							x: sunPosition.altitude / 90 * 5, // Scale altitude to fit within marker
-							y: sunPosition.azimuth / 180 * 5, // Scale azimuth to fit within marker
-							z: -5 // Position the sun marker 5 meters in front of the camera
-					});
+							x: sunPosition.azimuth / 180 * 10, // Scale azimuth to fit within marker
+							y: sunPosition.altitude / 90 * 10, // Scale altitude to fit within marker
+							z: -10 // Position the sun marker 10 meters in front of the camera
+						});
+						sunEl.setAttribute('rotation', {
+							x: -sunPosition.altitude / Math.PI * 180, // Rotate the sun marker to face the sun
+							y: sunPosition.azimuth / Math.PI * 180,
+							z: 0
+						});
 					}
 				});
 
@@ -49,7 +86,7 @@
 		</script>
 		<a-scene>
 			<a-camera></a-camera>
-			<a-sphere id="sun" radius="0.5" color="yellow" sun-position></a-sphere>
+			<a-sphere id="sun" radius="0.5" color="yellow" opacity="0.5" sun-position></a-sphere>
 		</a-scene>
 
 	</body>
