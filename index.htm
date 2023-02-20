@@ -10,7 +10,7 @@
 <script>
 AFRAME.registerComponent('sun-position', {
   schema: {
-	distance: { type: 'number', default: 100 },
+	distance: { type: 'number', default: 200 },
 	date: { type: 'string', default: '' },
 	time: { type: 'string', default: '' }
   },
@@ -85,6 +85,9 @@ updatePosition: function (position) {
     const observerHeight = 1.7; // in meters
     const objectHeight = Math.tan(altitude) * this.data.distance + observerHeight;
     const objectSize = sphereRadius / Math.atan(objectHeight / this.data.distance);
+	  
+	  // Logging
+	console.log("Calculated Object Size: "+objectSize);
     return objectSize;
   }
   
