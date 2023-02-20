@@ -11,43 +11,40 @@
 AFRAME.registerComponent('sun-position', {
   schema: {
     observerHeight: { type: 'number', default: 1.5 },
-    sunRadius: { type: 'number', default: 0.25 },
+    radius: {type: 'number', default: 30}
   },
+
   init: function () {
     // Get the current position of the device
     navigator.geolocation.getCurrentPosition(position => {
       const currentdate = new Date();
       const { altitude, azimuth } = SunCalc.getPosition(currentdate, position.coords.latitude, position.coords.longitude);
-      this.data.distance = this.calculateDistance(this.data.sunSize, altitude);
       const pos = this.calculatePosition(altitude, azimuth);
       this.el.setAttribute('position', pos);
     });
     
-    // Update the position of the sphere every 30 seconds
+    // Update the position of the sphere every 10 seconds
     setInterval(() => {
       navigator.geolocation.getCurrentPosition(position => {
         const currentdate = new Date();
-	    // Logging
-	    console.log("Update Date "+ currentdate);
         const { altitude, azimuth } = SunCalc.getPosition(currentdate, position.coords.latitude, position.coords.longitude);
-        this.data.distance = this.calculateDistance(this.data.sunSize, altitude);
         const pos = this.calculatePosition(altitude, azimuth);
         this.el.setAttribute('position', pos);
-	      // Logging
-	    console.log("New Position "+ JSON.stringify(pos));
       });
-    }, 30000);
+    }, 10000);
   },
 
   calculatePosition: function (altitude, azimuth) {
     // Convert altitude and azimuth to X, Y, Z coordinates
-    const x = Math.sin(azimuth) * Math.cos(altitude) * this.data.distance;
-    const y = Math.sin(altitude) * this.data.distance;
-    const z = Math.cos(azimuth) * Math.cos(altitude) * this.data.distance;
+    const x = Math.sin(azimuth) * Math.cos(altitude) * this.data.radius * 10;
+    const y = Math.sin(altitude) * this.data.radius * 10;
+    const z = Math.cos(azimuth) * Math.cos(altitude) * this.data.radius * 10;
     return { x, y, z };
-  },
+  }
+});
 
-  calculateDistance: function () {
+
+  /*calculateDistance: function () {
     // Get the observer height
     const observerHeight = this.data.observerHeight;
     // Get the sun radius
@@ -55,12 +52,12 @@ AFRAME.registerComponent('sun-position', {
     // Calculate the distance based on the observer height and the sun radius
     const distance = (observerHeight + sunRadius) / Math.sin(0.5 * Math.PI - 0.5 * 0.53);
     return distance;
-  }
+  }*/
 });
 </script>
 		<a-scene debug>
 			<a-entity camera></a-entity>
-			<a-sphere id="sun" radius="900000000000" color="yellow" opacity="0.5" sun-position></a-sphere>
+			<a-sphere id="sun" radius="30" color="yellow" opacity="1" sun-position></a-sphere>
 		</a-scene>
 
 	</body>
