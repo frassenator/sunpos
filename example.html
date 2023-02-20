@@ -1,91 +1,47 @@
 <!DOCTYPE html>
 <html>
-  <head>
-	<meta charset="utf-8">
-    <title>AR Sun</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/suncalc/1.8.0/suncalc.min.js"></script>
-	 <style>
-      #ui-panel {
-        position: absolute;
-        bottom: 0;
-        width: 100%;
-        text-align: center;
-        background-color: rgba(0, 0, 0, 0.8);
-        color: red;
-        font-size: 24px;
-        padding: 8px;
-        box-sizing: border-box;
-      }
-    </style>
-   <body style='margin : 0px; overflow: hidden;'>
-    <a-scene embedded arjs='sourceType: webcam; debugUIEnabled: false;' vr-mode-ui="enabled: false">
-	
-		<!-- Create a marker to detect where the user is looking -->
-		<a-marker preset="hiro"></a-marker>
-	
-        <!-- Add a 3D sphere to represent the sun -->
-        <a-sphere color="#FF0000" radius="1" position="0 0 -100" id="sun"></a-sphere>
+  	<head>
+		<meta charset="utf-8">
+    		<title>AR Sun</title>
+	</head>
+	<body>
+    		<script>
+			function getSunPosition(latitude, longitude, date, time) {
+			  // Convert date and time to UTC
+			  const utcDate = new Date(date + 'T' + time + 'Z');
 
-        <!-- Add text elements for position and date information -->
-        <a-plane id="ui-panel" height="2" width="4" position="0 1 -5">
-        <a-text value="User position: " position="-1 0.4 0" align="center"></a-text>
-        <a-text id="user-position" value="" position="-1 -0.1 0" align="center"></a-text>
-        <a-text value="Sun position: " position="1 0.4 0" align="center"></a-text>
-        <a-text id="sun-position" value="" position="1 -0.1 0" align="center"></a-text>
-        <a-text id="date" value="" position="0 -0.7 0" align="center"></a-text>
-      </a-plane>
+			  // Calculate the day of the year
+			  const dayOfYear = Math.floor((utcDate - new Date(utcDate.getUTCFullYear(), 0, 0)) / 86400000);
 
-        <a-entity camera></a-entity>
-    </a-scene>
+			  // Calculate the fractional year
+			  const fractionalYear = (2 * Math.PI / 365) * (dayOfYear - 1 + (utcDate.getUTCHours() - 12) / 24);
 
-    <script>
-        // Get references to UI text elements
-        var userPosition = document.querySelector('#user-position');
-        var sunPosition = document.querySelector('#sun-position');
-        var dateText = document.querySelector('#date');
+			  // Calculate the declination angle of the sun
+			  const declination = 0.006918 - 0.399912 * Math.cos(fractionalYear) + 0.070257 * Math.sin(fractionalYear) - 0.006758 * Math.cos(2 * fractionalYear) + 0.000907 * Math.sin(2 * fractionalYear) - 0.002697 * Math.cos(3 * fractionalYear) + 0.00148 * Math.sin(3 * fractionalYear);
 
-        // Get user's current location
-        function getUserLocation() {
-            return new Promise((resolve, reject) => {
-                navigator.geolocation.getCurrentPosition(resolve, reject);
-            });
-        }
+			  // Calculate the time correction factor
+			  const timeCorrectionFactor = 229.18 * (0.000075 + 0.001868 * Math.cos(fractionalYear) - 0.032077 * Math.sin(fractionalYear) - 0.014615 * Math.cos(2 * fractionalYear) - 0.040849 * Math.sin(2 * fractionalYear));
 
-        // Update the position of the sun based on user location and time
-        function updateSunPosition(lat, long) {
-            try {
-                // Calculate sun's position
-                var date = new Date();
-                var sunPos = SunCalc.getPosition(date, lat, long);
+			  // Calculate the solar noon time
+			  const solarNoon = (720 - 4 * longitude - timeCorrectionFactor) / 1440;
 
-                // Update sun position in 3D space
-                var sphere = document.querySelector('#sun');
-                var distance = 1000;
-                var position = `${-sunPos.azimuth * distance} 0 ${-sunPos.altitude * distance}`;
-                var size = 100 * (1 / Math.tan(sunPos.altitude + (Math.PI / 180)));
-                sphere.setAttribute('position', position);
-                sphere.setAttribute('scale', `${size} ${size} ${size}`);
+			  // Calculate the current time as a fraction of a day
+			  const currentTime = (utcDate.getUTCHours() * 60 + utcDate.getUTCMinutes()) / 1440;
 
-                // Update UI with positions and date
-                userPosition.setAttribute('text', `value: User position: ${lat.toFixed(4)}, ${long.toFixed(4)}`);
-                sunPosition.setAttribute('text', `value: Sun position: ${position}`);
-                dateText.setAttribute('text', `value: Date: ${date}`);
-            } catch (err) {
-                console.error(err);
-            }
-        }
+			  // Calculate the hour angle of the sun
+			  const hourAngle = (currentTime - solarNoon) * 2 * Math.PI;
 
-        // Update sun position every 5 seconds
-        setInterval(() => {
-            getUserLocation().then(pos => {
-                updateSunPosition(pos.coords.latitude, pos.coords.longitude);
-            }).catch(err => {
-                console.error(err);
-            });
-        }, 5000);
-    </script>
-</body>
+			  // Calculate the altitude and azimuth angles of the sun
+			  const altitude = Math.asin(Math.sin(latitude * Math.PI / 180) * Math.sin(declination) + Math.cos(latitude * Math.PI / 180) * Math.cos(declination) * Math.cos(hourAngle));
+			  const azimuth = Math.acos((Math.sin(altitude) * Math.sin(latitude * Math.PI / 180) - Math.sin(declination)) / (Math.cos(altitude) * Math.cos(latitude * Math.PI / 180)));
+
+			  return {
+			    altitude: altitude * 180 / Math.PI,
+			    azimuth: azimuth * 180 / Math.PI,
+			  };
+			}
+			const position = getSunPosition(37.7749, -122.4194, '2023-02-20', '15:30');
+			console.log(position);
+		</script>
+	</body>
 </html>
