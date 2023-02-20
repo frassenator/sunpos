@@ -75,7 +75,7 @@
       });
     </script>
 <script>
-  const arrow = document.querySelector('#arrow');
+const arrow = document.querySelector('#arrow');
   const arrowRotation = new THREE.Vector3(0, 0, 0);
 
   AFRAME.registerComponent('compass', {
@@ -99,12 +99,12 @@
 </script>
   </head>
   <body>
-<a-scene embedded arjs="debugUIEnabled: true">
+<a-scene embedded arjs="debugUIEnabled: false">
   <a-entity id="camera" camera></a-entity>
   <a-marker preset="hiro">
-    <a-entity id="sun" geometry="primitive: sphere; radius: 0.1" material="color: yellow"></a-entity>
+    <a-entity id="sun" geometry="primitive: sphere; radius: 0.1" material="color: yellow" position="0 0 0"></a-entity>
   </a-marker>
-  <a-entity id="arrow" position="0 0 -1" geometry="primitive: cone; height: 1; radiusBottom: 0.1; radiusTop: 0" material="color: red"></a-entity>
+  <a-entity id="arrow" position="0 0 -0.2" geometry="primitive: cone; height: 0.5; radiusBottom: 0.1; radiusTop: 0" material="color: red"></a-entity>
 </a-scene>
   </body>
 </html>
