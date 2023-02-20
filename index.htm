@@ -24,7 +24,8 @@
 				
 				AFRAME.registerComponent('sun-position', {
 					init: function () {
-						console.log("New Update - every 5 sec");
+							// Logging for troubleshooting
+							console.log("New Update - every 5 sec");
 						// Update the position of the sphere every 5 seconds
 						setInterval(() => {
 						// Get the current position of the sun
@@ -34,12 +35,11 @@
 						const position = this.calculatePosition(altitude, azimuth);
 
 						// Update the position of the sphere
-						console.log("New Position: "+position);
+							// Logging for troubleshooting
+							console.log("New Position: "+position);
 						this.el.setAttribute('position', position);
 						}, 5000);
 					},
-					
-					console.log("Test 123");
 
 					calculatePosition: function (altitude, azimuth) {
 					// Convert altitude and azimuth to X, Y, Z coordinates
@@ -47,7 +47,8 @@
 					const y = Math.sin(altitude) * this.data.distance;
 					const z = Math.cos(azimuth) * Math.cos(altitude) * this.data.distance;
 					
-						console.log("New Calculation: "+ x +" "+ y +" "+ z)
+					// Logging for troubleshooting
+					console.log("New Calculation: "+ x +" "+ y +" "+ z)
 						
 					return { x, y, z };
 					}
