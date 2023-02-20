@@ -14,8 +14,6 @@ AFRAME.registerComponent('sun-position', {
   },
 
   init: function () {
-	// Find the arrow
-	const arrow = document.getElementById("arrow");
 	  
     // Get the current position of the device
     navigator.geolocation.getCurrentPosition(position => {
@@ -23,7 +21,6 @@ AFRAME.registerComponent('sun-position', {
       const { altitude, azimuth } = SunCalc.getPosition(currentdate, position.coords.latitude, position.coords.longitude);
       const pos = this.calculatePosition(altitude, azimuth);
       this.el.setAttribute('position', pos);
-      arrow.setAttribute("visible", true);
     });
     
     // Update the position of the sphere every 10 seconds
@@ -33,9 +30,6 @@ AFRAME.registerComponent('sun-position', {
         const { altitude, azimuth } = SunCalc.getPosition(currentdate, position.coords.latitude, position.coords.longitude);
         const pos = this.calculatePosition(altitude, azimuth);
         this.el.setAttribute('position', pos);
-	      // Update arrow
-	      arrow.setAttribute("position", { x: 0, y: -1, z: -1 });
-              arrow.setAttribute("look-at", "[camera]");
       });
     }, 10000);
   },
@@ -52,16 +46,9 @@ AFRAME.registerComponent('sun-position', {
 });
 </script>
 	<a-scene embedded arjs="sourceType: webcam; debugUIEnabled: true;">
-		<a-assets>
-			<a-asset-item id="arrow-model" src="arrow.glb"></a-asset-item>
-		</a-assets>
 		<a-camera gps-camera rotation-reader></a-camera>
 		<a-sphere id="sun" radius="30" color="yellow" opacity="1" sun-position></a-sphere>
-		<a-entity position="0 -0.2 -1">
-			<a-entity gltf-model="#arrow-model" scale="0.05 0.05 0.05" look-at="#sun"></a-entity>
-		</a-entity>
+		<a-marker-camera preset="hiro"></a-marker-camera>
 	</a-scene>
-
-
 	</body>
 </html>
