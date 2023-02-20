@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/suncalc/1.8.0/suncalc.min.js"></script>
+  </head>
+  <body style="margin: 0;">
+    <a-scene embedded arjs>
+      <a-nft
+        type="nft"
+        url="https://raw.githack.com/AR-js-org/AR.js/master/aframe/examples/image-tracking/nft/trex/trex-image/trex"
+        smooth="true"
+        smoothCount="10"
+        smoothTolerance=".01"
+        smoothThreshold="5"
+      >
+        <a-entity position="0 0 0" rotation="0 0 0">
+          <a-sphere radius="0.5" color="#ff0000"></a-sphere>
+        </a-entity>
+        <a-entity
+          id="sun"
+          position="0 0 0"
+          visible="false"
+          scale="3 3 3"
+          geometry="primitive: sphere; radius: 1;"
+          material="color: #ff0000;"
+        ></a-entity>
+      </a-nft>
+    </a-scene>
+
+    <script>
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+          var latitude = position.coords.latitude;
+          var longitude = position.coords.longitude;
+          var sunPosition = SunCalc.getPosition(new Date(), latitude, longitude);
+          var altitude = sunPosition.altitude;
+          var azimuth = sunPosition.azimuth;
+          var sun = document.getElementById("sun");
+          sun.setAttribute(
+            "position",
+            -Math.sin(azimuth) * Math.cos(altitude) + " " + Math.sin(altitude) + " " + Math.cos(azimuth) * Math.cos(altitude)
+          );
+          sun.setAttribute("visible", "true");
+        });
+      } else {
+        console.log("Geolocation is not supported by this browser.");
+      }
+    </script>
+  </body>
+</html>
