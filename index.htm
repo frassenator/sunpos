@@ -22,8 +22,8 @@
 
 			function showPosition(position) {
 				console.log(position);
-				//SunPosition = SunCalc.getPosition(currentdate, position.coords.latitude, position.coords.longitude);
-				console.log("Altitude: " + SunPosition.altitude + " Azimuth: " + SunPosition.azimuth);
+				LogSunPosition = SunCalc.getPosition(currentdate, position.coords.latitude, position.coords.longitude);
+				console.log("Altitude: " + LogSunPosition.altitude + " Azimuth: " + LogSunPosition.azimuth);
 				
 				AFRAME.registerComponent('sun-position', {
 					tick: function () {
