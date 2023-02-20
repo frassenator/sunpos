@@ -1,45 +1,53 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
+    <script src="https://cdn.rawgit.com/jeromeetienne/AR.js/2.3.0/aframe/build/aframe-ar.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/suncalc/1.8.0/suncalc.min.js"></script>
   </head>
-  <body style="margin: 0;">
-    <h1>V 0.1</h1>
+  <body style="margin: 0; overflow: hidden;">
+    <h1>V 0.2</h1>
     <a-scene embedded arjs>
-        <a-entity position="0 0 0" rotation="0 0 0" scale="10 10 10">
-          <a-sphere radius="0.5" color="#ff0000"></a-sphere>
+      <a-marker preset="hiro">
+        <a-entity position="0 0 0">
+          <a-sphere id="sun" color="red" radius="0.3"></a-sphere>
+          <a-entity position="0 0 0">
+            <a-text id="sun-label" value="Sun position: 0, 0, 0" align="center" scale="2 2 2"></a-text>
+          </a-entity>
         </a-entity>
-        <a-entity
-          id="sun"
-          position="0 0 0"
-          visible="false"
-          scale="10 10 10"
-          geometry="primitive: sphere; radius: 1;"
-          material="color: #ff0000;"
-        ></a-entity>
-      </a-nft>
+      </a-marker>
     </a-scene>
 
     <script>
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function (position) {
-          var latitude = position.coords.latitude;
-          var longitude = position.coords.longitude;
-          var sunPosition = SunCalc.getPosition(new Date(), latitude, longitude);
-          var altitude = sunPosition.altitude;
-          var azimuth = sunPosition.azimuth;
-          var sun = document.getElementById("sun");
-          sun.setAttribute(
-            "position",
-            -Math.sin(azimuth) * Math.cos(altitude) + " " + Math.sin(altitude) + " " + Math.cos(azimuth) * Math.cos(altitude)
-          );
-          sun.setAttribute("visible", "true");
+      function calculateSunPosition() {
+        // Get the user's current location
+        navigator.geolocation.getCurrentPosition(function(position) {
+          // Calculate the position of the sun
+          var times = SunCalc.getTimes(new Date(), position.coords.latitude, position.coords.longitude);
+          var sunPosition = SunCalc.getPosition(times.sunset, position.coords.latitude, position.coords.longitude);
+          // Convert the sun's position from spherical coordinates to Cartesian coordinates
+          var x = Math.cos(sunPosition.azimuth) * Math.sin(sunPosition.altitude);
+          var y = Math.sin(sunPosition.azimuth) * Math.sin(sunPosition.altitude);
+          var z = Math.cos(sunPosition.altitude);
+          return { x: x * 3, y: y * 3, z: z * 3 };
         });
-      } else {
-        console.log("Geolocation is not supported by this browser.");
       }
+
+      function onRender() {
+        // Get the position of the sun
+        var position = calculateSunPosition();
+        // Update the position of the sun sphere
+        var sun = document.querySelector("#sun");
+        sun.setAttribute("position", position);
+        // Update the text of the label to show the sun's position
+        var label = document.querySelector("#sun-label");
+        label.setAttribute("value", "Sun position: " + position.x.toFixed(2) + ", " + position.y.toFixed(2) + ", " + position.z.toFixed(2));
+      }
+
+      // Call the onRender function on every render of the A-Frame scene
+      var sceneEl = document.querySelector("a-scene");
+      sceneEl.addEventListener("renderstart", onRender);
     </script>
   </body>
 </html>
