@@ -37,22 +37,23 @@ AFRAME.registerComponent('sun-position', {
 	  this.updatePositionTime(selectedDate);
 	}
   },
+	
+updatePosition: function (position) {
+  const currentdate = new Date();
 
-  updatePosition: function (position) {
-	const currentdate = new Date();
+  // Get the date and time selected by the user
+  const dateTimePicker = document.getElementById('date-time-picker');
+  const selectedDate = dateTimePicker.value ? new Date(dateTimePicker.value) : null;
 
-	// Check if a date and time is selected by the user
-	if (this.data.date && this.data.time) {
-		// Logging
-			console.log("Date & Time has been selected by user");
-	  // Set the selected date and time
-	  const selectedDate = new Date(this.data.date + 'T' + this.data.time);
-	  this.updatePositionTime(selectedDate);
-	} else {
-	  // Use the current date and time
-	  this.updatePositionTime(currentdate);
-	}
-  },
+  if (selectedDate && !isNaN(selectedDate.getTime())) {
+    // Use the selected date and time
+	  console.log("Date & Time has been selected by user");
+    this.updatePositionTime(selectedDate);
+  } else {
+    // Use the current date and time
+    this.updatePositionTime(currentdate);
+  }
+},
 
   updatePositionTime: function (selectedDate) {
 	navigator.geolocation.getCurrentPosition(position => {
