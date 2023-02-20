@@ -45,15 +45,15 @@
         init: function () {
           // Get the user's current location
           navigator.geolocation.getCurrentPosition((position) => {
-            const latitude = position.coords.latitude;
-            const longitude = position.coords.longitude;
+          const latitude = position.coords.latitude;
+          const longitude = position.coords.longitude;
 
             // Get the current date and time in ISO format
-			const now = new Date();
+	    const now = new Date();
             const date = now.toISOString().substr(0, 10);
             const time = now.toISOString().substr(11, 5);
 			
-			// Get the sun's position
+	    // Get the sun's position
             const sunPosition = getSunPosition(latitude, longitude, date, time);
 
             // Create a sphere to represent the sun
@@ -62,12 +62,11 @@
             sun.setAttribute('color', 'yellow');
 
             // Set the sun's position in 3D space
-            const position = {
-              x: Math.cos(sunPosition.altitude * Math.PI / 180) * Math.sin(sunPosition.azimuth * Math.PI / 180) * -1,
-              y: Math.sin(sunPosition.altitude * Math.PI / 180),
-              z: Math.cos(sunPosition.altitude * Math.PI / 180) * Math.cos(sunPosition.azimuth * Math.PI / 180) * -1,
-            };
-            sun.setAttribute('position', position);
+            sun.setAttribute('position', {
+		x: Math.cos(sunPosition.altitude * Math.PI / 180) * Math.sin(sunPosition.azimuth * Math.PI / 180) * -1,
+		y: Math.sin(sunPosition.altitude * Math.PI / 180),
+		z: Math.cos(sunPosition.altitude * Math.PI / 180) * Math.cos(sunPosition.azimuth * Math.PI / 180) * -1,
+	    });
 
             // Add the sun to the scene
             this.el.sceneEl.appendChild(sun);
