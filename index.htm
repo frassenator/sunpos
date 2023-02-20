@@ -10,53 +10,66 @@
 <script>
 AFRAME.registerComponent('sun-position', {
   schema: {
-    distance: { type: 'number', default: 100 }
+    distance: { type: 'number', default: 100 },
+    date: { type: 'string', default: '' },
+    time: { type: 'string', default: '' }
   },
 
   init: function () {
+    const el = this.el;
+
     // Get the current position of the device
     navigator.geolocation.getCurrentPosition(position => {
-      const currentdate = new Date();
-	    // Logging
-	    console.log("New Date "+ currentdate);
-      const { altitude, azimuth } = SunCalc.getPosition(currentdate, position.coords.latitude, position.coords.longitude);
-	    // Logging
-	    console.log("Altitude: "+altitude+" Azimuth:"+azimuth);  
-      const pos = this.calculatePosition(altitude, azimuth);
-      const size = this.calculateSize(altitude);
-	    // Logging
-	    console.log("New Position "+ JSON.stringify(pos));
-      this.el.setAttribute('position', pos);
-      this.el.setAttribute('scale', {x: size, y: size, z: size});
+      this.updatePosition(position);
     });
-    
-    // Update the position and size of the sphere every 10 seconds
+
+    // Update the position of the sphere every 10 seconds
     setInterval(() => {
       navigator.geolocation.getCurrentPosition(position => {
-        const currentdate = new Date();
-	    // Logging
-	    console.log("Update Date "+ currentdate);
-        const { altitude, azimuth } = SunCalc.getPosition(currentdate, position.coords.latitude, position.coords.longitude);
-	      // Logging
-	    console.log("Altitude: "+altitude+" Azimuth:"+azimuth);
-        const pos = this.calculatePosition(altitude, azimuth);
-        const size = this.calculateSize(altitude);
-        this.el.setAttribute('position', pos);
-        this.el.setAttribute('scale', {x: size, y: size, z: size});
+        this.updatePosition(position);
       });
     }, 10000);
+
+    // Check if a date and time is selected by the user
+    if (this.data.date && this.data.time) {
+      // Set the selected date and time
+      const selectedDate = new Date(this.data.date + 'T' + this.data.time);
+      this.updatePositionTime(selectedDate);
+    }
   },
 
-  calculatePosition: function (altitude, azimuth) {
+  updatePosition: function (position) {
+    const currentdate = new Date();
+
+    // Check if a date and time is selected by the user
+    if (this.data.date && this.data.time) {
+      // Set the selected date and time
+      const selectedDate = new Date(this.data.date + 'T' + this.data.time);
+      this.updatePositionTime(selectedDate);
+    } else {
+      // Use the current date and time
+      this.updatePositionTime(currentdate);
+    }
+  },
+
+  updatePositionTime: function (selectedDate) {
+    const { altitude, azimuth } = SunCalc.getPosition(selectedDate, position.coords.latitude, position.coords.longitude);
+
     // Convert altitude and azimuth to X, Y, Z coordinates
     const x = Math.sin(azimuth) * Math.cos(altitude) * this.data.distance;
     const y = Math.sin(altitude) * this.data.distance;
     const z = Math.cos(azimuth) * Math.cos(altitude) * this.data.distance;
-    // Logging
-	  console.log("Calculate Position: "+ x + " " + y + " " + z);
-    return { x, y, z };
-  },
+	
+	// Custom added
+	const size = this.calculateSize(altitude);
 
+
+    // Set the position of the sphere
+    this.el.setAttribute('position', { x, y, z });
+	// Custom Added
+	this.el.setAttribute('scale', {x: size, y: size, z: size});
+  }
+  
   calculateSize: function (altitude) {
     // Set the radius of the sphere to block the actual sun from the observer's point of view
     const sphereRadius = 0.53; // in degrees
@@ -67,13 +80,18 @@ AFRAME.registerComponent('sun-position', {
     console.log("Calculate Size: "+ objectSize);
     return objectSize;
   }
+  
 });
+
 
 </script>
 	<a-scene>
 		<a-camera></a-camera>
 		<a-sphere id="sun" color="yellow" opacity="1" sun-position></a-sphere>
-
 	</a-scene>
+	<div style="position: absolute; top: 10px; right: 10px; z-index: 99999;">
+		<label for="date-time-picker">Select a date and time:</label>
+		<input type="datetime-local" id="date-time-picker" name="date-time-picker">
+	</div>
 	</body>
 </html>
