@@ -55,6 +55,8 @@ AFRAME.registerComponent('sun-position', {
   updatePositionTime: function (selectedDate) {
 	navigator.geolocation.getCurrentPosition(position => {
 		const { altitude, azimuth } = SunCalc.getPosition(selectedDate, position.coords.latitude, position.coords.longitude);
+		// Logging
+			console.log("Selected Date: "+selectedDate);
 
 		// Convert altitude and azimuth to X, Y, Z coordinates
 		const x = Math.sin(azimuth) * Math.cos(altitude) * this.data.distance;
