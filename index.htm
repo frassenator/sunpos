@@ -97,6 +97,14 @@ const arrow = document.querySelector('#arrow');
   compass.setAttribute('compass', '');
   document.querySelector('a-scene').appendChild(compass);
 </script>
+  <style>
+    #arrow {
+      width: 10%;
+      height: 10%;
+      min-width: 40px;
+      min-height: 40px;
+    }
+  </style>
   </head>
   <body>
 <a-scene embedded arjs="debugUIEnabled: false">
@@ -104,7 +112,7 @@ const arrow = document.querySelector('#arrow');
   <a-marker preset="hiro">
     <a-entity id="sun" geometry="primitive: sphere; radius: 0.1" material="color: yellow" position="0 0 0"></a-entity>
   </a-marker>
-  <a-entity id="arrow" position="0 0 -0.2" geometry="primitive: cone; height: 0.5; radiusBottom: 0.1; radiusTop: 0" material="color: red"></a-entity>
-</a-scene>
+ <a-entity id="arrow" position="0 0 -0.2" geometry="primitive: cone; height: 0.1; radiusBottom: 0.03; radiusTop: 0" material="color: red"></a-entity>
+  </a-scene>
   </body>
 </html>
