@@ -82,8 +82,6 @@ AFRAME.registerComponent('sun-position', {
     const observerHeight = 1.7; // in meters
     const objectHeight = Math.tan(altitude) * this.data.distance + observerHeight;
     const objectSize = sphereRadius / Math.atan(objectHeight / this.data.distance);
-    // Logging
-    console.log("Calculate Size: "+ objectSize);
     return objectSize;
   }
   
