@@ -82,6 +82,7 @@
   getLocation().then((location) => {
     const sun = createSun(location);
     document.querySelector('a-scene').appendChild(sun);
+});
 
     AFRAME.registerComponent('sun', {
       init: function () {
