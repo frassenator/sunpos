@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<!-- <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script> 
-		<script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script> -->
+		<script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script> 
+		<!-- <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script> -->
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/suncalc/1.8.0/suncalc.min.js"></script>
+		
 	</head>
 	<body style="margin: 0;">
 		<script>
@@ -21,9 +22,35 @@
 
 			function showPosition(position) {
 				console.log(position);
-				SunPosition = SunCalc.getPosition(currentdate, position.coords.latitude, position.coords.longitude);
+				//SunPosition = SunCalc.getPosition(currentdate, position.coords.latitude, position.coords.longitude);
 				console.log("Altitude: " + SunPosition.altitude + " Azimuth: " + SunPosition.azimuth);
+				
+				AFRAME.registerComponent('sun-position', {
+					tick: function () {
+						// Get the current time and location
+						//const now = new Date();
+						//const lat = 37.7749; // San Francisco latitude
+						//const lng = -122.4194; // San Francisco longitude
+
+						// Calculate the position of the sun
+						const sunPosition = SunCalc.getPosition(currentdate, position.coords.latitude, position.coords.longitude);
+
+						// Update the position of the sun marker
+						const sunEl = document.querySelector('#sun');
+						sunEl.setAttribute('position', {
+							x: sunPosition.altitude / 90 * 5, // Scale altitude to fit within marker
+							y: sunPosition.azimuth / 180 * 5, // Scale azimuth to fit within marker
+							z: -5 // Position the sun marker 5 meters in front of the camera
+					});
+					}
+				});
+
 			}
 		</script>
+		<a-scene>
+			<a-marker-camera preset="hiro"></a-marker-camera>
+			<a-sphere id="sun" radius="0.5" color="yellow" sun-position></a-sphere>
+		</a-scene>
+
 	</body>
 </html>
