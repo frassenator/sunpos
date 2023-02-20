@@ -62,12 +62,11 @@
             sun.setAttribute('color', 'yellow');
 
             // Set the sun's position in 3D space
-            const position = {
-              x: Math.cos(sunPosition.altitude * Math.PI / 180) * Math.sin(sunPosition.azimuth * Math.PI / 180) * -1,
-              y: Math.sin(sunPosition.altitude * Math.PI / 180),
-              z: Math.cos(sunPosition.altitude * Math.PI / 180) * Math.cos(sunPosition.azimuth * Math.PI / 180) * -1,
-            };
-            sun.setAttribute('position', position);
+            sun.setAttribute('position', {
+		x: Math.cos(sunPosition.altitude * Math.PI / 180) * Math.sin(sunPosition.azimuth * Math.PI / 180) * -1,
+		y: Math.sin(sunPosition.altitude * Math.PI / 180),
+		z: Math.cos(sunPosition.altitude * Math.PI / 180) * Math.cos(sunPosition.azimuth * Math.PI / 180) * -1,
+	    });
 
             // Add the sun to the scene
             this.el.sceneEl.appendChild(sun);
