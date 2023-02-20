@@ -14,12 +14,16 @@ AFRAME.registerComponent('sun-position', {
   },
 
   init: function () {
+	// Find the arrow
+	const arrow = document.getElementById("arrow");
+	  
     // Get the current position of the device
     navigator.geolocation.getCurrentPosition(position => {
       const currentdate = new Date();
       const { altitude, azimuth } = SunCalc.getPosition(currentdate, position.coords.latitude, position.coords.longitude);
       const pos = this.calculatePosition(altitude, azimuth);
       this.el.setAttribute('position', pos);
+      arrow.setAttribute("visible", true);
     });
     
     // Update the position of the sphere every 10 seconds
@@ -29,6 +33,9 @@ AFRAME.registerComponent('sun-position', {
         const { altitude, azimuth } = SunCalc.getPosition(currentdate, position.coords.latitude, position.coords.longitude);
         const pos = this.calculatePosition(altitude, azimuth);
         this.el.setAttribute('position', pos);
+	      // Update arrow
+	      arrow.setAttribute("position", { x: 0, y: -1, z: -1 });
+              arrow.setAttribute("look-at", "[camera]");
       });
     }, 10000);
   },
