@@ -30,11 +30,11 @@ AFRAME.registerComponent('sun-position', {
 	    // Logging
 	    console.log("Update Date "+ currentdate);
         const { altitude, azimuth } = SunCalc.getPosition(currentdate, position.coords.latitude, position.coords.longitude);
-	      // Logging
-	    console.log("Altitude: "+altitude+" Azimuth:"+azimuth);
         this.data.distance = this.calculateDistance(this.data.sunSize, altitude);
         const pos = this.calculatePosition(altitude, azimuth);
         this.el.setAttribute('position', pos);
+	      // Logging
+	    console.log("New Position "+ JSON.stringify(pos));
       });
     }, 10000);
   },
