@@ -7,8 +7,11 @@
 		
 	</head>
 	<body style="margin: 0;">
-		<script>
+<script>
 AFRAME.registerComponent('sun-position', {
+  schema: {
+    sunSize: {type: 'number', default: 1} // Added sunSize to the schema with default value 1
+  },
   init: function () {
     // Get the current position of the device
     navigator.geolocation.getCurrentPosition(position => {
@@ -18,6 +21,7 @@ AFRAME.registerComponent('sun-position', {
       const { altitude, azimuth } = SunCalc.getPosition(currentdate, position.coords.latitude, position.coords.longitude);
 	    // Logging
 	    console.log("Altitude: "+altitude+" Azimuth:"+azimuth);  
+      this.data.distance = this.calculateDistance(this.data.sunSize, altitude);
       const pos = this.calculatePosition(altitude, azimuth);
 	    // Logging
 	    console.log("New Position "+ JSON.stringify(pos));
@@ -33,6 +37,7 @@ AFRAME.registerComponent('sun-position', {
         const { altitude, azimuth } = SunCalc.getPosition(currentdate, position.coords.latitude, position.coords.longitude);
 	      // Logging
 	    console.log("Altitude: "+altitude+" Azimuth:"+azimuth);
+        this.data.distance = this.calculateDistance(this.data.sunSize, altitude);
         const pos = this.calculatePosition(altitude, azimuth);
         this.el.setAttribute('position', pos);
       });
@@ -48,9 +53,17 @@ AFRAME.registerComponent('sun-position', {
 	  // Logging
 	  console.log("Calculate Position: "+ x + " " + y + " " + z);
     return { x, y, z };
+  },
+
+  calculateDistance: function(sunSize, altitude) {
+    // Calculate the distance based on the size of the Sun in the sky
+    const sunDiameter = 0.53; // Diameter of the Sun in degrees
+    const angularSize = (sunSize * sunDiameter) / 2; // Angular size of the Sun in degrees
+    const distance = (Math.tan(angularSize * Math.PI / 180) * 149.6e6) / Math.cos(altitude); // Calculate the distance based on the angular size and altitude
+    return distance;
   }
 });
-		</script>
+</script>
 		<a-scene>
 			<a-entity camera></a-entity>
 			<a-sphere id="sun" radius="0.5" color="yellow" opacity="0.5" sun-position></a-sphere>
