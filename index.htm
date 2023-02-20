@@ -24,7 +24,7 @@
     </style>
   </head>
   <body>
-    <h1>SunPos 0.10</h1>
+    <h1>SunPos 0.11</h1>
     <label for="datepicker">Select a date:</label>
     <input type="text" id="datepicker">
     <script>
@@ -42,6 +42,21 @@
 			datetimeInput.value = now.toISOString().slice(0, 16);
 		}
     </script>
+	<script>
+	// Troubleshooting
+	
+		function onSceneLoaded() {
+		  console.log('Scene loaded');
+		  const sphere = document.getElementById('sphere');
+		  const cone = document.getElementById('cone');
+		  console.log(box);
+		  console.log(sphere);
+		  console.log(cone);
+
+		  // Scale the sphere up by 2x
+		  sphere.object3D.scale.set(2, 2, 2);
+		}
+</script>
     <script>
       // get DOM elements
       const datetimeInput = document.querySelector('#datetime');
@@ -96,7 +111,7 @@
 	     <a-scene embedded arjs>
       	<a-entity camera></a-entity>
       	<a-sphere position="0 0 0" radius="0.5" color="red" id="sun-object" sun-object-position></a-sphere>
-	<a-cone position="0 1 0" radius-bottom="0.1" height="0.2" color="blue" look-at="#sun-object" scale="2 2 2"></a-cone>
+		<a-cone position="0 1 0" radius-bottom="0.1" height="0.2" color="blue" look-at="#sun-object" scale="2 2 2"></a-cone>
       	<a-entity id="sun-trajectory" line="start: 0 0 0; end: 0 0 -10; color: yellow"></a-entity>
     </a-scene>
   </body>
