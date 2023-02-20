@@ -41,9 +41,7 @@ AFRAME.registerComponent('sun-position', {
     const z = Math.cos(azimuth) * Math.cos(altitude) * this.data.radius * 10;
     return { x, y, z };
   }
-});
-
-
+	
   /*calculateDistance: function () {
     // Get the observer height
     const observerHeight = this.data.observerHeight;
