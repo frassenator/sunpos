@@ -20,11 +20,10 @@ AFRAME.registerComponent('sun-position', {
       const { altitude, azimuth } = SunCalc.getPosition(currentdate, position.coords.latitude, position.coords.longitude);
       this.data.distance = this.calculateDistance(this.data.sunSize, altitude);
       const pos = this.calculatePosition(altitude, azimuth);
-      //this.el.setAttribute('position', pos);
-		document.getElementById("sun").setAttribute('position', pos)
+      this.el.setAttribute('position', pos);
     });
     
-    // Update the position of the sphere every 10 seconds
+    // Update the position of the sphere every 30 seconds
     setInterval(() => {
       navigator.geolocation.getCurrentPosition(position => {
         const currentdate = new Date();
@@ -33,12 +32,11 @@ AFRAME.registerComponent('sun-position', {
         const { altitude, azimuth } = SunCalc.getPosition(currentdate, position.coords.latitude, position.coords.longitude);
         this.data.distance = this.calculateDistance(this.data.sunSize, altitude);
         const pos = this.calculatePosition(altitude, azimuth);
-        //this.el.setAttribute('position', pos);
-		document.getElementById("sun").setAttribute('position', pos)
+        this.el.setAttribute('position', pos);
 	      // Logging
 	    console.log("New Position "+ JSON.stringify(pos));
       });
-    }, 10000);
+    }, 30000);
   },
 
   calculatePosition: function (altitude, azimuth) {
