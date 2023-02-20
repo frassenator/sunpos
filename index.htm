@@ -8,54 +8,54 @@
 	</head>
 	<body style="margin: 0;">
 		<script>
-			currentdate = new Date();
-			
-			userLocation = getLocation();
+		    AFRAME.registerComponent('sun-position', {
+			init: function() {
 
-			function getLocation() {
-				if (navigator.geolocation) {
-					navigator.geolocation.getCurrentPosition(showPosition);
-				} else { 
-					console.log("Geolocation is not supported by this browser.");
-				}
-			}
+			    // Get the user's location
+			    if (navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition(position => {
+				    // Logging for troubleshooting
+				    console.log('Got user location: ', position.coords.latitude, position.coords.longitude);
 
-			function showPosition(position) {
-				
-				AFRAME.registerComponent('sun-position', {
-					init: function () {
-							// Logging for troubleshooting
-							console.log("New Update - every 5 sec");
-						// Update the position of the sphere every 5 seconds
-						setInterval(() => {
-						// Get the current position of the sun
-						const { altitude, azimuth } = SunCalc.getPosition(currentdate, position.coords.latitude, position.coords.longitude);
+				    // Update the position of the sphere every 5 seconds
+				    setInterval(() => {
+					// Get the current position of the sun
+					const {
+					    altitude,
+					    azimuth
+					} = SunCalc.getPosition(new Date(), position.coords.latitude, position.coords.longitude);
 
-						// Calculate the position of the sphere based on the sun's position
-						const position = this.calculatePosition(altitude, azimuth);
+					// Calculate the position of the sphere based on the sun's position
+					const position = this.calculatePosition(altitude, azimuth);
 
-						// Update the position of the sphere
-							// Logging for troubleshooting
-							console.log("New Position: "+position);
-						this.el.setAttribute('position', position);
-						}, 5000);
-					},
-
-					calculatePosition: function (altitude, azimuth) {
-					// Convert altitude and azimuth to X, Y, Z coordinates
-					const x = Math.sin(azimuth) * Math.cos(altitude) * this.data.distance;
-					const y = Math.sin(altitude) * this.data.distance;
-					const z = Math.cos(azimuth) * Math.cos(altitude) * this.data.distance;
-					
-					// Logging for troubleshooting
-					console.log("New Calculation: "+ x +" "+ y +" "+ z)
-						
-					return { x, y, z };
-					}
+					// Update the position of the sphere
+					this.el.setAttribute('position', position);
+				    }, 5000);
 				});
+			    } else {
+				console.log('Geolocation is not supported by this browser.');
+			    }
+			},
 
+			schema: {
+			    distance: {
+				default: 100
+			    }
+			},
 
+			calculatePosition: function(altitude, azimuth) {
+			    // Convert altitude and azimuth to X, Y, Z coordinates
+			    const x = Math.sin(azimuth) * Math.cos(altitude) * this.data.distance;
+			    const y = Math.sin(altitude) * this.data.distance;
+			    const z = Math.cos(azimuth) * Math.cos(altitude) * this.data.distance;
+
+			    return {
+				x,
+				y,
+				z
+			    };
 			}
+		    });
 		</script>
 		<a-scene>
 			<a-entity camera></a-entity>
