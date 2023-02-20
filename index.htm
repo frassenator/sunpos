@@ -5,116 +5,93 @@
     <title>AR Solar Position</title>
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
-    <script>
-      function getSunPosition(latitude, longitude, date, time) {
-        // Convert date and time to UTC
-        const utcDate = new Date(date + 'T' + time + 'Z');
-
-        // Calculate the day of the year
-        const dayOfYear = Math.floor((utcDate - new Date(utcDate.getUTCFullYear(), 0, 0)) / 86400000);
-
-        // Calculate the fractional year
-        const fractionalYear = (2 * Math.PI / 365) * (dayOfYear - 1 + (utcDate.getUTCHours() - 12) / 24);
-
-        // Calculate the declination angle of the sun
-        const declination = 0.006918 - 0.399912 * Math.cos(fractionalYear) + 0.070257 * Math.sin(fractionalYear) - 0.006758 * Math.cos(2 * fractionalYear) + 0.000907 * Math.sin(2 * fractionalYear) - 0.002697 * Math.cos(3 * fractionalYear) + 0.00148 * Math.sin(3 * fractionalYear);
-
-        // Calculate the time correction factor
-        const timeCorrectionFactor = 229.18 * (0.000075 + 0.001868 * Math.cos(fractionalYear) - 0.032077 * Math.sin(fractionalYear) - 0.014615 * Math.cos(2 * fractionalYear) - 0.040849 * Math.sin(2 * fractionalYear));
-
-        // Calculate the solar noon time
-        const solarNoon = (720 - 4 * longitude - timeCorrectionFactor) / 1440;
-
-        // Calculate the current time as a fraction of a day
-        const currentTime = (utcDate.getUTCHours() * 60 + utcDate.getUTCMinutes()) / 1440;
-
-        // Calculate the hour angle of the sun
-        const hourAngle = (currentTime - solarNoon) * 2 * Math.PI;
-
-        // Calculate the altitude and azimuth angles of the sun
-        const altitude = Math.asin(Math.sin(latitude * Math.PI / 180) * Math.sin(declination) + Math.cos(latitude * Math.PI / 180) * Math.cos(declination) * Math.cos(hourAngle));
-        const azimuth = Math.acos((Math.sin(altitude) * Math.sin(latitude * Math.PI / 180) - Math.sin(declination)) / (Math.cos(altitude) * Math.cos(latitude * Math.PI / 180)));
-
-        return {
-          altitude: altitude * 180 / Math.PI,
-          azimuth: azimuth * 180 / Math.PI,
-        };
-      }
-
-      AFRAME.registerComponent('sun-object', {
-        init: function () {
-          // Get the user's current location
-          navigator.geolocation.getCurrentPosition((position) => {
-          const latitude = position.coords.latitude;
-          const longitude = position.coords.longitude;
-
-            // Get the current date and time in ISO format
-	    const now = new Date();
-            const date = now.toISOString().substr(0, 10);
-            const time = now.toISOString().substr(11, 5);
-			
-	    // Get the sun's position
-            const sunPosition = getSunPosition(latitude, longitude, date, time);
-
-            // Create a sphere to represent the sun
-            const sun = document.createElement('a-sphere');
-            sun.setAttribute('radius', 0.1);
-            sun.setAttribute('color', 'yellow');
-
-            // Set the sun's position in 3D space
-            sun.setAttribute('position', {
-		x: Math.cos(sunPosition.altitude * Math.PI / 180) * Math.sin(sunPosition.azimuth * Math.PI / 180) * -1,
-		y: Math.sin(sunPosition.altitude * Math.PI / 180),
-		z: Math.cos(sunPosition.altitude * Math.PI / 180) * Math.cos(sunPosition.azimuth * Math.PI / 180) * -1,
-	    });
-
-            // Add the sun to the scene
-            this.el.sceneEl.appendChild(sun);
-          });
-        },
-      });
-    </script>
-<script>
-const arrow = document.querySelector('#arrow');
-  const arrowRotation = new THREE.Vector3(0, 0, 0);
-
-  AFRAME.registerComponent('compass', {
-    init: function () {
-      this.camera = document.querySelector('#camera');
-      this.updateArrowRotation = this.updateArrowRotation.bind(this);
-      this.updateArrowRotation();
-      window.addEventListener('deviceorientation', this.updateArrowRotation);
-    },
-
-    updateArrowRotation: function () {
-	const arrow = document.querySelector('#arrow');
-	arrow.setAttribute('rotation', arrowRotation);
-    }
-  });
-
-	document.addEventListener('DOMContentLoaded', function() {
-		const compass = document.createElement('a-entity');
-		compass.setAttribute('compass', '');
-		document.querySelector('a-scene').appendChild(compass);
-	});
-  
-</script>
-  <style>
-    #arrow {
-      width: 10%;
-      height: 10%;
-      min-width: 40px;
-      min-height: 40px;
-    }
-  </style>
   </head>
   <body>
-<a-scene embedded arjs="debugUIEnabled: false">
-  <a-entity id="camera" camera></a-entity>
-  <a-marker preset="hiro">
-    <a-entity id="sun" geometry="primitive: sphere; radius: 0.1" material="color: yellow" position="0 0 0"></a-entity>
-  </a-marker>
-<a-entity id="arrow" position="0 0 -0.2" geometry="primitive: cone; height: 0.1; radiusBottom: 0.03; radiusTop: 0" material="color: red" rotation="0 0 0"></a-entity>
- </a-scene>
-  </body>
+    <a-scene>
+      <a-entity position="0 1.6 0">
+        <a-camera></a-camera>
+        <a-entity position="0 -0.8 -2" id="compass"></a-entity>
+      </a-entity>
+      <a-sphere position="0 0 -5" radius="1.5" material="color: #EFEFEF; roughness: 1"></a-sphere>
+      <a-sphere position="0 3 0" radius="0.5" material="color: #FDB813; roughness: 1"></a-sphere>
+      <a-sphere position="-3 1 0" radius="1" material="color: #FDB813; roughness: 1"></a-sphere>
+      <a-sphere position="3 1 0" radius="1" material="color: #FDB813; roughness: 1"></a-sphere>
+    </a-scene>
+    <script>
+      // get the sun's position in the sky
+      function getSunPosition() {
+        const now = new Date();
+        const lat = 37.7749; // latitude of San Francisco
+        const lng = -122.4194; // longitude of San Francisco
+        const zenith = 90.83333333333333; // sun's zenith for sunrise/sunset
+        const sunrise = SunCalc.getTimes(now, lat, lng).sunrise;
+        const sunset = SunCalc.getTimes(now, lat, lng).sunset;
+        const currentTime = now.getTime();
+
+        let sunPosition;
+        if (currentTime > sunrise.getTime() && currentTime < sunset.getTime()) {
+          sunPosition = SunCalc.getPosition(now, lat, lng);
+        } else {
+          sunPosition = { altitude: -100 };
+        }
+        return sunPosition;
+      }
+
+      // create the sun entity
+      function createSun() {
+        const sun = document.createElement('a-sphere');
+        sun.setAttribute('radius', '1');
+        sun.setAttribute('position', '0 0 -5');
+        sun.setAttribute('material', 'color: #FDB813; roughness: 1');
+        sun.setAttribute('visible', false);
+
+        const sunPosition = getSunPosition();
+        if (sunPosition.altitude > -90) {
+          const azimuth = -sunPosition.azimuth * (180 / Math.PI);
+          const altitude = sunPosition.altitude * (180 / Math.PI);
+          sun.setAttribute('rotation', `${altitude} ${azimuth} 0`);
+          sun.setAttribute('visible', true);
+        } else {
+          console.warn('The sun is below the horizon');
+        }
+
+        return sun;
+      }
+
+      // create the compass entity
+      function createCompass() {
+        const compass = document.createElement('a-image');
+        compass.setAttribute('src', 'https://cdn.glitch.com/c3a3aa07-9682-4c0f-82db-6de8f6aa954f%2Fcompass.png?v=1620324332088');
+        compass.setAttribute('width', '1');
+        compass.setAttribute('height', '1');
+        compass.setAttribute('position', '0 0 0');
+        compass.setAttribute('rotation', '0 180 0');
+        return compass;
+      }
+
+      const sun = createSun();
+      document.querySelector('a-scene').appendChild(sun);
+      
+      AFRAME.registerComponent('sun', {
+  init: function () {
+    this.el.object3D.rotation.order = 'YXZ';
+  },
+
+ tick: function (time, delta) {
+  try {
+    const sunPos = getSunPosition();
+
+    if (sunPos.altitude > 0) {
+      const { azimuth, altitude } = sunPos;
+      this.el.object3D.rotation.y = -THREE.Math.degToRad(azimuth);
+      this.el.object3D.rotation.x = -THREE.Math.degToRad(altitude);
+      this.el.object3D.rotation.z = 0;
+      this.el.object3D.updateMatrixWorld();
+    }
+  } catch (error) {
+    console.error('Error occurred while updating sun position:', error);
+  }
+}
+	  </script>
+	  </ body>
 </html>
