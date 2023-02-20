@@ -11,7 +11,6 @@
     <a-scene>
       <a-entity position="0 1.6 0">
         <a-camera></a-camera>
-        <a-entity position="0 -0.8 -2" id="compass"></a-entity>
       </a-entity>
       <a-sphere position="0 0 -5" radius="1.5" material="color: #EFEFEF; roughness: 1"></a-sphere>
       <a-sphere position="0 3 0" radius="0.5" material="color: #FDB813; roughness: 1"></a-sphere>
@@ -19,91 +18,110 @@
       <a-sphere position="3 1 0" radius="1" material="color: #FDB813; roughness: 1"></a-sphere>
     </a-scene>
     <script>
+     <script>
+      // get the user's current location
+      function getLocation() {
+        return new Promise((resolve, reject) => {
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+              (position) => {
+                resolve({
+                  latitude: position.coords.latitude,
+                  longitude: position.coords.longitude,
+                });
+              },
+              (error) => {
+                reject(error);
+              }
+            );
+          } else {
+            reject('Geolocation is not supported by this browser.');
+          }
+        });
+      }
+
       // get the sun's position in the sky
-	function getSunPosition(now, lat, lng) {
-		const zenith = 90.83333333333333; // sun's zenith for sunrise/sunset
-		const sunrise = SunCalc.getTimes(now, lat, lng).sunrise;
-		const sunset = SunCalc.getTimes(now, lat, lng).sunset;
-		const currentTime = now.getTime();
+      function getSunPosition(location, time) {
+        const now = time || new Date();
+        const lat = location.latitude;
+        const lng = location.longitude;
+        const zenith = 90.83333333333333; // sun's zenith for sunrise/sunset
+        const sunrise = SunCalc.getTimes(now, lat, lng).sunrise;
+        const sunset = SunCalc.getTimes(now, lat, lng).sunset;
+        const currentTime = now.getTime();
 
-		let sunPosition;
-		if (currentTime > sunrise.getTime() && currentTime < sunset.getTime()) {
-			sunPosition = SunCalc.getPosition(now, lat, lng);
-		} else {
-			sunPosition = { altitude: -100 };
-		}
-		return sunPosition;
-	}
+        let sunPosition;
+        if (currentTime > sunrise.getTime() && currentTime < sunset.getTime()) {
+          sunPosition = SunCalc.getPosition(now, lat, lng);
+        } else {
+          sunPosition = { altitude: -100 };
+        }
+        return sunPosition;
+      }
 
-	// create the sun entity
-	function createSun() {
-		const sun = document.createElement('a-sphere');
-		sun.setAttribute('radius', '1');
-		sun.setAttribute('position', '0 0 -5');
-		sun.setAttribute('material', 'color: #FDB813; roughness: 1');
-		sun.setAttribute('visible', false);
+      // create the sun entity
+      function createSun(location) {
+        const sun = document.createElement('a-sphere');
+        sun.setAttribute('radius', '1');
+        sun.setAttribute('position', '0 0 -5');
+        sun.setAttribute('material', 'color: #FDB813; roughness: 1');
+        sun.setAttribute('visible', false);
 
-		navigator.geolocation.getCurrentPosition((position) => {
-		const lat = position.coords.latitude;
-		const lng = position.coords.longitude;
-		const now = new Date();
+        const sunPosition = getSunPosition(location, new Date());
+        if (sunPosition.altitude > -90) {
+          const azimuth = -sunPosition.azimuth * (180 / Math.PI);
+          const altitude = sunPosition.altitude * (180 / Math.PI);
+          sun.setAttribute('rotation', `${altitude} ${azimuth} 0`);
+          sun.setAttribute('visible', true);
+        } else {
+          console.warn('The sun is below the horizon');
+        }
 
-		const sunPosition = getSunPosition(now, lat, lng);
-		if (sunPosition.altitude > -90) {
-			const azimuth = -sunPosition.azimuth * (180 / Math.PI);
-			const altitude = sunPosition.altitude * (180 / Math.PI);
-			sun.setAttribute('rotation', `${altitude} ${azimuth} 0`);
-			sun.setAttribute('visible', true);
-		} else {
-			console.warn('The sun is below the horizon');
-		}
-		}, (error) => {
-			console.error('Error occurred while getting geolocation:', error);
-		});
-
-		return sun;
-	}
-
-
-      // create the compass entity
-		function createCompass() {
-		  const compass = document.createElement('a-image');
-		  compass.setAttribute('src', 'https://cdn.aframe.io/examples/arjs/compass.png');
-		  compass.setAttribute('width', '1');
-		  compass.setAttribute('height', '1');
-		  compass.setAttribute('position', '0 0 0');
-		  compass.setAttribute('rotation', '0 180 0');
-		  return compass;
-		}
-
-		const compass = createCompass();
-		document.querySelector('a-scene').appendChild(compass);
-		compass.setAttribute('sun', '');
+        return sun;
+      }
 
       const sun = createSun();
-      document.querySelector('a-scene').appendChild(sun);
-      
-	 AFRAME.registerComponent('sun', {
-	  init: function () {
-		this.el.object3D.rotation.order = 'YXZ';
-	  },
+document.querySelector('a-scene').appendChild(sun);
 
-	  tick: function (time, delta) {
-		try {
-		  const sunPos = getSunPosition();
+AFRAME.registerComponent('sun', {
+  init: function () {
+    this.el.object3D.rotation.order = 'YXZ';
+  },
 
-		  if (sunPos.altitude > 0) {
-			const { azimuth, altitude } = sunPos;
-			this.el.object3D.rotation.y = -THREE.Math.degToRad(azimuth);
-			this.el.object3D.rotation.x = -THREE.Math.degToRad(altitude);
-			this.el.object3D.rotation.z = 0;
-			this.el.object3D.updateMatrixWorld();
-		  }
-		} catch (error) {
-		  console.error('Error occurred while updating sun position:', error);
-		}
-	  }
-	});
+  tick: function (time, delta) {
+    try {
+      const userPosition = this.el.sceneEl.camera.el.object3D.getWorldPosition();
+      const lat = userPosition.x;
+      const lng = userPosition.z;
+      const now = new Date();
+      const zenith = 90.83333333333333; // sun's zenith for sunrise/sunset
+      const sunrise = SunCalc.getTimes(now, lat, lng).sunrise;
+      const sunset = SunCalc.getTimes(now, lat, lng).sunset;
+      const currentTime = now.getTime();
+
+      let sunPosition;
+      if (currentTime > sunrise.getTime() && currentTime < sunset.getTime()) {
+        sunPosition = SunCalc.getPosition(now, lat, lng);
+      } else {
+        sunPosition = { altitude: -100 };
+      }
+
+      if (sunPosition.altitude > -90) {
+        const azimuth = -sunPosition.azimuth * (180 / Math.PI);
+        const altitude = sunPosition.altitude * (180 / Math.PI);
+        this.el.object3D.rotation.y = -THREE.Math.degToRad(azimuth);
+        this.el.object3D.rotation.x = -THREE.Math.degToRad(altitude);
+        this.el.object3D.rotation.z = 0;
+        this.el.object3D.updateMatrixWorld();
+      } else {
+        console.warn('The sun is below the horizon');
+      }
+    } catch (error) {
+      console.error('Error occurred while updating sun position:', error);
+    }
+  }
+});
+
 	  </script>
-	  </ body>
+	  </body>
 </html>
