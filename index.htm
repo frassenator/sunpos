@@ -31,6 +31,16 @@
       $(function() {
         $("#datepicker").datepicker();
       });
+	</script>
+    <script>
+		// Get the datetime input element
+		var datetimeInput = document.getElementById("datetime-input");
+
+		// If the input is null, set the default value to the current date and time
+		if (datetimeInput === null) {
+			var now = new Date();
+			datetimeInput.value = now.toISOString().slice(0, 16);
+		}
     </script>
     <script>
       // get DOM elements
