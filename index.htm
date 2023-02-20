@@ -77,26 +77,37 @@
   </head>
   <body>
 <a-scene embedded arjs="debugUIEnabled: true">
-  <a-entity camera></a-entity>
+  <a-entity id="camera" camera></a-entity>
   <a-marker preset="hiro">
     <a-entity id="sun" geometry="primitive: sphere; radius: 0.1" material="color: yellow"></a-entity>
   </a-marker>
-  <a-entity id="arrow" position="0 0 -1" geometry="primitive: cone; height: 1; radiusBottom: 0.1; radiusTop: 0"></a-entity>
+  <a-entity id="arrow" position="0 0 -1" geometry="primitive: cone; height: 1; radiusBottom: 0.1; radiusTop: 0" material="color: red"></a-entity>
 </a-scene>
 
 <script>
   const arrow = document.querySelector('#arrow');
   const arrowRotation = new THREE.Vector3(0, 0, 0);
 
-  function updateArrowRotation() {
-    const cameraRotation = new THREE.Euler().setFromQuaternion(camera.quaternion, 'YXZ');
-    arrowRotation.set(0, -cameraRotation.y, 0);
-    arrow.object3D.rotation.setFromVector3(arrowRotation);
-  }
+  AFRAME.registerComponent('compass', {
+    init: function () {
+      this.camera = document.querySelector('#camera');
+      this.updateArrowRotation = this.updateArrowRotation.bind(this);
+      this.updateArrowRotation();
+      window.addEventListener('deviceorientation', this.updateArrowRotation);
+    },
 
-  updateArrowRotation();
-  window.addEventListener('deviceorientation', updateArrowRotation);
+    updateArrowRotation: function () {
+      const cameraRotation = new THREE.Euler().setFromQuaternion(this.camera.object3D.quaternion, 'YXZ');
+      arrowRotation.set(0, -cameraRotation.y, 0);
+      arrow.object3D.rotation.setFromVector3(arrowRotation);
+    }
+  });
+
+  const compass = document.createElement('a-entity');
+  compass.setAttribute('compass', '');
+  document.querySelector('a-scene').appendChild(compass);
 </script>
+
 
   </body>
 </html>
