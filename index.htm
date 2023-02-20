@@ -73,12 +73,26 @@
           });
         },
       });
+	    	const arrow = document.querySelector('#arrow');
+		const arrowRotation = new THREE.Vector3(0, 0, 0);
+
+		function updateArrowRotation() {
+			const cameraRotation = new THREE.Euler().setFromQuaternion(camera.quaternion, 'YXZ');
+			arrowRotation.set(0, -cameraRotation.y, 0);
+			arrow.object3D.rotation.setFromVector3(arrowRotation);
+		}
+		updateArrowRotation();
+		window.addEventListener('deviceorientation', updateArrowRotation);
+	
     </script>
   </head>
   <body>
-    <a-scene embedded arjs="debugUIEnabled: true">
-      <a-entity camera></a-entity>
-      <a-entity sun-object></a-entity>
-    </a-scene>
+	<a-scene embedded arjs="debugUIEnabled: true">
+		<a-entity camera></a-entity>
+		<a-marker preset="hiro">
+			<a-entity id="sun" geometry="primitive: sphere; radius: 0.1" material="color: yellow"></a-entity>
+		</a-marker>
+		<a-entity id="arrow" position="0 0 -1" geometry="primitive: cone; height: 1; radiusBottom: 0.1; radiusTop: 0"></a-entity>
+	</a-scene>
   </body>
 </html>
