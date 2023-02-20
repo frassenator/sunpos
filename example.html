@@ -6,48 +6,62 @@
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/suncalc/1.8.0/suncalc.min.js"></script>
   </head>
-  <body style="margin: 0; overflow: hidden;">
-    <h1>V 0.2</h1>
+  <body>
+    <h1>V 0.3</h1>
     <a-scene embedded arjs>
-      <a-marker preset="hiro">
-        <a-entity position="0 0 0">
-          <a-sphere id="sun" color="red" radius="0.3"></a-sphere>
-          <a-entity position="0 0 0">
-            <a-text id="sun-label" value="Sun position: 0, 0, 0" align="center" scale="2 2 2"></a-text>
-          </a-entity>
-        </a-entity>
-      </a-marker>
+        <a-entity
+          id="sun"
+          geometry="primitive: sphere; radius: 0.2"
+          material="color: red; shader: flat"
+          position="0 0 0"
+        ></a-entity>
+        <a-text
+          id="sun-label"
+          value="Sun"
+          align="center"
+          color="#ffffff"
+          position="0 0.4 0"
+          scale="0.5 0.5 0.5"
+        ></a-text>
+      </a-nft>
     </a-scene>
-
     <script>
       function calculateSunPosition() {
-        // Get the user's current location
-        navigator.geolocation.getCurrentPosition(function(position) {
-          // Calculate the position of the sun
-          var times = SunCalc.getTimes(new Date(), position.coords.latitude, position.coords.longitude);
-          var sunPosition = SunCalc.getPosition(times.sunset, position.coords.latitude, position.coords.longitude);
-          // Convert the sun's position from spherical coordinates to Cartesian coordinates
-          var x = Math.cos(sunPosition.azimuth) * Math.sin(sunPosition.altitude);
-          var y = Math.sin(sunPosition.azimuth) * Math.sin(sunPosition.altitude);
-          var z = Math.cos(sunPosition.altitude);
-          return { x: x * 3, y: y * 3, z: z * 3 };
+        // Return a Promise that resolves with the sun position, or rejects with an error
+        return new Promise(function(resolve, reject) {
+          navigator.geolocation.getCurrentPosition(
+            function(position) {
+              // Calculate the position of the sun
+              var times = SunCalc.getTimes(new Date(), position.coords.latitude, position.coords.longitude);
+              var sunPosition = SunCalc.getPosition(times.sunset, position.coords.latitude, position.coords.longitude);
+              // Convert the sun's position from spherical coordinates to Cartesian coordinates
+              var x = Math.cos(sunPosition.azimuth) * Math.sin(sunPosition.altitude);
+              var y = Math.sin(sunPosition.azimuth) * Math.sin(sunPosition.altitude);
+              var z = Math.cos(sunPosition.altitude);
+              resolve({ x: x * 3, y: y * 3, z: z * 3 });
+            },
+            function(error) {
+              reject(error);
+            }
+          );
         });
       }
 
-      function onRender() {
-        // Get the position of the sun
-        var position = calculateSunPosition();
-        // Update the position of the sun sphere
-        var sun = document.querySelector("#sun");
-        sun.setAttribute("position", position);
-        // Update the text of the label to show the sun's position
-        var label = document.querySelector("#sun-label");
-        label.setAttribute("value", "Sun position: " + position.x.toFixed(2) + ", " + position.y.toFixed(2) + ", " + position.z.toFixed(2));
+      var sun = document.querySelector("#sun");
+
+      function updateSunPosition() {
+        calculateSunPosition()
+          .then(function(position) {
+            sun.setAttribute("position", position);
+            console.log("Sun position:", position);
+          })
+          .catch(function(error) {
+            console.error("Error getting sun position:", error);
+          });
       }
 
-      // Call the onRender function on every render of the A-Frame scene
-      var sceneEl = document.querySelector("a-scene");
-      sceneEl.addEventListener("renderstart", onRender);
+      // Update the position of the sun every 100 seconds
+      setInterval(updateSunPosition, 100000);
     </script>
   </body>
 </html>
