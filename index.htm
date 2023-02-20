@@ -68,7 +68,7 @@ AFRAME.registerComponent('sun-position', {
     this.el.setAttribute('position', { x, y, z });
 	// Custom Added
 	this.el.setAttribute('scale', {x: size, y: size, z: size});
-  }
+  },
   
   calculateSize: function (altitude) {
     // Set the radius of the sphere to block the actual sun from the observer's point of view
