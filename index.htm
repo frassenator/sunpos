@@ -53,21 +53,25 @@ AFRAME.registerComponent('sun-position', {
   },
 
   updatePositionTime: function (selectedDate) {
-    const { altitude, azimuth } = SunCalc.getPosition(selectedDate, position.coords.latitude, position.coords.longitude);
+	navigator.geolocation.getCurrentPosition(position => {
+		// Logging
+			console.log(JSON.stringify(position));
+		const { altitude, azimuth } = SunCalc.getPosition(selectedDate, position.coords.latitude, position.coords.longitude);
 
-    // Convert altitude and azimuth to X, Y, Z coordinates
-    const x = Math.sin(azimuth) * Math.cos(altitude) * this.data.distance;
-    const y = Math.sin(altitude) * this.data.distance;
-    const z = Math.cos(azimuth) * Math.cos(altitude) * this.data.distance;
-	
-	// Custom added
-	const size = this.calculateSize(altitude);
+		// Convert altitude and azimuth to X, Y, Z coordinates
+		const x = Math.sin(azimuth) * Math.cos(altitude) * this.data.distance;
+		const y = Math.sin(altitude) * this.data.distance;
+		const z = Math.cos(azimuth) * Math.cos(altitude) * this.data.distance;
+		
+		// Custom added
+		const size = this.calculateSize(altitude);
 
 
-    // Set the position of the sphere
-    this.el.setAttribute('position', { x, y, z });
-	// Custom Added
-	this.el.setAttribute('scale', {x: size, y: size, z: size});
+		// Set the position of the sphere
+		this.el.setAttribute('position', { x, y, z });
+		// Custom Added
+		this.el.setAttribute('scale', {x: size, y: size, z: size});
+	});
   },
   
   calculateSize: function (altitude) {
