@@ -59,39 +59,44 @@
       }
 
       // create the compass entity
-      function createCompass() {
-        const compass = document.createElement('a-image');
-        compass.setAttribute('src', 'https://cdn.glitch.com/c3a3aa07-9682-4c0f-82db-6de8f6aa954f%2Fcompass.png?v=1620324332088');
-        compass.setAttribute('width', '1');
-        compass.setAttribute('height', '1');
-        compass.setAttribute('position', '0 0 0');
-        compass.setAttribute('rotation', '0 180 0');
-        return compass;
-      }
+		function createCompass() {
+		  const compass = document.createElement('a-image');
+		  compass.setAttribute('src', 'https://cdn.glitch.com/c3a3aa07-9682-4c0f-82db-6de8f6aa954f%2Fcompass.png?v=1620324332088');
+		  compass.setAttribute('width', '1');
+		  compass.setAttribute('height', '1');
+		  compass.setAttribute('position', '0 0 0');
+		  compass.setAttribute('rotation', '0 180 0');
+		  return compass;
+		}
+
+		const compass = createCompass();
+		document.querySelector('a-scene').appendChild(compass);
+		compass.setAttribute('sun', '');
 
       const sun = createSun();
       document.querySelector('a-scene').appendChild(sun);
       
-      AFRAME.registerComponent('sun', {
-  init: function () {
-    this.el.object3D.rotation.order = 'YXZ';
-  },
+	 AFRAME.registerComponent('sun', {
+	  init: function () {
+		this.el.object3D.rotation.order = 'YXZ';
+	  },
 
- tick: function (time, delta) {
-  try {
-    const sunPos = getSunPosition();
+	  tick: function (time, delta) {
+		try {
+		  const sunPos = getSunPosition();
 
-    if (sunPos.altitude > 0) {
-      const { azimuth, altitude } = sunPos;
-      this.el.object3D.rotation.y = -THREE.Math.degToRad(azimuth);
-      this.el.object3D.rotation.x = -THREE.Math.degToRad(altitude);
-      this.el.object3D.rotation.z = 0;
-      this.el.object3D.updateMatrixWorld();
-    }
-  } catch (error) {
-    console.error('Error occurred while updating sun position:', error);
-  }
-}
+		  if (sunPos.altitude > 0) {
+			const { azimuth, altitude } = sunPos;
+			this.el.object3D.rotation.y = -THREE.Math.degToRad(azimuth);
+			this.el.object3D.rotation.x = -THREE.Math.degToRad(altitude);
+			this.el.object3D.rotation.z = 0;
+			this.el.object3D.updateMatrixWorld();
+		  }
+		} catch (error) {
+		  console.error('Error occurred while updating sun position:', error);
+		}
+	  }
+	});
 	  </script>
 	  </ body>
 </html>
