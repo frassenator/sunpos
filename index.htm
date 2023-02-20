@@ -1,121 +1,29 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/suncalc/1.8.0/suncalc.min.js"></script>
-  </head>
-  <body style="margin: 0;">
-  <script>
-	 // get the user's current location
-	function getLocation() {
-		return new Promise((resolve, reject) => {
-		  if (navigator.geolocation) {
-			navigator.geolocation.getCurrentPosition(
-			  (position) => {
-				resolve({
-				  latitude: position.coords.latitude,
-				  longitude: position.coords.longitude,
-				});
-			  },
-			  (error) => {
-				reject(error);
-			  }
-			);
-		  } else {
-			reject('Geolocation is not supported by this browser.');
-		  }
-		});
-	}
+	<head>
+		<!-- <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script> 
+		<script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script> -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/suncalc/1.8.0/suncalc.min.js"></script>
+	</head>
+	<body style="margin: 0;">
+		<script>
+			currentdate = new Date();
+			
+			userLocation = getLocation();
 
-  // get the sun's position in the sky
-	function getSunPosition(location, time) {
-		const now = time || new Date();
-		const lat = location.latitude;
-		const lng = location.longitude;
-		const zenith = 90.83333333333333; // sun's zenith for sunrise/sunset
-		const sunrise = SunCalc.getTimes(now, lat, lng).sunrise;
-		const sunset = SunCalc.getTimes(now, lat, lng).sunset;
-		const currentTime = now.getTime();
-
-		let sunPosition;
-		if (currentTime > sunrise.getTime() && currentTime < sunset.getTime()) {
-		  sunPosition = SunCalc.getPosition(now, lat, lng);
-		} else {
-		  sunPosition = { altitude: -100 };
-		}
-		return sunPosition;
-	 }
-
-  // create the sun entity
-	function createSun(location) {
-		const sun = document.createElement('a-sphere');
-		sun.setAttribute('radius', '1');
-		sun.setAttribute('position', '0 0 -5');
-		sun.setAttribute('material', 'color: #FDB813; roughness: 1');
-		sun.setAttribute('visible', false);
-
-		const sunPosition = getSunPosition(location, new Date());
-		if (sunPosition.altitude > -90) {
-		  const azimuth = -sunPosition.azimuth * (180 / Math.PI);
-		  const altitude = sunPosition.altitude * (180 / Math.PI);
-		  sun.setAttribute('rotation', `${altitude} ${azimuth} 0`);
-		  sun.setAttribute('visible', true);
-		} else {
-		  console.warn('The sun is below the horizon');
-		}
-
-		return sun;
-	 }
-	
-	AFRAME.registerComponent('sun', {
-		init: function () {
-			this.el.object3D.rotation.order = 'YXZ';
-		},
-
-		tick: function (time, delta) {
-			try {
-			  const userPosition = this.el.sceneEl.camera.el.object3D.getWorldPosition();
-			  const lat = userPosition.z;
-			  const lng = userPosition.x;
-			  const now = new Date();
-			  const zenith = 90.83333333333333; // sun's zenith for sunrise/sunset
-			  const sunrise = SunCalc.getTimes(now, lat, lng).sunrise;
-			  const sunset = SunCalc.getTimes(now, lat, lng).sunset;
-			  const currentTime = now.getTime();
-
-			  let sunPosition;
-			  if (currentTime > sunrise.getTime() && currentTime < sunset.getTime()) {
-				sunPosition = SunCalc.getPosition(now, lat, lng);
-			  } else {
-				sunPosition = { altitude: -100 };
-			  }
-
-			if (sunPosition.altitude > -90) {
-			const azimuth = -sunPosition.azimuth * (180 / Math.PI);
-			const altitude = sunPosition.altitude * (180 / Math.PI);
-			this.el.object3D.rotation.y = -THREE.Math.degToRad(azimuth);
-			this.el.object3D.rotation.x = -THREE.Math.degToRad(altitude);
-			this.el.object3D.rotation.z = 0;
-			this.el.object3D.updateMatrixWorld();
-			} else {
-				console.warn('The sun is below the horizon');
+			function getLocation() {
+				if (navigator.geolocation) {
+					navigator.geolocation.getCurrentPosition(showPosition);
+				} else { 
+					console.log("Geolocation is not supported by this browser.");
+				}
 			}
-			} catch (error) {
-				console.error('Error occurred while updating sun position:', error);
+
+			function showPosition(position) {
+				console.log(position);
+				SunPosition = SunCalc.getPosition(currentdate, position.coords.latitude, position.coords.longitude);
+				console.log("Altitude: " + SunPosition.altitude + " Azimuth: " + SunPosition.azimuth);
 			}
-		}
-	});
-    </script>
-	
-	<a-scene embedded arjs>
-      <a-entity position="0 1.6 0">
-        <a-camera></a-camera>
-      </a-entity>
-      <a-sphere position="0 0 -5" radius="1.5" material="color: #EFEFEF; roughness: 1"></a-sphere>
-      <a-sphere position="0 3 0" radius="0.5" material="color: #FDB813; roughness: 1"></a-sphere>
-      <a-sphere position="-3 1 0" radius="1" material="color: #FDB813; roughness: 1"></a-sphere>
-      <a-sphere position="3 1 0" radius="1" material="color: #FDB813; roughness: 1"></a-sphere>
-    </a-scene>
-  </body>
+		</script>
+	</body>
 </html>
