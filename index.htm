@@ -92,9 +92,12 @@ const arrow = document.querySelector('#arrow');
     }
   });
 
-  const compass = document.createElement('a-entity');
-  compass.setAttribute('compass', '');
-  document.querySelector('a-scene').appendChild(compass);
+	document.addEventListener('DOMContentLoaded', function() {
+		const compass = document.createElement('a-entity');
+		compass.setAttribute('compass', '');
+		document.querySelector('a-scene').appendChild(compass);
+	});
+  
 </script>
   <style>
     #arrow {
