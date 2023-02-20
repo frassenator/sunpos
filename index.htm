@@ -5,25 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	  
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/suncalc/1.8.0/suncalc.min.js"></script>
-    	<script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
 	<script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+	
+	
+	<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     
     <style>
-      .input-field {
-        margin: 10px;
-      }
+		#datepicker {
+			position: fixed;
+			bottom: 0;
+			left: 50%;
+			transform: translateX(-50%);
+			z-index: 9999;
+		}
     </style>
   </head>
   <body>
-    <h1>SunPos 0.11</h1>
-    <div class="input-field">
-      <label for="datetime">Date and Time:</label>
-      <input type="datetime-local" id="datetime" value="">
-    </div>
+    <h1>SunPos 0.10</h1>
+    <label for="datepicker">Select a date:</label>
+    <input type="text" id="datepicker">
+    <script>
+      $(function() {
+        $("#datepicker").datepicker();
+      });
+    </script>
     <script>
       // get DOM elements
       const datetimeInput = document.querySelector('#datetime');
-      const sunTrajectory = document.querySelector('#sun-trajectory');
+      //const sunTrajectory = document.querySelector('#sun-trajectory');
 
       // register sun object position component
       AFRAME.registerComponent('sun-object-position', {
@@ -54,15 +66,16 @@
           const afterSunPos = SunCalc.getPosition(afterTime, this.el.getAttribute('position').x, this.el.getAttribute('position').y);
           const afterX = afterSunPos.azimuth / Math.PI * -10;
           const afterY = afterSunPos.altitude / Math.PI * -10;
-		
-	// check if sunTrajectory exists
-	if (!sunTrajectory) {
-		sunTrajectory = document.querySelector('#sun-trajectory');
-		if (!sunTrajectory) {
-			console.error('sunTrajectory entity not found!');
-			return;
-		}
-	}
+
+			// check if sunTrajectory exists
+			if (!sunTrajectory) {
+				const sunTrajectory = document.querySelector('#sun-trajectory');
+				if (!sunTrajectory) {
+					console.error('sunTrajectory entity not found!');
+					return;
+				}
+			}
+
 
           // update sun trajectory
           sunTrajectory.setAttribute('line', `start: ${beforeX} ${beforeY} -10; end: 0 0 -10; color: yellow;`);
