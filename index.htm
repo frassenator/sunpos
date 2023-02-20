@@ -74,16 +74,6 @@
         },
       });
     </script>
-  </head>
-  <body>
-<a-scene embedded arjs="debugUIEnabled: true">
-  <a-entity id="camera" camera></a-entity>
-  <a-marker preset="hiro">
-    <a-entity id="sun" geometry="primitive: sphere; radius: 0.1" material="color: yellow"></a-entity>
-  </a-marker>
-  <a-entity id="arrow" position="0 0 -1" geometry="primitive: cone; height: 1; radiusBottom: 0.1; radiusTop: 0" material="color: red"></a-entity>
-</a-scene>
-
 <script>
   const arrow = document.querySelector('#arrow');
   const arrowRotation = new THREE.Vector3(0, 0, 0);
@@ -107,7 +97,14 @@
   compass.setAttribute('compass', '');
   document.querySelector('a-scene').appendChild(compass);
 </script>
-
-
+  </head>
+  <body>
+<a-scene embedded arjs="debugUIEnabled: true">
+  <a-entity id="camera" camera></a-entity>
+  <a-marker preset="hiro">
+    <a-entity id="sun" geometry="primitive: sphere; radius: 0.1" material="color: yellow"></a-entity>
+  </a-marker>
+  <a-entity id="arrow" position="0 0 -1" geometry="primitive: cone; height: 1; radiusBottom: 0.1; radiusTop: 0" material="color: red"></a-entity>
+</a-scene>
   </body>
 </html>
