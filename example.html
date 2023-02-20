@@ -1,47 +1,85 @@
 <!DOCTYPE html>
 <html>
-  	<head>
-		<meta charset="utf-8">
-    		<title>AR Sun</title>
-	</head>
-	<body>
-    		<script>
-			function getSunPosition(latitude, longitude, date, time) {
-			  // Convert date and time to UTC
-			  const utcDate = new Date(date + 'T' + time + 'Z');
+  <head>
+    <meta charset="utf-8" />
+    <title>AR Solar Position</title>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+    <script>
+      function getSunPosition(latitude, longitude, date, time) {
+        // Convert date and time to UTC
+        const utcDate = new Date(date + 'T' + time + 'Z');
 
-			  // Calculate the day of the year
-			  const dayOfYear = Math.floor((utcDate - new Date(utcDate.getUTCFullYear(), 0, 0)) / 86400000);
+        // Calculate the day of the year
+        const dayOfYear = Math.floor((utcDate - new Date(utcDate.getUTCFullYear(), 0, 0)) / 86400000);
 
-			  // Calculate the fractional year
-			  const fractionalYear = (2 * Math.PI / 365) * (dayOfYear - 1 + (utcDate.getUTCHours() - 12) / 24);
+        // Calculate the fractional year
+        const fractionalYear = (2 * Math.PI / 365) * (dayOfYear - 1 + (utcDate.getUTCHours() - 12) / 24);
 
-			  // Calculate the declination angle of the sun
-			  const declination = 0.006918 - 0.399912 * Math.cos(fractionalYear) + 0.070257 * Math.sin(fractionalYear) - 0.006758 * Math.cos(2 * fractionalYear) + 0.000907 * Math.sin(2 * fractionalYear) - 0.002697 * Math.cos(3 * fractionalYear) + 0.00148 * Math.sin(3 * fractionalYear);
+        // Calculate the declination angle of the sun
+        const declination = 0.006918 - 0.399912 * Math.cos(fractionalYear) + 0.070257 * Math.sin(fractionalYear) - 0.006758 * Math.cos(2 * fractionalYear) + 0.000907 * Math.sin(2 * fractionalYear) - 0.002697 * Math.cos(3 * fractionalYear) + 0.00148 * Math.sin(3 * fractionalYear);
 
-			  // Calculate the time correction factor
-			  const timeCorrectionFactor = 229.18 * (0.000075 + 0.001868 * Math.cos(fractionalYear) - 0.032077 * Math.sin(fractionalYear) - 0.014615 * Math.cos(2 * fractionalYear) - 0.040849 * Math.sin(2 * fractionalYear));
+        // Calculate the time correction factor
+        const timeCorrectionFactor = 229.18 * (0.000075 + 0.001868 * Math.cos(fractionalYear) - 0.032077 * Math.sin(fractionalYear) - 0.014615 * Math.cos(2 * fractionalYear) - 0.040849 * Math.sin(2 * fractionalYear));
 
-			  // Calculate the solar noon time
-			  const solarNoon = (720 - 4 * longitude - timeCorrectionFactor) / 1440;
+        // Calculate the solar noon time
+        const solarNoon = (720 - 4 * longitude - timeCorrectionFactor) / 1440;
 
-			  // Calculate the current time as a fraction of a day
-			  const currentTime = (utcDate.getUTCHours() * 60 + utcDate.getUTCMinutes()) / 1440;
+        // Calculate the current time as a fraction of a day
+        const currentTime = (utcDate.getUTCHours() * 60 + utcDate.getUTCMinutes()) / 1440;
 
-			  // Calculate the hour angle of the sun
-			  const hourAngle = (currentTime - solarNoon) * 2 * Math.PI;
+        // Calculate the hour angle of the sun
+        const hourAngle = (currentTime - solarNoon) * 2 * Math.PI;
 
-			  // Calculate the altitude and azimuth angles of the sun
-			  const altitude = Math.asin(Math.sin(latitude * Math.PI / 180) * Math.sin(declination) + Math.cos(latitude * Math.PI / 180) * Math.cos(declination) * Math.cos(hourAngle));
-			  const azimuth = Math.acos((Math.sin(altitude) * Math.sin(latitude * Math.PI / 180) - Math.sin(declination)) / (Math.cos(altitude) * Math.cos(latitude * Math.PI / 180)));
+        // Calculate the altitude and azimuth angles of the sun
+        const altitude = Math.asin(Math.sin(latitude * Math.PI / 180) * Math.sin(declination) + Math.cos(latitude * Math.PI / 180) * Math.cos(declination) * Math.cos(hourAngle));
+        const azimuth = Math.acos((Math.sin(altitude) * Math.sin(latitude * Math.PI / 180) - Math.sin(declination)) / (Math.cos(altitude) * Math.cos(latitude * Math.PI / 180)));
 
-			  return {
-			    altitude: altitude * 180 / Math.PI,
-			    azimuth: azimuth * 180 / Math.PI,
-			  };
-			}
-			const position = getSunPosition(37.7749, -122.4194, '2023-02-20', '15:30');
-			console.log(position);
-		</script>
-	</body>
+        return {
+          altitude: altitude * 180 / Math.PI,
+          azimuth: azimuth * 180 / Math.PI,
+        };
+      }
+
+      AFRAME.registerComponent('sun-object', {
+        init: function () {
+          // Get the user's current location
+          navigator.geolocation.getCurrentPosition((position) => {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+
+            // Get the current date and time in ISO format
+			const now = new Date();
+            const date = now.toISOString().substr(0, 10);
+            const time = now.toISOString().substr(11, 5);
+			
+			// Get the sun's position
+            const sunPosition = getSunPosition(latitude, longitude, date, time);
+
+            // Create a sphere to represent the sun
+            const sun = document.createElement('a-sphere');
+            sun.setAttribute('radius', 0.1);
+            sun.setAttribute('color', 'yellow');
+
+            // Set the sun's position in 3D space
+            const position = {
+              x: Math.cos(sunPosition.altitude * Math.PI / 180) * Math.sin(sunPosition.azimuth * Math.PI / 180) * -1,
+              y: Math.sin(sunPosition.altitude * Math.PI / 180),
+              z: Math.cos(sunPosition.altitude * Math.PI / 180) * Math.cos(sunPosition.azimuth * Math.PI / 180) * -1,
+            };
+            sun.setAttribute('position', position);
+
+            // Add the sun to the scene
+            this.el.sceneEl.appendChild(sun);
+          });
+        },
+      });
+    </script>
+  </head>
+  <body>
+    <a-scene embedded arjs>
+      <a-entity camera></a-entity>
+      <a-entity sun-object></a-entity>
+    </a-scene>
+  </body>
 </html>
