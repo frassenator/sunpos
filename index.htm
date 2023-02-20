@@ -10,8 +10,7 @@
 <script>
 AFRAME.registerComponent('sun-position', {
   schema: {
-    observerHeight: { type: 'number', default: 1.5 },
-    radius: {type: 'number', default: 30}
+    distance: { type: 'number', default: 50 }
   },
 
   init: function () {
@@ -36,21 +35,13 @@ AFRAME.registerComponent('sun-position', {
 
   calculatePosition: function (altitude, azimuth) {
     // Convert altitude and azimuth to X, Y, Z coordinates
-    const x = Math.sin(azimuth) * Math.cos(altitude) * this.data.radius * 10;
-    const y = Math.sin(altitude) * this.data.radius * 10;
-    const z = Math.cos(azimuth) * Math.cos(altitude) * this.data.radius * 10;
+    const x = Math.sin(azimuth) * Math.cos(altitude) * this.data.distance;
+    const y = Math.sin(altitude) * this.data.distance;
+    const z = Math.cos(azimuth) * Math.cos(altitude) * this.data.distance;
+    // Logging
+	  console.log("Calculate Position: "+ x + " " + y + " " + z);
     return { x, y, z };
   }
-	
-  /*calculateDistance: function () {
-    // Get the observer height
-    const observerHeight = this.data.observerHeight;
-    // Get the sun radius
-    const sunRadius = this.data.sunRadius;
-    // Calculate the distance based on the observer height and the sun radius
-    const distance = (observerHeight + sunRadius) / Math.sin(0.5 * Math.PI - 0.5 * 0.53);
-    return distance;
-  }*/
 });
 </script>
 		<a-scene debug>
