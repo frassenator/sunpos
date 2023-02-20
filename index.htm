@@ -20,7 +20,8 @@ AFRAME.registerComponent('sun-position', {
       const { altitude, azimuth } = SunCalc.getPosition(currentdate, position.coords.latitude, position.coords.longitude);
       this.data.distance = this.calculateDistance(this.data.sunSize, altitude);
       const pos = this.calculatePosition(altitude, azimuth);
-      this.el.setAttribute('position', pos);
+      //this.el.setAttribute('position', pos);
+		document.getElementById("sun").setAttribute('position', pos)
     });
     
     // Update the position of the sphere every 10 seconds
@@ -32,7 +33,8 @@ AFRAME.registerComponent('sun-position', {
         const { altitude, azimuth } = SunCalc.getPosition(currentdate, position.coords.latitude, position.coords.longitude);
         this.data.distance = this.calculateDistance(this.data.sunSize, altitude);
         const pos = this.calculatePosition(altitude, azimuth);
-        this.el.setAttribute('position', pos);
+        //this.el.setAttribute('position', pos);
+		document.getElementById("sun").setAttribute('position', pos)
 	      // Logging
 	    console.log("New Position "+ JSON.stringify(pos));
       });
