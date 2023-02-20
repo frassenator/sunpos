@@ -93,9 +93,13 @@ updatePosition: function (position) {
   
 });
 </script>
-	<a-scene debug>
-		<a-camera gps-camera></a-camera>
-		<a-sphere id="sun" color="yellow" opacity="1" sun-position></a-sphere>
+	<a-scene gps-camera="minDistance: 10; maxDistance: 2000" debug>
+		<a-marker preset="hiro">
+			<a-sphere id="sun" color="yellow" opacity="1" radius="1" gps-entity-place="latitude: 0; longitude: 0; altitude: 0" sun-position></a-sphere>
+		</a-marker>
+		<a-entity position="0 0 -1.5">
+			<a-camera></a-camera>
+		</a-entity>
 	</a-scene>
 	<div style="position: absolute; top: 10px; right: 10px; z-index: 99999;">
 		<label for="date-time-picker">Select a date and time:</label>
