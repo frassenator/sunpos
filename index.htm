@@ -18,7 +18,7 @@ AFRAME.registerComponent('sun-position', {
       const { altitude, azimuth } = SunCalc.getPosition(currentdate, position.coords.latitude, position.coords.longitude);
       const pos = this.calculatePosition(altitude, azimuth);
 	    // Logging
-	    console.log("New Position "+ pos);
+	    console.log("New Position "+ JSON.stringify(pos));
       this.el.setAttribute('position', pos);
     });
     
@@ -31,7 +31,7 @@ AFRAME.registerComponent('sun-position', {
         const { altitude, azimuth } = SunCalc.getPosition(currentdate, position.coords.latitude, position.coords.longitude);
         const pos = this.calculatePosition(altitude, azimuth);
 	    // Logging
-	    console.log("Update Position: "+ pos);
+	    console.log("Update Position: "+ JSON.stringify(pos));
         this.el.setAttribute('position', pos);
       });
     }, 5000);
