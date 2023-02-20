@@ -5,8 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	  
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/suncalc/1.8.0/suncalc.min.js"></script>
+	
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
 	<script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+    <script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v6.1.1/dist/aframe-extras.min.js"></script>
+    
 	
 	
 	<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -14,6 +17,11 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     
     <style>
+		/* make sure the canvas is always visible */
+		canvas {
+			display: block;
+		}
+	
 		#datepicker {
 			position: fixed;
 			bottom: 0;
@@ -24,7 +32,7 @@
     </style>
   </head>
   <body>
-    <h1>SunPos 0.11</h1>
+    <h1>SunPos 0.12</h1>
     <label for="datepicker">Select a date:</label>
     <input type="text" id="datepicker">
     <script>
@@ -34,7 +42,7 @@
 	</script>
     <script>
 		// Get the datetime input element
-		var datetimeInput = document.getElementById("datetime-input");
+		var datetimeInput = document.getElementById("datepicker");
 
 		// If the input is null, set the default value to the current date and time
 		if (datetimeInput === null) {
@@ -59,7 +67,7 @@
 </script>
     <script>
       // get DOM elements
-      const datetimeInput = document.querySelector('#datetime');
+      const datetimeInput = document.querySelector('#datepicker');
       //const sunTrajectory = document.querySelector('#sun-trajectory');
 
       // register sun object position component
@@ -108,7 +116,7 @@
         }
       });
     </script>
-	     <a-scene embedded arjs>
+	 <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: true;">
       	<a-entity camera></a-entity>
       	<a-sphere position="0 0 0" radius="0.5" color="red" id="sun-object" sun-object-position></a-sphere>
 		<a-cone position="0 1 0" radius-bottom="0.1" height="0.2" color="blue" look-at="#sun-object" scale="2 2 2"></a-cone>
