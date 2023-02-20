@@ -14,8 +14,8 @@ AFRAME.registerComponent('sun-position', {
     navigator.geolocation.getCurrentPosition(position => {
       const currentdate = new Date();
       const { altitude, azimuth } = SunCalc.getPosition(currentdate, position.coords.latitude, position.coords.longitude);
-      const position = this.calculatePosition(altitude, azimuth);
-      this.el.setAttribute('position', position);
+      const pos = this.calculatePosition(altitude, azimuth);
+      this.el.setAttribute('position', pos);
     });
     
     // Update the position of the sphere every 5 seconds
