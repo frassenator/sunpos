@@ -54,8 +54,6 @@ AFRAME.registerComponent('sun-position', {
 
   updatePositionTime: function (selectedDate) {
 	navigator.geolocation.getCurrentPosition(position => {
-		// Logging
-			console.log(JSON.stringify(position));
 		const { altitude, azimuth } = SunCalc.getPosition(selectedDate, position.coords.latitude, position.coords.longitude);
 
 		// Convert altitude and azimuth to X, Y, Z coordinates
@@ -66,11 +64,13 @@ AFRAME.registerComponent('sun-position', {
 		// Custom added
 		const size = this.calculateSize(altitude);
 
-
 		// Set the position of the sphere
 		this.el.setAttribute('position', { x, y, z });
 		// Custom Added
 		this.el.setAttribute('scale', {x: size, y: size, z: size});
+		
+		// Custom Logging
+		console.log("Position and scale updated based on user input.");
 	});
   },
   
