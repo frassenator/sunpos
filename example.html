@@ -7,7 +7,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/suncalc/1.8.0/suncalc.min.js"></script>
   </head>
   <body>
-    <h1>V 0.3</h1>
+    <h1>V 0.4</h1>
     <a-scene embedded arjs>
         <a-entity
           id="sun"
@@ -27,18 +27,20 @@
     </a-scene>
     <script>
       function calculateSunPosition() {
-        // Return a Promise that resolves with the sun position, or rejects with an error
+        // Return a Promise that resolves with the sun position and size, or rejects with an error
         return new Promise(function(resolve, reject) {
           navigator.geolocation.getCurrentPosition(
             function(position) {
-              // Calculate the position of the sun
+              // Calculate the position and size of the sun
               var times = SunCalc.getTimes(new Date(), position.coords.latitude, position.coords.longitude);
               var sunPosition = SunCalc.getPosition(times.sunset, position.coords.latitude, position.coords.longitude);
+              var altitude = sunPosition.altitude;
+              var size = Math.tan(Math.PI/2 - altitude) * 3 * 100;
               // Convert the sun's position from spherical coordinates to Cartesian coordinates
-              var x = Math.cos(sunPosition.azimuth) * Math.sin(sunPosition.altitude);
-              var y = Math.sin(sunPosition.azimuth) * Math.sin(sunPosition.altitude);
-              var z = Math.cos(sunPosition.altitude);
-              resolve({ x: x * 3, y: y * 3, z: z * 3 });
+              var x = Math.cos(sunPosition.azimuth) * Math.sin(altitude);
+              var y = Math.sin(sunPosition.azimuth) * Math.sin(altitude);
+              var z = Math.cos(altitude);
+              resolve({ x: x * 3, y: y * 3, z: z * 3, size: size });
             },
             function(error) {
               reject(error);
@@ -52,7 +54,8 @@
       function updateSunPosition() {
         calculateSunPosition()
           .then(function(position) {
-            sun.setAttribute("position", position);
+            sun.setAttribute("position", position.x + " " + position.y + " " + position.z);
+            sun.setAttribute("geometry", "primitive: sphere; radius: " + position.size/100);
             console.log("Sun position:", position);
           })
           .catch(function(error) {
