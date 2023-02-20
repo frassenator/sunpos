@@ -10,50 +10,51 @@
 <script>
 AFRAME.registerComponent('sun-position', {
   schema: {
-    distance: { type: 'number', default: 100 },
-    date: { type: 'string', default: '' },
-    time: { type: 'string', default: '' }
+	distance: { type: 'number', default: 100 },
+	date: { type: 'string', default: '' },
+	time: { type: 'string', default: '' }
   },
 
   init: function () {
-    const el = this.el;
+	const el = this.el;
 
-    // Get the current position of the device
-    navigator.geolocation.getCurrentPosition(position => {
-      this.updatePosition(position);
-    });
+	// Get the current position of the device
+	navigator.geolocation.getCurrentPosition(position => {
+	  this.updatePosition(position);
+	});
 
-    // Update the position of the sphere every 10 seconds
-    setInterval(() => {
-      navigator.geolocation.getCurrentPosition(position => {
-        this.updatePosition(position);
-      });
-    }, 10000);
+	// Update the position of the sphere every 10 seconds
+	setInterval(() => {
+	  navigator.geolocation.getCurrentPosition(position => {
+		this.updatePosition(position);
+	  });
+	}, 10000);
 
-    // Check if a date and time is selected by the user
-    if (this.data.date && this.data.time) {
-      // Set the selected date and time
-      const selectedDate = new Date(this.data.date + 'T' + this.data.time);
-      this.updatePositionTime(selectedDate);
-    }
+	// Check if a date and time is selected by the user
+	if (this.data.date && this.data.time) {
+	  // Set the selected date and time
+	  const selectedDate = new Date(this.data.date + 'T' + this.data.time);
+	  this.updatePositionTime(selectedDate);
+	}
   },
 
   updatePosition: function (position) {
-    const currentdate = new Date();
+	const currentdate = new Date();
 
-    // Check if a date and time is selected by the user
-    if (this.data.date && this.data.time) {
-      // Set the selected date and time
-      const selectedDate = new Date(this.data.date + 'T' + this.data.time);
-      this.updatePositionTime(selectedDate);
-    } else {
-      // Use the current date and time
-      this.updatePositionTime(currentdate);
-    }
+	// Check if a date and time is selected by the user
+	if (this.data.date && this.data.time) {
+	  // Set the selected date and time
+	  const selectedDate = new Date(this.data.date + 'T' + this.data.time);
+	  this.updatePositionTime(selectedDate);
+	} else {
+	  // Use the current date and time
+	  this.updatePositionTime(currentdate);
+	}
   },
 
   updatePositionTime: function (selectedDate) {
 	navigator.geolocation.getCurrentPosition(position => {
+
 		const { altitude, azimuth } = SunCalc.getPosition(selectedDate, position.coords.latitude, position.coords.longitude);
 		// Logging
 			console.log("Selected Date: "+selectedDate);
@@ -62,7 +63,7 @@ AFRAME.registerComponent('sun-position', {
 		const x = Math.sin(azimuth) * Math.cos(altitude) * this.data.distance;
 		const y = Math.sin(altitude) * this.data.distance;
 		const z = Math.cos(azimuth) * Math.cos(altitude) * this.data.distance;
-		
+
 		// Custom added
 		const size = this.calculateSize(altitude);
 
@@ -70,7 +71,7 @@ AFRAME.registerComponent('sun-position', {
 		this.el.setAttribute('position', { x, y, z });
 		// Custom Added
 		this.el.setAttribute('scale', {x: size, y: size, z: size});
-		
+
 		// Custom Logging
 		console.log("Position and scale updated based on user input.");
 	});
@@ -88,8 +89,6 @@ AFRAME.registerComponent('sun-position', {
   }
   
 });
-
-
 </script>
 	<a-scene>
 		<a-camera></a-camera>
