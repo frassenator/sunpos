@@ -5,70 +5,70 @@
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/suncalc/1.8.0/suncalc.min.js"></script>
-	
-	<style>
-		#ui-container {
-			position: absolute;
-			top: 0;
-			left: 0;
-			padding: 16px;
-			color: white;
-			font-size: 16px;
-		}
-		#ui-container p {
-			margin: 4px;
-		}
-	</style>
+    <script>
+      function getLocation() {
+        return new Promise((resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(resolve, reject);
+        });
+      }
+
+      function handleError(error) {
+        var errorDiv = document.createElement('div');
+        errorDiv.innerText = error.message;
+        document.body.appendChild(errorDiv);
+      }
+
+      async function init() {
+        try {
+          const { coords } = await getLocation();
+          const { latitude: lat, longitude: long } = coords;
+
+          const sunPosition = SunCalc.getPosition(new Date(), lat, long);
+          const altitude = sunPosition.altitude;
+          const azimuth = sunPosition.azimuth;
+
+          // Calculate the position of the sun based on altitude and azimuth
+          const theta = azimuth - Math.PI / 2;
+          const phi = Math.PI / 2 - altitude;
+          const x = 100 * Math.sin(phi) * Math.cos(theta);
+          const y = 100 * Math.cos(phi);
+          const z = 100 * Math.sin(phi) * Math.sin(theta);
+
+          // Calculate the size of the sun based on altitude
+          const sunSize = 3 * (1000 / Math.tan(altitude + (Math.PI / 180) * 0.53));
+
+          // Create the sun entity
+          const scene = document.querySelector('a-scene');
+          const sun = document.createElement('a-sphere');
+          sun.setAttribute('position', `${x} ${y} ${z}`);
+          sun.setAttribute('radius', sunSize);
+          sun.setAttribute('color', 'red');
+          scene.appendChild(sun);
+
+          // Update UI with positions and date
+          var userPosition = document.querySelector('[text*="User position"]');
+          userPosition.setAttribute('value', `User position: ${lat.toFixed(4)}, ${long.toFixed(4)}`);
+          var sunPositionEl = document.querySelector('[text*="Sun position"]');
+          sunPositionEl.setAttribute('value', `Sun position: ${x.toFixed(2)}, ${y.toFixed(2)}, ${z.toFixed(2)}`);
+          var dateEl = document.querySelector('[text*="Date"]');
+          dateEl.setAttribute('value', `Date: ${new Date().toLocaleString()}`);
+
+        } catch (error) {
+          handleError(error);
+        }
+      }
+    </script>
   </head>
   <body>
-    <a-scene embedded arjs="sourceType: webcam;">
-      <a-sphere id="sun" radius="0.01" color="red"></a-sphere>
+    <a-scene>
       <a-entity camera></a-entity>
-      <a-entity id="ui-container">
-        <p id="sun-position"></p>
-        <p id="user-location"></p>
-        <p id="datetime"></p>
-      </a-entity>
+      <a-text position="-0.8 0.8 -1" value="" color="white"></a-text>
+      <a-text position="-0.8 0.7 -1" value="" color="white"></a-text>
+      <a-text position="-0.8 0.6 -1" value="" color="white"></a-text>
     </a-scene>
-    <script>
-      // Get the HTML elements for the UI
-      const sunPositionEl = document.getElementById('sun-position');
-      const userLocationEl = document.getElementById('user-location');
-      const datetimeEl = document.getElementById('datetime');
-
-      // Get the user's current location
-      navigator.geolocation.getCurrentPosition(position => {
-        const { latitude, longitude } = position.coords;
-        const userLocation = { lat: latitude, lng: longitude };
-
-        // Set the user location in the UI
-        userLocationEl.textContent = `User location: ${latitude.toFixed(2)}, ${longitude.toFixed(2)}`;
-
-        // Calculate the sun's position
-        const date = new Date();
-        const { altitude, azimuth } = SunCalc.getPosition(date, latitude, longitude);
-        const sunPosition = SunCalc.getPosition(date, latitude, longitude);
-        const distance = 1000;
-
-        // Calculate the position of the sun in 3D space
-        const phi = (90 - altitude) * Math.PI / 180;
-        const theta = (azimuth + 180) * Math.PI / 180;
-        const x = distance * Math.sin(phi) * Math.cos(theta);
-        const y = distance * Math.cos(phi);
-        const z = distance * Math.sin(phi) * Math.sin(theta);
-
-        // Set the position of the sun in the A-Frame scene
-        const sunEl = document.getElementById('sun');
-        sunEl.setAttribute('position', `${x} ${y} ${z}`);
-
-        // Set the sun's position in the UI
-        sunPositionEl.textContent = `Sun position: ${x.toFixed(2)}, ${y.toFixed(2)}, ${z.toFixed(2)}`;
-
-        // Set the datetime in the UI
-        datetimeEl.textContent = `Datetime: ${date.toISOString()}`;
-      }, error => {
-        console.error(error);
-      });
-    </script>
   </body>
+  <script>
+    init();
+  </script>
 </html>
+
