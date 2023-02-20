@@ -26,29 +26,30 @@
 				console.log("Altitude: " + LogSunPosition.altitude + " Azimuth: " + LogSunPosition.azimuth);
 				
 				AFRAME.registerComponent('sun-position', {
-					tick: function () {
-						// Get the current time and location
-						//const now = new Date();
-						//const lat = 37.7749; // San Francisco latitude
-						//const lng = -122.4194; // San Francisco longitude
+					init: function () {
+						// Update the position of the sphere every 5 seconds
+						setInterval(() => {
+						// Get the current position of the sun
+						const { altitude, azimuth } = SunCalc.getPosition(currentdate, position.coords.latitude, position.coords.longitude);
 
-						// Calculate the position of the sun
-						const sunPosition = SunCalc.getPosition(currentdate, position.coords.latitude, position.coords.longitude);
+						// Calculate the position of the sphere based on the sun's position
+						const position = this.calculatePosition(altitude, azimuth);
 
-						// Update the position and rotation of the sun marker
-						const sunEl = document.querySelector('#sun');
-						sunEl.setAttribute('position', {
-							x: sunPosition.azimuth / 180 * 10, // Scale azimuth to fit within marker
-							y: sunPosition.altitude / 90 * 10, // Scale altitude to fit within marker
-							z: -10 // Position the sun marker 10 meters in front of the camera
-						});
-						sunEl.setAttribute('rotation', {
-							x: -sunPosition.altitude / Math.PI * 180, // Rotate the sun marker to face the sun
-							y: sunPosition.azimuth / Math.PI * 180,
-							z: 0
-						});
+						// Update the position of the sphere
+						this.el.setAttribute('position', position);
+						}, 5000);
+					},
+
+					calculatePosition: function (altitude, azimuth) {
+					// Convert altitude and azimuth to X, Y, Z coordinates
+					const x = Math.sin(azimuth) * Math.cos(altitude) * this.data.distance;
+					const y = Math.sin(altitude) * this.data.distance;
+					const z = Math.cos(azimuth) * Math.cos(altitude) * this.data.distance;
+
+					return { x, y, z };
 					}
 				});
+
 
 			}
 		</script>
