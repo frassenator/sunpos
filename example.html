@@ -78,14 +78,14 @@
             }
         }
 
-        // Update sun position every 30 seconds
+        // Update sun position every 5 seconds
         setInterval(() => {
             getUserLocation().then(pos => {
                 updateSunPosition(pos.coords.latitude, pos.coords.longitude);
             }).catch(err => {
                 console.error(err);
             });
-        }, 30000);
+        }, 5000);
     </script>
 </body>
 </html>
