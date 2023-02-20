@@ -87,9 +87,8 @@ const arrow = document.querySelector('#arrow');
     },
 
     updateArrowRotation: function () {
-      const cameraRotation = new THREE.Euler().setFromQuaternion(this.camera.object3D.quaternion, 'YXZ');
-      arrowRotation.set(0, -cameraRotation.y, 0);
-      arrow.object3D.rotation.setFromVector3(arrowRotation);
+	const arrow = document.querySelector('#arrow');
+	arrow.setAttribute('rotation', arrowRotation);
     }
   });
 
@@ -112,7 +111,7 @@ const arrow = document.querySelector('#arrow');
   <a-marker preset="hiro">
     <a-entity id="sun" geometry="primitive: sphere; radius: 0.1" material="color: yellow" position="0 0 0"></a-entity>
   </a-marker>
- <a-entity id="arrow" position="0 0 -0.2" geometry="primitive: cone; height: 0.1; radiusBottom: 0.03; radiusTop: 0" material="color: red"></a-entity>
-  </a-scene>
+<a-entity id="arrow" position="0 0 -0.2" geometry="primitive: cone; height: 0.1; radiusBottom: 0.03; radiusTop: 0" material="color: red" rotation="0 0 0"></a-entity>
+ </a-scene>
   </body>
 </html>
