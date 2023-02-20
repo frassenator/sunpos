@@ -22,7 +22,7 @@ AFRAME.registerComponent('sun-position', {
       this.el.setAttribute('position', pos);
     });
     
-    // Update the position of the sphere every 5 seconds
+    // Update the position of the sphere every 10 seconds
     setInterval(() => {
       navigator.geolocation.getCurrentPosition(position => {
         const currentdate = new Date();
@@ -34,7 +34,7 @@ AFRAME.registerComponent('sun-position', {
 	    console.log("Update Position: "+ JSON.stringify(pos));
         this.el.setAttribute('position', pos);
       });
-    }, 5000);
+    }, 10000);
   },
 
   calculatePosition: function (altitude, azimuth) {
