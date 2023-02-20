@@ -58,12 +58,9 @@ AFRAME.registerComponent('sun-position', {
   }
 });
 </script>
-		<a-scene>
+		<a-scene debug>
 			<a-entity camera></a-entity>
 			<a-sphere id="sun" radius="0.5" color="yellow" opacity="0.5" sun-position></a-sphere>
-			<a-entity position="0 0 -3">
-				<a-box color="red" width="0.3" height="0.3" depth="0.3"></a-box>
-			</a-entity>
 		</a-scene>
 
 	</body>
