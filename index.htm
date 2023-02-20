@@ -69,6 +69,9 @@ updatePosition: function (position) {
 
 		// Custom added
 		const size = this.calculateSize(altitude);
+		
+		// Custom Logging
+		console.log("Calculated Position: x:"+ x + " y:" + y + " z:" + z);
 
 		// Set the position of the sphere
 		this.el.setAttribute('position', { x, y, z });
