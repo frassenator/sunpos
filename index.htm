@@ -15,7 +15,7 @@
     </style>
   </head>
   <body>
-    <h1>SunPos 0.10</h1>
+    <h1>SunPos 0.11</h1>
     <div class="input-field">
       <label for="datetime">Date and Time:</label>
       <input type="datetime-local" id="datetime" value="">
@@ -54,6 +54,15 @@
           const afterSunPos = SunCalc.getPosition(afterTime, this.el.getAttribute('position').x, this.el.getAttribute('position').y);
           const afterX = afterSunPos.azimuth / Math.PI * -10;
           const afterY = afterSunPos.altitude / Math.PI * -10;
+		
+	// check if sunTrajectory exists
+	if (!sunTrajectory) {
+		sunTrajectory = document.querySelector('#sun-trajectory');
+		if (!sunTrajectory) {
+			console.error('sunTrajectory entity not found!');
+			return;
+		}
+	}
 
           // update sun trajectory
           sunTrajectory.setAttribute('line', `start: ${beforeX} ${beforeY} -10; end: 0 0 -10; color: yellow;`);
