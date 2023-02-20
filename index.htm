@@ -1,127 +1,85 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>SunPos</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	  
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/suncalc/1.8.0/suncalc.min.js"></script>
-	
+    <meta charset="utf-8" />
+    <title>AR Solar Position</title>
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-	<script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
-    <script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v6.1.1/dist/aframe-extras.min.js"></script>
-    
-	
-	
-	<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-    
-    <style>
-		/* make sure the canvas is always visible */
-		canvas {
-			display: block;
-		}
-	
-		#datepicker {
-			position: fixed;
-			bottom: 0;
-			left: 50%;
-			transform: translateX(-50%);
-			z-index: 9999;
-		}
-    </style>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+    <script>
+      function getSunPosition(latitude, longitude, date, time) {
+        // Convert date and time to UTC
+        const utcDate = new Date(date + 'T' + time + 'Z');
+
+        // Calculate the day of the year
+        const dayOfYear = Math.floor((utcDate - new Date(utcDate.getUTCFullYear(), 0, 0)) / 86400000);
+
+        // Calculate the fractional year
+        const fractionalYear = (2 * Math.PI / 365) * (dayOfYear - 1 + (utcDate.getUTCHours() - 12) / 24);
+
+        // Calculate the declination angle of the sun
+        const declination = 0.006918 - 0.399912 * Math.cos(fractionalYear) + 0.070257 * Math.sin(fractionalYear) - 0.006758 * Math.cos(2 * fractionalYear) + 0.000907 * Math.sin(2 * fractionalYear) - 0.002697 * Math.cos(3 * fractionalYear) + 0.00148 * Math.sin(3 * fractionalYear);
+
+        // Calculate the time correction factor
+        const timeCorrectionFactor = 229.18 * (0.000075 + 0.001868 * Math.cos(fractionalYear) - 0.032077 * Math.sin(fractionalYear) - 0.014615 * Math.cos(2 * fractionalYear) - 0.040849 * Math.sin(2 * fractionalYear));
+
+        // Calculate the solar noon time
+        const solarNoon = (720 - 4 * longitude - timeCorrectionFactor) / 1440;
+
+        // Calculate the current time as a fraction of a day
+        const currentTime = (utcDate.getUTCHours() * 60 + utcDate.getUTCMinutes()) / 1440;
+
+        // Calculate the hour angle of the sun
+        const hourAngle = (currentTime - solarNoon) * 2 * Math.PI;
+
+        // Calculate the altitude and azimuth angles of the sun
+        const altitude = Math.asin(Math.sin(latitude * Math.PI / 180) * Math.sin(declination) + Math.cos(latitude * Math.PI / 180) * Math.cos(declination) * Math.cos(hourAngle));
+        const azimuth = Math.acos((Math.sin(altitude) * Math.sin(latitude * Math.PI / 180) - Math.sin(declination)) / (Math.cos(altitude) * Math.cos(latitude * Math.PI / 180)));
+
+        return {
+          altitude: altitude * 180 / Math.PI,
+          azimuth: azimuth * 180 / Math.PI,
+        };
+      }
+
+      AFRAME.registerComponent('sun-object', {
+        init: function () {
+          // Get the user's current location
+          navigator.geolocation.getCurrentPosition((position) => {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+
+            // Get the current date and time in ISO format
+			const now = new Date();
+            const date = now.toISOString().substr(0, 10);
+            const time = now.toISOString().substr(11, 5);
+			
+			// Get the sun's position
+            const sunPosition = getSunPosition(latitude, longitude, date, time);
+
+            // Create a sphere to represent the sun
+            const sun = document.createElement('a-sphere');
+            sun.setAttribute('radius', 0.1);
+            sun.setAttribute('color', 'yellow');
+
+            // Set the sun's position in 3D space
+            const position = {
+              x: Math.cos(sunPosition.altitude * Math.PI / 180) * Math.sin(sunPosition.azimuth * Math.PI / 180) * -1,
+              y: Math.sin(sunPosition.altitude * Math.PI / 180),
+              z: Math.cos(sunPosition.altitude * Math.PI / 180) * Math.cos(sunPosition.azimuth * Math.PI / 180) * -1,
+            };
+            sun.setAttribute('position', position);
+
+            // Add the sun to the scene
+            this.el.sceneEl.appendChild(sun);
+          });
+        },
+      });
+    </script>
   </head>
   <body>
-    <h1>SunPos 0.12</h1>
-    <label for="datepicker">Select a date:</label>
-    <input type="text" id="datepicker">
-    <script>
-      $(function() {
-        $("#datepicker").datepicker();
-      });
-	</script>
-    <script>
-		// Get the datetime input element
-		var datetimeInput = document.getElementById("datepicker");
-
-		// If the input is null, set the default value to the current date and time
-		if (datetimeInput === null) {
-			var now = new Date();
-			datetimeInput.value = now.toISOString().slice(0, 16);
-		}
-    </script>
-	<script>
-	// Troubleshooting
-	
-		function onSceneLoaded() {
-		  console.log('Scene loaded');
-		  const sphere = document.getElementById('sphere');
-		  const cone = document.getElementById('cone');
-		  console.log(box);
-		  console.log(sphere);
-		  console.log(cone);
-
-		  // Scale the sphere up by 2x
-		  sphere.object3D.scale.set(2, 2, 2);
-		}
-</script>
-    <script>
-      // get DOM elements
-      const datetimeInput = document.querySelector('#datepicker');
-      //const sunTrajectory = document.querySelector('#sun-trajectory');
-
-      // register sun object position component
-      AFRAME.registerComponent('sun-object-position', {
-        dependencies: ['position'],
-        schema: {
-          objHeight: {type: 'number', default: 1},
-          objWidth: {type: 'number', default: 1}
-        },
-        update: function () {
-          const datetime = new Date(datetimeInput.value);
-          const sunPos = SunCalc.getPosition(datetime, this.el.getAttribute('position').x, this.el.getAttribute('position').y);
-          const elevation = sunPos.altitude * 180 / Math.PI;
-          const azimuth = sunPos.azimuth * 180 / Math.PI;
-          const distance = sunPos.distance;
-          const radius = Math.tan(this.el.sceneEl.camera.fov / 2 * Math.PI / 180) * distance;
-          const scale = radius * this.data.objWidth * 2;
-
-          this.el.setAttribute('rotation', {x: -elevation, y: azimuth, z: 0});
-          this.el.setAttribute('scale', {x: scale, y: scale * this.data.objHeight, z: scale});
-
-          // calculate sun position 3 hours before and after
-          const beforeTime = new Date(datetime.getTime() - (3 * 60 * 60 * 1000));
-          const beforeSunPos = SunCalc.getPosition(beforeTime, this.el.getAttribute('position').x, this.el.getAttribute('position').y);
-          const beforeX = beforeSunPos.azimuth / Math.PI * -10;
-          const beforeY = beforeSunPos.altitude / Math.PI * -10;
-
-          const afterTime = new Date(datetime.getTime() + (3 * 60 * 60 * 1000));
-          const afterSunPos = SunCalc.getPosition(afterTime, this.el.getAttribute('position').x, this.el.getAttribute('position').y);
-          const afterX = afterSunPos.azimuth / Math.PI * -10;
-          const afterY = afterSunPos.altitude / Math.PI * -10;
-
-			// check if sunTrajectory exists
-			if (!sunTrajectory) {
-				const sunTrajectory = document.querySelector('#sun-trajectory');
-				if (!sunTrajectory) {
-					console.error('sunTrajectory entity not found!');
-					return;
-				}
-			}
-
-
-          // update sun trajectory
-          sunTrajectory.setAttribute('line', `start: ${beforeX} ${beforeY} -10; end: 0 0 -10; color: yellow;`);
-          sunTrajectory.setAttribute('line__2', `start: 0 0 -10; end: ${afterX} ${afterY} -10; color: yellow;`);
-        }
-      });
-    </script>
-	 <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: true;">
-      	<a-entity camera></a-entity>
-      	<a-sphere position="0 0 0" radius="0.5" color="red" id="sun-object" sun-object-position></a-sphere>
-		<a-cone position="0 1 0" radius-bottom="0.1" height="0.2" color="blue" look-at="#sun-object" scale="2 2 2"></a-cone>
-      	<a-entity id="sun-trajectory" line="start: 0 0 0; end: 0 0 -10; color: yellow"></a-entity>
+    <a-scene embedded arjs>
+      <a-entity camera></a-entity>
+      <a-entity sun-object></a-entity>
     </a-scene>
   </body>
 </html>
-
