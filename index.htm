@@ -20,44 +20,50 @@
     </a-scene>
     <script>
       // get the sun's position in the sky
-      function getSunPosition() {
-        const now = new Date();
-        const lat = 37.7749; // latitude of San Francisco
-        const lng = -122.4194; // longitude of San Francisco
-        const zenith = 90.83333333333333; // sun's zenith for sunrise/sunset
-        const sunrise = SunCalc.getTimes(now, lat, lng).sunrise;
-        const sunset = SunCalc.getTimes(now, lat, lng).sunset;
-        const currentTime = now.getTime();
+	function getSunPosition(now, lat, lng) {
+		const zenith = 90.83333333333333; // sun's zenith for sunrise/sunset
+		const sunrise = SunCalc.getTimes(now, lat, lng).sunrise;
+		const sunset = SunCalc.getTimes(now, lat, lng).sunset;
+		const currentTime = now.getTime();
 
-        let sunPosition;
-        if (currentTime > sunrise.getTime() && currentTime < sunset.getTime()) {
-          sunPosition = SunCalc.getPosition(now, lat, lng);
-        } else {
-          sunPosition = { altitude: -100 };
-        }
-        return sunPosition;
-      }
+		let sunPosition;
+		if (currentTime > sunrise.getTime() && currentTime < sunset.getTime()) {
+			sunPosition = SunCalc.getPosition(now, lat, lng);
+		} else {
+			sunPosition = { altitude: -100 };
+		}
+		return sunPosition;
+	}
 
-      // create the sun entity
-      function createSun() {
-        const sun = document.createElement('a-sphere');
-        sun.setAttribute('radius', '1');
-        sun.setAttribute('position', '0 0 -5');
-        sun.setAttribute('material', 'color: #FDB813; roughness: 1');
-        sun.setAttribute('visible', false);
+	// create the sun entity
+	function createSun() {
+		const sun = document.createElement('a-sphere');
+		sun.setAttribute('radius', '1');
+		sun.setAttribute('position', '0 0 -5');
+		sun.setAttribute('material', 'color: #FDB813; roughness: 1');
+		sun.setAttribute('visible', false);
 
-        const sunPosition = getSunPosition();
-        if (sunPosition.altitude > -90) {
-          const azimuth = -sunPosition.azimuth * (180 / Math.PI);
-          const altitude = sunPosition.altitude * (180 / Math.PI);
-          sun.setAttribute('rotation', `${altitude} ${azimuth} 0`);
-          sun.setAttribute('visible', true);
-        } else {
-          console.warn('The sun is below the horizon');
-        }
+		navigator.geolocation.getCurrentPosition((position) => {
+		const lat = position.coords.latitude;
+		const lng = position.coords.longitude;
+		const now = new Date();
 
-        return sun;
-      }
+		const sunPosition = getSunPosition(now, lat, lng);
+		if (sunPosition.altitude > -90) {
+			const azimuth = -sunPosition.azimuth * (180 / Math.PI);
+			const altitude = sunPosition.altitude * (180 / Math.PI);
+			sun.setAttribute('rotation', `${altitude} ${azimuth} 0`);
+			sun.setAttribute('visible', true);
+		} else {
+			console.warn('The sun is below the horizon');
+		}
+		}, (error) => {
+			console.error('Error occurred while getting geolocation:', error);
+		});
+
+		return sun;
+	}
+
 
       // create the compass entity
 		function createCompass() {
