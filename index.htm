@@ -13,8 +13,12 @@ AFRAME.registerComponent('sun-position', {
     // Get the current position of the device
     navigator.geolocation.getCurrentPosition(position => {
       const currentdate = new Date();
+	    // Logging
+	    console.log("New Date "+ currentdate);
       const { altitude, azimuth } = SunCalc.getPosition(currentdate, position.coords.latitude, position.coords.longitude);
       const pos = this.calculatePosition(altitude, azimuth);
+	    // Logging
+	    console.log("New Position "+ pos);
       this.el.setAttribute('position', pos);
     });
     
@@ -22,8 +26,12 @@ AFRAME.registerComponent('sun-position', {
     setInterval(() => {
       navigator.geolocation.getCurrentPosition(position => {
         const currentdate = new Date();
+	    // Logging
+	    console.log("Update Date "+ currentdate);
         const { altitude, azimuth } = SunCalc.getPosition(currentdate, position.coords.latitude, position.coords.longitude);
         const pos = this.calculatePosition(altitude, azimuth);
+	    // Logging
+	    console.log("Update Position: "+ pos);
         this.el.setAttribute('position', pos);
       });
     }, 5000);
@@ -34,6 +42,8 @@ AFRAME.registerComponent('sun-position', {
     const x = Math.sin(azimuth) * Math.cos(altitude) * this.data.distance;
     const y = Math.sin(altitude) * this.data.distance;
     const z = Math.cos(azimuth) * Math.cos(altitude) * this.data.distance;
+	  // Logging
+	  console.log("Calculate Position: "+ x + " " + y + " " + z);
     return { x, y, z };
   }
 });
