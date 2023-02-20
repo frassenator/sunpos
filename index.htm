@@ -21,9 +21,6 @@
 			}
 
 			function showPosition(position) {
-				console.log(position);
-				LogSunPosition = SunCalc.getPosition(currentdate, position.coords.latitude, position.coords.longitude);
-				console.log("Altitude: " + LogSunPosition.altitude + " Azimuth: " + LogSunPosition.azimuth);
 				
 				AFRAME.registerComponent('sun-position', {
 					init: function () {
@@ -41,6 +38,8 @@
 						this.el.setAttribute('position', position);
 						}, 5000);
 					},
+					
+					console.log("Test 123");
 
 					calculatePosition: function (altitude, azimuth) {
 					// Convert altitude and azimuth to X, Y, Z coordinates
