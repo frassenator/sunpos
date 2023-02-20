@@ -10,26 +10,39 @@
 <script>
 AFRAME.registerComponent('sun-position', {
   schema: {
-    distance: { type: 'number', default: 1000000000000 }
+    distance: { type: 'number', default: 100 }
   },
 
   init: function () {
-	  
     // Get the current position of the device
     navigator.geolocation.getCurrentPosition(position => {
       const currentdate = new Date();
+	    // Logging
+	    console.log("New Date "+ currentdate);
       const { altitude, azimuth } = SunCalc.getPosition(currentdate, position.coords.latitude, position.coords.longitude);
+	    // Logging
+	    console.log("Altitude: "+altitude+" Azimuth:"+azimuth);  
       const pos = this.calculatePosition(altitude, azimuth);
+      const size = this.calculateSize(altitude);
+	    // Logging
+	    console.log("New Position "+ JSON.stringify(pos));
       this.el.setAttribute('position', pos);
+      this.el.setAttribute('scale', {x: size, y: size, z: size});
     });
     
-    // Update the position of the sphere every 10 seconds
+    // Update the position and size of the sphere every 10 seconds
     setInterval(() => {
       navigator.geolocation.getCurrentPosition(position => {
         const currentdate = new Date();
+	    // Logging
+	    console.log("Update Date "+ currentdate);
         const { altitude, azimuth } = SunCalc.getPosition(currentdate, position.coords.latitude, position.coords.longitude);
+	      // Logging
+	    console.log("Altitude: "+altitude+" Azimuth:"+azimuth);
         const pos = this.calculatePosition(altitude, azimuth);
+        const size = this.calculateSize(altitude);
         this.el.setAttribute('position', pos);
+        this.el.setAttribute('scale', {x: size, y: size, z: size});
       });
     }, 10000);
   },
@@ -42,16 +55,25 @@ AFRAME.registerComponent('sun-position', {
     // Logging
 	  console.log("Calculate Position: "+ x + " " + y + " " + z);
     return { x, y, z };
+  },
+
+  calculateSize: function (altitude) {
+    // Set the radius of the sphere to block the actual sun from the observer's point of view
+    const sphereRadius = 0.53; // in degrees
+    const observerHeight = 1.7; // in meters
+    const objectHeight = Math.tan(altitude) * this.data.distance + observerHeight;
+    const objectSize = sphereRadius / Math.atan(objectHeight / this.data.distance);
+    // Logging
+    console.log("Calculate Size: "+ objectSize);
+    return objectSize;
   }
 });
+
 </script>
-	<a-scene embedded arjs="sourceType: webcam; debugUIEnabled: true;">
-		<a-camera gps-camera rotation-reader></a-camera>
-		<a-assets>
-			<a-mixin id="arrow" look-at="#sun" geometry="primitive: cone; height: 0.3; radiusBottom: 0.1;" material="color: red;"></a-mixin>
-		</a-assets>
-		<a-sphere id="sun" radius="30" color="yellow" opacity="1" sun-position></a-sphere>
-		<a-marker-camera preset="hiro"></a-marker-camera>
+	<a-scene>
+		<a-camera></a-camera>
+		<a-sphere id="sun" color="yellow" opacity="1" sun-position></a-sphere>
+
 	</a-scene>
 	</body>
 </html>
