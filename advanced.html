@@ -30,7 +30,7 @@
 
           // Create the "anchor" object and position it at the GPS coordinates
           var anchor = document.createElement('a-entity');
-          anchor.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
+          anchor.setAttribute('gps-new-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
           document.querySelector('a-scene').appendChild(anchor);
 
           // Create the sun object and position it relative to the "anchor" object
