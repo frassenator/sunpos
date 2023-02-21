@@ -104,11 +104,13 @@ updatePosition: function (position) {
 			// Logging
 			console.log("Calculated Size: "+size);
 		
-		// Custom Logging
+		// Logging
 		console.log("Calculated Position: x:"+ x + " y:" + y + " z:" + z);
 
 		// Set the position of the sphere
 		// this.el.setAttribute('position', { x, y, z });
+			// Logging
+			console.log("Calculated Position: x:"+ entity.object3D.position.x + " y:" + entity.object3D.position.y + " z:" + entity.object3D.position.z);
 		this.el.setAttribute('position', { x: entity.object3D.position.x + x, y: entity.object3D.position.y + y, z: entity.object3D.position.z + z });
 
 		// Custom Added
