@@ -38,6 +38,21 @@ AFRAME.registerComponent('sun-position', {
 	  const selectedDate = new Date(this.data.date + 'T' + this.data.time);
 	  this.updatePositionTime(selectedDate);
 	}
+	  
+	// Add a device orientation event listener to update the orientation of the AR object
+	window.addEventListener('deviceorientation', function(event) {
+	var alpha = event.alpha; // compass direction in degrees
+	var beta = event.beta;   // front-to-back tilt in degrees
+	var gamma = event.gamma; // left-to-right tilt in degrees
+
+	// Logging
+	console.log('Compass: ' + alpha);
+	console.log('Front-to-back tilt: ' + beta);
+	console.log('Left-to-right tilt: ' + gamma);
+
+	// Update the rotation of the AR object
+	el.setAttribute('rotation', { x: beta, y: alpha, z: -gamma });
+	});
   },
 	
 updatePosition: function (position) {
