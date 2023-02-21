@@ -12,7 +12,7 @@
 <script>
 AFRAME.registerComponent('sun-position', {
   schema: {
-	distance: { type: 'number', default: 200 },
+	distance: { type: 'number', default: 50 },
 	date: { type: 'string', default: '' },
 	time: { type: 'string', default: '' }
   },
@@ -25,12 +25,12 @@ AFRAME.registerComponent('sun-position', {
 	  this.updatePosition(position);
 	});
 
-	// Update the position of the sphere every 30 seconds
+	// Update the position of the sphere every 5 seconds
 	setInterval(() => {
 	  navigator.geolocation.getCurrentPosition(position => {
 		this.updatePosition(position);
 	  });
-	}, 30000);
+	}, 5000);
 
 	// Check if a date and time is selected by the user
 	if (this.data.date && this.data.time) {
