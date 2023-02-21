@@ -84,7 +84,7 @@ updatePosition: function (position) {
 		const z = Math.cos(azimuth) * Math.cos(altitude) * this.data.distance;
 
 		// Custom added
-		const size = this.calculateSize(altitude);
+		const size = this.calculateSize(altitude)*5;
 		
 			// Logging
 			console.log("Calculated Size: "+size);
@@ -114,7 +114,7 @@ updatePosition: function (position) {
 	<a-scene vr-mode-ui='enabled: false' arjs='sourceType: webcam; videoTexture: true; debugUIEnabled: false' renderer='antialias: true; alpha: true'>
 		<a-camera gps-new-camera='gpsMinDistance: 5'></a-camera>
 		<a-box id="anchor">
-			<a-box id="sun" sun-position></a-box>
+			<a-sphere id="sun" sun-position></a-sphere>
 		</a-box>
 	</a-scene>
 	
