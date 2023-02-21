@@ -43,12 +43,15 @@ AFRAME.registerComponent('sun-position', {
 	
 updatePosition: function (position) {
   const currentdate = new Date();
+	
+// New Code
   const basebox = document.getElementById("basebox")
 	basebox .setAttribute('gps-entity-place', {
  		latitude: new_latitude,
  		longitude: new_longitude
 	});
 	basebox.components["gps-entity-place"]._updatePosition();
+// End New Code
 
   // Get the date and time selected by the user
   const dateTimePicker = document.getElementById('date-time-picker');
@@ -114,7 +117,7 @@ updatePosition: function (position) {
 	-->
 	<a-scene vr-mode-ui="enabled: false" arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false" renderer="antialias: true; alpha: true">
 		<a-camera gps-new-camera="gpsMinDistance: 5"></a-camera>
-		<a-entity id="main_model" material="color: red" geometry="primitive: box" gps-new-entity-place="" scale="10 10 10">
+		<a-entity id="basebox" material="color: red" geometry="primitive: box" gps-new-entity-place="" scale="10 10 10">
 			<a-sphere id="sun" color="yellow" opacity="1" radius="1" sun-position></a-sphere>
 		</a-entity>
 	</a-scene>
