@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>AR.js A-Frame Location-based</title>
+    <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+    <script type='text/javascript' src='https://raw.githack.com/AR-js-org/AR.js/master/three.js/build/ar-threex-location-only.js'></script>
+    <script type='text/javascript' src='https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js'></script>
+  </head>
+  <body>
+    <a-scene debug="" vr-mode-ui="enabled: false" arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false" renderer="antialias: true; alpha: true" inspector="" keyboard-shortcuts="" screenshot="" device-orientation-permission-ui="">
+      <<a-camera gps-new-camera='gpsMinDistance: 5'></a-camera>
+      <a-entity id="basebox" material="color: red" geometry="primitive: box" gps-new-entity-place="" scale="10 10 10" gps-entity-place="latitude: 59.340170345290325; longitude: 18.013633677548686">
+        <a-sphere id="sun" color="yellow" opacity="1" radius="1" sun-position="" material="" geometry="" position="-137.45814848655226 39.505329325783975 139.80195409761015" scale="2.5605229493481145 2.5605229493481145 2.5605229493481145"></a-sphere>
+      </a-entity>
+    </a-scene>
+  </body>
+</html>
+
