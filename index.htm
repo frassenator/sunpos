@@ -66,9 +66,9 @@ updatePosition: function (position) {
 		// Add a box to the north of the GPS position, this used as the basepoint for relative position of the Sun
             const entity = document.querySelector("#anchor");
             entity.setAttribute("scale", {
-                x: 20, 
-                y: 20,
-                z: 20
+                x: 10, 
+                y: 10,
+                z: 10
             });
             entity.setAttribute('material', { color: 'blue' } );
             entity.setAttribute('gps-new-entity-place', {
