@@ -20,7 +20,8 @@
           // Calculate the position of the sun using SunCalc.js
           var position = SunCalc.getPosition(date, latitude, longitude);
               // Logging
-              console.log("Position: " + position);
+              console.log("Azimuth: " + position.azimuth);
+              console.log("Altitude: " + position.altitude);
 
           // Convert the azimuth and altitude to X, Y, and Z coordinates
           var radius = 10; // example radius of the sun object
