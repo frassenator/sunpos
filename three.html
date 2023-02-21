@@ -28,8 +28,8 @@
                 lon: e.detail.position.longitude
             };
             const distance = 10; // meters
-            const position = getLocationRelativeToCamera(camera, target, distance);
-            entity.setAttribute('position', position);
+            const relativeposition = getLocationRelativeToCamera(camera, target, distance);
+            entity.setAttribute('position', relativeposition);
             document.querySelector("a-scene").appendChild(entity);
         }
         testEntityAdded = true;
