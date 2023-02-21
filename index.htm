@@ -103,8 +103,8 @@ updatePosition: function (position) {
     const objectHeight = Math.tan(altitude) * this.data.distance + observerHeight;
     const objectSize = sphereRadius / Math.atan(objectHeight / this.data.distance);
 	  
-	  // Logging
-	//console.log("Calculated Object Size: "+objectSize);
+	// Logging
+	console.log("Calculated Object Size: "+objectSize);
     return objectSize;
   }
   
