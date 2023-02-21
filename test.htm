@@ -14,14 +14,10 @@
     el.addEventListener("gps-camera-update-position", e => {
         if(!testEntityAdded) {
             alert("Got first GPS position: lon " + e.detail.position.longitude + " lat " + e.detail.position.latitude);
+          
             // Add a box to the north of the initial GPS position
-            const entity = document.createElement("a-box");
-            entity.setAttribute("scale", {
-                x: 20, 
-                y: 20,
-                z: 20
+            const entity = document.getElementById("basebox")
             });
-            entity.setAttribute('material', { color: 'red' } );
             entity.setAttribute('gps-new-entity-place', {
                 latitude: e.detail.position.latitude + 0.001,
                 longitude: e.detail.position.longitude
@@ -36,7 +32,7 @@
   <body>
     <a-scene debug vr-mode-ui='enabled: false' arjs='sourceType: webcam; videoTexture: true; debugUIEnabled: false' renderer='antialias: true; alpha: true'>
       gps-camera="minDistance: 10;" debug
-      <a-entity id="basebox" material="color: red" geometry="primitive: box" gps-new-entity-place="latitude: 59.3399896; longitude: 18.0134857" scale="10 10 10">
+      <a-entity id="basebox" material="color: red" geometry="primitive: box" gps-new-entity-place="latitude: 59.3399896; longitude: 18.0134857" scale="20 20 20">
         <a-sphere id="sun" color="yellow" opacity="1" radius="1" sun-position="" position="-137.45814848655226 39.505329325783975 139.80195409761015" scale="2.5605229493481145 2.5605229493481145 2.5605229493481145"></a-sphere>
       </a-entity>
     </a-scene>
