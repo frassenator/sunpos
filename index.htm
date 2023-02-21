@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script> 
-		<script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
+		<!-- <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script> -->
+		<!-- <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script> -->
+		<script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+		<script type='text/javascript' src='https://raw.githack.com/AR-js-org/AR.js/master/three.js/build/ar-threex-location-only.js'></script>
+		<script type='text/javascript' src='https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js'></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/suncalc/1.8.0/suncalc.min.js"></script>
 		<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 	</head>
@@ -40,6 +43,12 @@ AFRAME.registerComponent('sun-position', {
 	
 updatePosition: function (position) {
   const currentdate = new Date();
+  const basebox = document.getElementById("basebox")
+	basebox .setAttribute('gps-entity-place', {
+ 		latitude: new_latitude,
+ 		longitude: new_longitude
+	});
+	basebox.components["gps-entity-place"]._updatePosition();
 
   // Get the date and time selected by the user
   const dateTimePicker = document.getElementById('date-time-picker');
@@ -93,12 +102,20 @@ updatePosition: function (position) {
   
 });
 </script>
+	<!-- Original Scene
 	<a-scene gps-camera="minDistance: 10; maxDistance: 2000" debug>
 		<a-marker preset="hiro">
 			<a-sphere id="sun" color="yellow" opacity="1" radius="1" sun-position></a-sphere>
 		</a-marker>
 		<a-entity position="0 0 -1.5">
 			<a-camera></a-camera>
+		</a-entity>
+	</a-scene>
+	-->
+	<a-scene vr-mode-ui="enabled: false" arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false" renderer="antialias: true; alpha: true">
+		<a-camera gps-new-camera="gpsMinDistance: 5"></a-camera>
+		<a-entity material="color: red" geometry="primitive: box" gps-new-entity-place="" scale="10 10 10">
+			<a-sphere id="sun" color="yellow" opacity="1" radius="1" sun-position></a-sphere>
 		</a-entity>
 	</a-scene>
 	<div style="position: absolute; top: 10px; right: 10px; z-index: 99999;">
