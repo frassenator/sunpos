@@ -1,58 +1,58 @@
 <!DOCTYPE html>
 <html>
-<head>
-<title>AR.js A-Frame Location-based</title>
-<script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
-<script type='text/javascript' src='https://raw.githack.com/AR-js-org/AR.js/master/three.js/build/ar-threex-location-only.js'></script>
-<script type='text/javascript' src='https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js'></script>
-<script>
-  window.onload = () => {
-    let testEntityAdded = false;
-
-    const el = document.querySelector("[gps-new-camera]");
-
-    el.addEventListener("gps-camera-update-position", e => {
-        if(!testEntityAdded) {
-            alert(`Got first GPS position: lon ${e.detail.position.longitude} lat ${e.detail.position.latitude}`);
-           
-            // Add a box to the north of the initial GPS position
-            const sun = document.createElement("a-box");
-            sun.setAttribute("scale", {
-                x: 20, 
-                y: 20,
-                z: 20
-            });
-            sun.setAttribute('material', { color: 'yellow' } );
-            sun.setAttribute('gps-new-entity-place', {
-                latitude: e.detail.position.latitude + 0.0001,
-                longitude: e.detail.position.longitude
-            });
-            sun.setAttribute("position", { x: 40, y: 40, z: 40 });
-            document.querySelector("a-scene").appendChild(sun);
-            
+  <head>
+    <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+    <script type='text/javascript' src='https://raw.githack.com/AR-js-org/AR.js/master/three.js/build/ar-threex-location-only.js'></script>
+    <script type='text/javascript' src='https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/suncalc/1.8.0/suncalc.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <h1>Sun Position</h1>
+    
+    <script>
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
           
-             // Add a box to the north of the initial GPS position
-            const entity = document.createElement("a-box");
-            entity.setAttribute("scale", {
-                x: 20, 
-                y: 20,
-                z: 20
-            });
-            entity.setAttribute('material', { color: 'blue' } );
-            entity.setAttribute('gps-new-entity-place', {
-                latitude: e.detail.position.latitude + 0.0001,
-                longitude: e.detail.position.longitude
-            });
-            document.querySelector("a-scene").appendChild(entity);
-        }
-        testEntityAdded = true;
-    });
-};
-  </script>
-</head>
-<body>
-<a-scene vr-mode-ui='enabled: false' arjs='sourceType: webcam; videoTexture: true; debugUIEnabled: false' renderer='antialias: true; alpha: true'>
-    <a-camera gps-new-camera='gpsMinDistance: 5'></a-camera>
-</a-scene>
-</body>
-</html
+          // Get the current date/time and GPS coordinates
+          var date = new Date();
+          var latitude = position.coords.latitude;
+          var longitude = position.coords.longitude;
+
+          // Calculate the position of the sun using SunCalc.js
+          var position = SunCalc.getPosition(date, latitude, longitude);
+              // Logging
+              console.log("Position: " + position);
+
+          // Convert the azimuth and altitude to X, Y, and Z coordinates
+          var radius = 10; // example radius of the sun object
+          var x = radius * Math.cos(position.azimuth) * Math.sin(position.altitude);
+          var y = radius * Math.cos(position.altitude);
+          var z = -radius * Math.sin(position.azimuth) * Math.sin(position.altitude);
+
+          // Create the "anchor" object and position it at the GPS coordinates
+          var anchor = document.createElement('a-entity');
+          anchor.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
+          document.querySelector('a-scene').appendChild(anchor);
+
+          // Create the sun object and position it relative to the "anchor" object
+          var sun = document.createElement('a-sphere');
+          sun.setAttribute('radius', radius);
+          sun.setAttribute('color', 'yellow');
+          sun.setAttribute('position', `${x} ${y} ${z}`);
+              // Logging
+              console.log("x: " + x + " y: " + y +" z: " + z);
+          anchor.appendChild(sun);
+          
+      }, function(error) {
+        console.error(error);
+      });
+      } else {
+        console.error('Geolocation is not supported by this browser.');
+      }
+    </script>
+  </head>
+  <body style="margin: 0;">
+    <a-scene vr-mode-ui="enabled: false" arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false">
+      <a-camera gps-new-camera="gpsMinDistance: 15"></a-camera>
+    </a-scene>
+  </body>
+</html>
