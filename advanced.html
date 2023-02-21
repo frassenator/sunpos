@@ -5,9 +5,7 @@
     <script type='text/javascript' src='https://raw.githack.com/AR-js-org/AR.js/master/three.js/build/ar-threex-location-only.js'></script>
     <script type='text/javascript' src='https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js'></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/suncalc/1.8.0/suncalc.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <h1>Sun Position</h1>
-    
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>    
     <script>
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {
@@ -18,16 +16,16 @@
           var longitude = position.coords.longitude;
 
           // Calculate the position of the sun using SunCalc.js
-          var position = SunCalc.getPosition(date, latitude, longitude);
+          var sunPosition = SunCalc.getPosition(date, latitude, longitude);
               // Logging
-              console.log("Azimuth: " + position.azimuth);
-              console.log("Altitude: " + position.altitude);
+              console.log("Azimuth: " + sunPosition.azimuth);
+              console.log("Altitude: " + sunPosition.altitude);
 
           // Convert the azimuth and altitude to X, Y, and Z coordinates
           var radius = 10; // example radius of the sun object
-          var x = radius * Math.cos(position.azimuth) * Math.sin(position.altitude);
-          var y = radius * Math.cos(position.altitude);
-          var z = -radius * Math.sin(position.azimuth) * Math.sin(position.altitude);
+          var x = radius * Math.cos(sunPosition.azimuth) * Math.sin(sunPosition.altitude);
+          var y = radius * Math.cos(sunPosition.altitude);
+          var z = -radius * Math.sin(sunPosition.azimuth) * Math.sin(sunPosition.altitude);
 
           // Create the "anchor" object and position it at the GPS coordinates
           var anchor = document.createElement('a-entity');
