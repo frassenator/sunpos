@@ -2,6 +2,8 @@
 <html>
 	<head>
 		<script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
+    		<!-- <script src="https://rawgit.com/mrdoob/three.js/dev/examples/js/controls/DeviceOrientationControls.js"></script> -->
 		<script type='text/javascript' src='https://raw.githack.com/AR-js-org/AR.js/master/three.js/build/ar-threex-location-only.js'></script>
 		<script type='text/javascript' src='https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js'></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/suncalc/1.8.0/suncalc.min.js"></script>
@@ -9,6 +11,43 @@
 	</head>
 	<body style="margin: 0;">
 <script>
+// Get the camera element
+const camera = document.querySelector('a-camera');
+
+// Create a DeviceOrientationControls instance
+const controls = new THREE.DeviceOrientationControls(camera.object3D);
+
+// Add the controls to the camera element
+camera.setAttribute('device-orientation', '');
+camera.object3D.add(controls);
+
+// Get the text element
+const text = document.querySelector('#direction-text');
+
+// Listen for the deviceorientation event
+window.addEventListener('deviceorientation', (event) => {
+  // Calculate the current cardinal direction
+  const alpha = event.alpha || 0;
+  const direction = getCardinalDirection(alpha);
+  
+  // Update the text content
+  text.setAttribute('value', direction);
+});
+
+function getCardinalDirection(alpha) {
+  // Convert the alpha value to a compass heading (0-360 degrees)
+  const heading = (alpha + 360) % 360;
+  
+  // Define an array of cardinal directions
+  const directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
+  
+  // Calculate the index of the closest cardinal direction
+  const index = Math.round(heading / 45) % 8;
+  
+  // Return the cardinal direction
+  return directions[index];
+}
+	
 AFRAME.registerComponent('sun-position', {
   schema: {
 	distance: { type: 'number', default: 200 },
@@ -129,6 +168,7 @@ updatePosition: function (position) {
 </script>
 	<a-scene vr-mode-ui='enabled: false' arjs='sourceType: webcam; videoTexture: true; debugUIEnabled: false' renderer='antialias: true; alpha: true'>
 		<a-camera gps-new-camera='gpsMinDistance: 20'></a-camera>
+		<a-entity id="direction-text"></a-entity>
 		<a-box id="anchor">
 			<a-sphere id="sun" color="yellow" sun-position></a-sphere>
 		</a-box>
