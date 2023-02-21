@@ -11,43 +11,6 @@
 	</head>
 	<body style="margin: 0;">
 <script>
-// Get the camera element
-const camera = document.querySelector('a-camera');
-
-// Create a DeviceOrientationControls instance
-const controls = new THREE.DeviceOrientationControls(camera.object3D);
-
-// Add the controls to the camera element
-camera.setAttribute('device-orientation', '');
-camera.object3D.add(controls);
-
-// Get the text element
-const text = document.querySelector('#direction-text');
-
-// Listen for the deviceorientation event
-window.addEventListener('deviceorientation', (event) => {
-  // Calculate the current cardinal direction
-  const alpha = event.alpha || 0;
-  const direction = getCardinalDirection(alpha);
-  
-  // Update the text content
-  text.setAttribute('value', direction);
-});
-
-function getCardinalDirection(alpha) {
-  // Convert the alpha value to a compass heading (0-360 degrees)
-  const heading = (alpha + 360) % 360;
-  
-  // Define an array of cardinal directions
-  const directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
-  
-  // Calculate the index of the closest cardinal direction
-  const index = Math.round(heading / 45) % 8;
-  
-  // Return the cardinal direction
-  return directions[index];
-}
-	
 AFRAME.registerComponent('sun-position', {
   schema: {
 	distance: { type: 'number', default: 200 },
@@ -178,5 +141,43 @@ updatePosition: function (position) {
 		<label for="date-time-picker">Select a date and time:</label>
 		<input type="datetime-local" id="date-time-picker" name="date-time-picker">
 	</div>
+	<script>
+		// Get the camera element
+const camera = document.querySelector('a-camera');
+
+// Create a DeviceOrientationControls instance
+const controls = new THREE.DeviceOrientationControls(camera.object3D);
+
+// Add the controls to the camera element
+camera.setAttribute('device-orientation', '');
+camera.object3D.add(controls);
+
+// Get the text element
+const text = document.querySelector('#direction-text');
+
+// Listen for the deviceorientation event
+window.addEventListener('deviceorientation', (event) => {
+  // Calculate the current cardinal direction
+  const alpha = event.alpha || 0;
+  const direction = getCardinalDirection(alpha);
+  
+  // Update the text content
+  text.setAttribute('value', direction);
+});
+
+function getCardinalDirection(alpha) {
+  // Convert the alpha value to a compass heading (0-360 degrees)
+  const heading = (alpha + 360) % 360;
+  
+  // Define an array of cardinal directions
+  const directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
+  
+  // Calculate the index of the closest cardinal direction
+  const index = Math.round(heading / 45) % 8;
+  
+  // Return the cardinal direction
+  return directions[index];
+}
+		</script>
 	</body>
 </html>
