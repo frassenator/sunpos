@@ -17,14 +17,14 @@
             // Add a box to the north of the initial GPS position
             const entity = document.createElement("a-box");
             entity.setAttribute("scale", {
-                x: 30, 
-                y: 30,
-                z: 30
+                x: 20, 
+                y: 20,
+                z: 20
             });
             entity.setAttribute('material', { color: 'blue' } );
             entity.setAttribute('gps-new-entity-place', {
                 latitude: e.detail.position.latitude + 0.001,
-                longitude: e.detail.position.longitude
+                longitude: e.detail.position.longitude + 0.001
             });
             document.querySelector("a-scene").appendChild(entity);
         }
@@ -36,7 +36,7 @@
 <body>
 <a-scene vr-mode-ui="enabled" false' arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false">
     <a-camera gps-new-camera="gpsMinDistance: 10"></a-camera>
-    <a-box color="red" gps-new-entity-place="latitude: 59.341179986655405; longitude: 18.013660246332837" scale="20 20 20"></a-box>
+    <a-box color="red" gps-new-entity-place="latitude: 59.341179986655405; longitude: 18.013660246332837" scale="30 30 30"></a-box>
 </a-scene>
 </body>
 </html
