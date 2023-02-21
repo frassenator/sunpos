@@ -16,7 +16,7 @@
             alert(`Got first GPS position: lon ${e.detail.position.longitude} lat ${e.detail.position.latitude}`);
            
             // Creating a GPS anchor point
-            const basepos = document.getElementById("basepos");
+            const basepos = document.querySelector('#basepos');
             basepos.setAttribute('gps-new-entity-place', {
                 latitude: e.detail.position.latitude,
                 longitude: e.detail.position.longitude
