@@ -17,6 +17,11 @@
            
             // Creating a GPS anchor point
             const basepos = document.querySelector('#basepos');
+            basepos.setAttribute("scale", {
+                x: 20, 
+                y: 20,
+                z: 20
+            });
             basepos.setAttribute('gps-new-entity-place', {
                 latitude: e.detail.position.latitude,
                 longitude: e.detail.position.longitude
