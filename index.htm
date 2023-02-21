@@ -26,12 +26,12 @@ AFRAME.registerComponent('sun-position', {
 	  this.updatePosition(position);
 	});
 
-	// Update the position of the sphere every 10 seconds
+	// Update the position of the sphere every 30 seconds
 	setInterval(() => {
 	  navigator.geolocation.getCurrentPosition(position => {
 		this.updatePosition(position);
 	  });
-	}, 10000);
+	}, 30000);
 
 	// Check if a date and time is selected by the user
 	if (this.data.date && this.data.time) {
