@@ -51,7 +51,7 @@ AFRAME.registerComponent('sun-position', {
 	console.log('Left-to-right tilt: ' + gamma);
 
 	// Update the rotation of the AR object
-	el.setAttribute('rotation', { x: beta, y: alpha, z: -gamma });
+	//el.setAttribute('rotation', { x: beta, y: alpha, z: -gamma });
 	});
   },
 	
@@ -108,9 +108,12 @@ updatePosition: function (position) {
 		console.log("Calculated Position: x:"+ x + " y:" + y + " z:" + z);
 
 		// Set the position of the sphere
-		this.el.setAttribute('position', { x, y, z });
+		// this.el.setAttribute('position', { x, y, z });
+		this.el.setAttribute('position', { x: entity.object3D.position.x + x, y: entity.object3D.position.y + y, z: entity.object3D.position.z + z });
+
 		// Custom Added
 		this.el.setAttribute('scale', {x: size, y: size, z: size});
+		
 	});
   },
   
