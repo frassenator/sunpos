@@ -45,13 +45,15 @@
         const z = Math.cos(lon) * Math.cos(lat) * distance;
         const offset = new THREE.Vector3(x, y, z);
         const position = camera.position.clone().add(offset.applyQuaternion(orientation));
+        // Logging
+        console.log(position);
         return position;
     }
 };
 </script>
 </head>
 <body>
-<a-scene vr-mode-ui='enabled: false' arjs='sourceType: webcam; videoTexture: true; debugUIEnabled: false' renderer='antialias: true; alpha: true'>
+<a-scene debug vr-mode-ui='enabled: false' arjs='sourceType: webcam; videoTexture: true; debugUIEnabled: false' renderer='antialias: true; alpha: true'>
     <a-camera gps-new-camera='gpsMinDistance: 20'></a-camera>
 </a-scene>
 </body>
