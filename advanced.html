@@ -15,6 +15,7 @@
         if(!testEntityAdded) {
             alert(`Got first GPS position: lon ${e.detail.position.longitude} lat ${e.detail.position.latitude}`);
            
+          /*
             // Creating a GPS anchor point
             const basepos = document.querySelector('#basepos');
             basepos.setAttribute('gps-new-entity-place', {
@@ -28,6 +29,7 @@
                 y: 20,
                 z: 20
             });
+            */
           
              // Add a box to the north of the initial GPS position
             const entity = document.createElement("a-box");
@@ -51,9 +53,9 @@
 <body>
 <a-scene debug vr-mode-ui='enabled: false' arjs='sourceType: webcam; videoTexture: true; debugUIEnabled: false' renderer='antialias: true; alpha: true'>
     <a-camera gps-new-camera='gpsMinDistance: 5'></a-camera>
-    <a-entity id="basepos">
+    <!-- <a-entity id="basepos">
       <a-sphere id="sun" radius="5" color="yellow" sun-position></a-sphere>
-    </a-entity>
+    </a-entity> -->
 </a-scene>
 </body>
 </html
