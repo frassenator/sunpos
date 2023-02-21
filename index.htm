@@ -72,8 +72,8 @@ updatePosition: function (position) {
             });
             entity.setAttribute('material', { color: 'blue' } );
             entity.setAttribute('gps-new-entity-place', {
-                latitude: e.detail.position.latitude + 0.0001,
-                longitude: e.detail.position.longitude
+                latitude: position.coords.latitude + 0.0001,
+                longitude: position.coords.longitude
             });
             //document.querySelector("a-scene").appendChild(entity);
 		
