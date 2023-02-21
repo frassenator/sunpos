@@ -35,7 +35,7 @@
   </head>
   <body>
     <a-scene debug vr-mode-ui='enabled: false' arjs='sourceType: webcam; videoTexture: true; debugUIEnabled: false' renderer='antialias: true; alpha: true'>
-      <a-camera></a-camera>
+      gps-camera="minDistance: 10;" debug
       <a-entity id="basebox" material="color: red" geometry="primitive: box" gps-new-entity-place="latitude: 59.3399896; longitude: 18.0134857" scale="10 10 10">
         <a-sphere id="sun" color="yellow" opacity="1" radius="1" sun-position="" position="-137.45814848655226 39.505329325783975 139.80195409761015" scale="2.5605229493481145 2.5605229493481145 2.5605229493481145"></a-sphere>
       </a-entity>
