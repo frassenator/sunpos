@@ -41,6 +41,11 @@
 			var sunBox = document.querySelector("#sun");
 			sunBox.setAttribute('position', { x, y, z });
 			alert("x: " + x+  "y: " + y + "z: " + z);
+			
+			// Update the text element with the current position of the sun box
+			var textElement = document.querySelector("#sun-position-text");
+			textElement.setAttribute('value', `Position: x=${x.toFixed(2)}, y=${y.toFixed(2)}, z=${z.toFixed(2)}`);
+		
 		});
 		</script>
 		
@@ -51,6 +56,7 @@
 			<a-box id="anchor" color="blue" scale="1 1 1">
 				<a-box id="sun" color="yellow" scale="1000 1000 1000"></a-box>
 			</a-box>
+			<a-entity position="-2 2 -5" text="value: Position: x=0, y=0, z=0" id="sun-position-text"></a-entity>
 		</a-scene>
 	</body>
 </html>
