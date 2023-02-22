@@ -114,6 +114,7 @@ AFRAME.registerComponent('sun-position', {
 			
 			// Logging
 			console.log("Alpha: "+alpha);
+			alert("Alpha: " + alpha);
 
 			// Calculate the X, Y, and Z coordinates of the sun sphere based on the alpha value
 			const x = Math.sin((azimuth - alpha) * Math.PI / 180) * Math.cos(altitude) * this.data.distance;
