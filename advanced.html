@@ -13,6 +13,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/suncalc/1.8.0/suncalc.min.js"></script>
 
     <script>
+	// Get the alpha value from the device orientation (rotation around the z-axis)
+	var alpha = 0;
+	window.addEventListener('deviceorientation', function(event) {
+	  alpha = event.alpha;
+	});
+	    
       navigator.geolocation.getCurrentPosition(position => {
 			// Get the current date and time
 			//var now = new Date();
@@ -41,13 +47,7 @@
 			// Distance from earth to sun in kilometers (adjusted for scaling)
 			var kmDistance = 150;
 
-			// Get the alpha value from the device orientation (rotation around the z-axis)
-			var alpha = 0;
-			window.addEventListener('deviceorientation', function(event) {
-			  alpha = event.alpha;
-			});
-
-      // Calculate the X, Y, and Z positions of the sun relative to the camera in kilometers. Includes horizon offset and alpha adjustment
+      			// Calculate the X, Y, and Z positions of the sun relative to the camera in kilometers. Includes horizon offset and alpha adjustment
 			var x = Math.cos(horizonOffset) * Math.sin(sunPosition.azimuth - alpha * Math.PI / 180) * kmDistance;
 			var y = Math.cos(horizonOffset) * Math.cos(sunPosition.altitude * Math.PI / 180) * kmDistance;
 			var z = Math.sin(horizonOffset) * Math.sin(sunPosition.altitude * Math.PI / 180) * kmDistance;
@@ -56,8 +56,7 @@
 			var newSunPosition = new THREE.Vector3(x * 1000, y * 1000, z * 1000);
 
 			// Set the position of the sun box to the calculated position
-	      		var sunBox = document.querySelector("#sun");
-			sunBox.position.copy(newSunPosition);
+			    sunBox.object3D.position.copy(newSunPosition);
 
 		});
 		</script>
