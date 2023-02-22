@@ -12,12 +12,13 @@
   <a-box color="red" gps-new-entity-place="latitude: 59.341179986655405; longitude: 18.013660246332837" scale="30 30 30"></a-box>
 </a-scene>
 
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.rawgit.com/mrdoob/three.js/r128/examples/js/controls/DeviceOrientationControls.js"></script>
 <script>
   // Wait for the scene to load before attaching the event listener
   document.querySelector('a-scene').addEventListener('loaded', function () {
-
-    // Create a new Three.js scene
-    const threeScene = new THREE.Scene();
 
     // Create a new Three.js camera
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -30,12 +31,8 @@
     renderer.domElement.style.left = '0';
     document.body.appendChild(renderer.domElement);
 
-    // Create a new Three.js sphere to represent the north direction
-    const sphereGeometry = new THREE.SphereGeometry(0.1, 32, 32);
-    const sphereMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-    const northSphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
-    northSphere.position.set(0, 0, -1); // Place the sphere in front of the camera
-    threeScene.add(northSphere);
+    // Create a new DeviceOrientationControls object and pass in the camera
+    const controls = new THREE.DeviceOrientationControls(camera);
 
     // Attach a deviceorientation event listener to the window object
     window.addEventListener('deviceorientation', function (event) {
@@ -44,14 +41,11 @@
       const angle = event.webkitCompassHeading || event.alpha;
       const radian = THREE.Math.degToRad(angle);
 
-      // Set the rotation of the north sphere to point towards the calculated angle
-      northSphere.rotation.y = radian;
-
-      // Set the rotation of the camera to point towards the opposite direction
-      camera.rotation.y = radian + Math.PI;
+      // Set the rotation of the controls to point towards the calculated angle
+      controls.alphaOffsetAngle = -radian;
 
       // Render the Three.js scene using the A-Frame scene's camera
-      renderer.render(threeScene, camera);
+      renderer.render(this.object3DMap.camera.parent, this.object3DMap.camera);
     });
 
     // Replace the A-Frame scene's default camera with the Three.js camera
@@ -59,6 +53,7 @@
     aframeCamera.object3DMap.camera = camera;
   });
 </script>
+
 
 
 </body>
