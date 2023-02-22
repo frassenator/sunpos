@@ -16,32 +16,60 @@
 
 		navigator.geolocation.getCurrentPosition(position => {
 			
-			var currentDate = Date.now();
-
-			const { altitude, azimuth } = SunCalc.getPosition(currentDate, position.coords.latitude, position.coords.longitude);
 			
-			console.log("Latitude: " +  position.coords.latitude);
-			console.log("Longitude: " +  position.coords.longitude);
-			console.log("Altitude: " +  altitude);
-			console.log("Azimuth: " +  altitude);
 
-			// Calculate the X, Y, and Z coordinates of the sun sphere
-			var altRad = altitude * Math.PI / 180;
-			var azRad = azimuth * Math.PI / 180;
 			
-			var x = Math.cos(altRad) * Math.sin(azRad);
-			var y = Math.cos(altRad) * Math.cos(azRad);
-			var z = Math.sin(altRad);
+			
+			// Get the current date and time
+			var now = new Date();
+			console.log("Date: "+now);
 
-			console.log("Calculated Position: x:"+ x + " y:" + y + " z:" + z);
+			// Get the latitude and longitude of your current location (e.g., using the Geolocation API)
+			var latitude = position.coords.latitude;
+			var longitude = position.coords.longitude;
+			console.log("Latitude: "+latitude);
+			console.log("Longitude: "+longitude);
+			
+			// Calculate the Sun's current position
+			var sunPosition = SunCalc.getPosition(now, latitude, longitude);
+			console.log("Altitude: "+sunPosition.altitude);
+			console.log("Azimuth: "+sunPosition.azimuth);
+			
+			var x = Math.cos(sunPosition.altitude * Math.PI / 180) * Math.sin(sunPosition.azimuth * Math.PI / 180);
+			var y = Math.cos(sunPosition.altitude * Math.PI / 180) * Math.cos(sunPosition.azimuth * Math.PI / 180);
+			var z = Math.sin(sunPosition.altitude * Math.PI / 180);
+			
+			var currentSize = this.calculateSize(sunPosition.altitude);
+			
+			console.log("Sun current Position: x:"+ x + " y:" + y + " z:" + z);
+			console.log("Sun current Size: "+currentSize);
 
-			// Set the position of the sphere
-			//this.el.setAttribute('position', { x, y, z });
+			// Calculate the sunrise and sunset times
+			var times = SunCalc.getTimes(now, latitude, longitude);
 
-			// Custom Added
-			const size = this.calculateSize(altitude);
-			console.log("Size: " + size);
-			//this.el.setAttribute('scale', {x: size, y: size, z: size});
+			// Calculate the position of the sun at sunrise and sunset
+			var sunrisePosition = SunCalc.getPosition(times.sunrise, latitude, longitude);
+			var sunsetPosition = SunCalc.getPosition(times.sunset, latitude, longitude);
+
+			// Convert the altitude and azimuth values to Cartesian coordinates
+			var sunriseX = Math.cos(sunrisePosition.altitude * Math.PI / 180) * Math.sin(sunrisePosition.azimuth * Math.PI / 180);
+			var sunriseY = Math.cos(sunrisePosition.altitude * Math.PI / 180) * Math.cos(sunrisePosition.azimuth * Math.PI / 180);
+			var sunriseZ = Math.sin(sunrisePosition.altitude * Math.PI / 180);
+			
+			var sunriseSize = this.calculateSize(sunrisePosition.altitude);
+			
+			console.log("Sunrise Position: x:"+ sunriseX + " y:" + sunriseY + " z:" + sunriseZ);
+			console.log("Sunrise Size: "+sunriseSize);
+
+			var sunsetX = Math.cos(sunsetPosition.altitude * Math.PI / 180) * Math.sin(sunsetPosition.azimuth * Math.PI / 180);
+			var sunsetY = Math.cos(sunsetPosition.altitude * Math.PI / 180) * Math.cos(sunsetPosition.azimuth * Math.PI / 180);
+			var sunsetZ = Math.sin(sunsetPosition.altitude * Math.PI / 180);
+			
+			var sunsetSize = this.calculateSize(sunsetPosition.altitude);
+
+			console.log("Sunset Position: x:"+ sunsetX + " y:" + sunsetY + " z:" + sunsetZ);
+			console.log("Sunset Size: "+sunsetSize);
+			
 
 		});
 		  
