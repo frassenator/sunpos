@@ -3,58 +3,33 @@
 <head>
 <title>AR.js A-Frame Location-based</title>
 <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
-<script type='text/javascript' src='https://raw.githack.com/AR-js-org/AR.js/master/three.js/build/ar-threex-location-only.js'></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.149.0/three.min.js" integrity="sha512-6p9lGA4Cm89KiwN1CixiOVQU2H9e13LeYoN6/Hj/qoUhtrMW5vNiqQz9Z96Z7/I8u89ghL6SPBz9na5HFVzF3g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script type='text/javascript' src='https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js'></script>
-<script>
-  AFRAME.registerComponent('rotation-reader', {
-  /**
-   * We use IIFE (immediately-invoked function expression) to only allocate one
-   * vector or euler and not re-create on every tick to save memory.
-   */
-  tick: (function () {
-    var position = new THREE.Vector3();
-    var quaternion = new THREE.Quaternion();
-
-    return function () {
-      this.el.object3D.getWorldPosition(position);
-      this.el.object3D.getWorldQuaternion(quaternion);
-      // position and rotation now contain vector and quaternion in world space.
-      console.log("Position: "+position);
-      console.log("Quaternion: "+quaternion);
-    }; 
-  })()
-});
-  window.onload = () => {
-    let testEntityAdded = false;
-
-    const el = document.querySelector("[gps-new-camera]");
-
-    el.addEventListener("gps-camera-update-position", e => {
-        if(!testEntityAdded) {
-            alert(`Got first GPS position: lon ${e.detail.position.longitude} lat ${e.detail.position.latitude}`);
-            // Add a box to the north of the initial GPS position
-            const entity = document.createElement("a-box");
-            entity.setAttribute("scale", {
-                x: 20, 
-                y: 20,
-                z: 20
-            });
-            entity.setAttribute('material', { color: 'blue' } );
-            entity.setAttribute('gps-new-entity-place', {
-                latitude: e.detail.position.latitude + 0.001,
-                longitude: e.detail.position.longitude + 0.001
-            });
-            document.querySelector("a-scene").appendChild(entity);
-        }
-        testEntityAdded = true;
-    });
-};
-  </script>
 </head>
-<body>
-<a-scene vr-mode-ui="enabled" false' arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false">
-    <a-camera gps-new-camera="gpsMinDistance: 10"></a-camera>
-    <a-box color="red" gps-new-entity-place="latitude: 59.341179986655405; longitude: 18.013660246332837" scale="30 30 30"></a-box>
+<body>                                 
+<a-scene embedded arjs="sourceType: webcam;" vr-mode-ui="enabled" false">
+  <a-camera gps-new-camera="gpsMinDistance: 10"></a-camera>
+  <a-box color="red" gps-new-entity-place="latitude: 59.341179986655405; longitude: 18.013660246332837" scale="30 30 30"></a-box>
 </a-scene>
+
+<script>
+  // Wait for the scene to load before attaching the event listener
+  document.querySelector('a-scene').addEventListener('loaded', function () {
+    
+    // Get the scene element
+    const sceneEl = document.querySelector('a-scene');
+    
+    // Attach a deviceorientation event listener to the window object
+    window.addEventListener('deviceorientation', function (event) {
+      
+      // Calculate the rotation angle based on the device's compass heading
+      const angle = 360 - event.webkitCompassHeading;
+      
+      // Set the rotation of the scene to point towards the calculated angle
+      sceneEl.setAttribute('rotation', { x: 0, y: angle, z: 0 });
+    });
+  });
+</script>
+
 </body>
 </html
