@@ -15,21 +15,51 @@
 <script>
   // Wait for the scene to load before attaching the event listener
   document.querySelector('a-scene').addEventListener('loaded', function () {
-    
-    // Get the scene element
-    const sceneEl = document.querySelector('a-scene');
-    
+
+    // Create a new Three.js scene
+    const threeScene = new THREE.Scene();
+
+    // Create a new Three.js camera
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+    // Create a new Three.js renderer and set its size to match the A-Frame scene
+    const renderer = new THREE.WebGLRenderer({ alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.domElement.style.position = 'absolute';
+    renderer.domElement.style.top = '0';
+    renderer.domElement.style.left = '0';
+    document.body.appendChild(renderer.domElement);
+
+    // Create a new Three.js sphere to represent the north direction
+    const sphereGeometry = new THREE.SphereGeometry(0.1, 32, 32);
+    const sphereMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+    const northSphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+    northSphere.position.set(0, 0, -1); // Place the sphere in front of the camera
+    threeScene.add(northSphere);
+
     // Attach a deviceorientation event listener to the window object
     window.addEventListener('deviceorientation', function (event) {
-      
+
       // Calculate the rotation angle based on the device's compass heading
-      const angle = 360 - event.webkitCompassHeading;
-      
-      // Set the rotation of the scene to point towards the calculated angle
-      sceneEl.setAttribute('rotation', { x: 0, y: angle, z: 0 });
+      const angle = event.webkitCompassHeading || event.alpha;
+      const radian = THREE.Math.degToRad(angle);
+
+      // Set the rotation of the north sphere to point towards the calculated angle
+      northSphere.rotation.y = radian;
+
+      // Set the rotation of the camera to point towards the opposite direction
+      camera.rotation.y = radian + Math.PI;
+
+      // Render the Three.js scene using the A-Frame scene's camera
+      renderer.render(threeScene, camera);
     });
+
+    // Replace the A-Frame scene's default camera with the Three.js camera
+    const aframeCamera = document.querySelector('[camera]');
+    aframeCamera.object3DMap.camera = camera;
   });
 </script>
+
 
 </body>
 </html
