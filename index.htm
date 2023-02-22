@@ -83,12 +83,6 @@ AFRAME.registerComponent('sun-position', {
 				});
 				//document.querySelector("a-scene").appendChild(entity);
 			
-
-			// ORIGINAL Convert altitude and azimuth to X, Y, Z coordinates
-			/*const x = Math.sin(azimuth) * Math.cos(altitude) * this.data.distance;
-			const y = Math.sin(altitude) * this.data.distance;
-			const z = Math.cos(azimuth) * Math.cos(altitude) * this.data.distance;*/
-			
 			// Get the alpha value from the deviceorientation event
 			const alpha = this.data.deviceAlpha;
 			
@@ -106,7 +100,6 @@ AFRAME.registerComponent('sun-position', {
 			
 			// Logging
 			console.log("Calculated Position: x:"+ x + " y:" + y + " z:" + z);
-			alert("Calculated Position: x:"+ x + " y:" + y + " z:" + z);
 
 			// Set the position of the sphere
 			this.el.setAttribute('position', { x, y, z });
