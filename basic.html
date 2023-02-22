@@ -43,7 +43,7 @@
   			var horizonOffset = -(sunPosition.altitude - 0.5 * Math.PI);
 
 			// Distance from earth to sun in kilometers (adjusted for scaling)
-			var kmDistance = 150 * 100;
+			var kmDistance = 150;
 
 			/*// Calculate the X, Y, and Z positions of the sun relative to the camera in kilometers
 			var x = Math.cos(sunPosition.altitude) * Math.sin(sunPosition.azimuth) * kmDistance;
@@ -69,7 +69,7 @@
 		<a-scene debug vr-mode-ui="enabled: false" arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: true">
 			<a-camera gps-new-camera="gpsMinDistance: 20" rotation-reader></a-camera>
 			<a-box id="anchor" color="blue" scale="1 1 1">
-				<a-box id="sun" color="yellow" scale="2000 2000 2000"></a-box>
+				<a-box id="sun" color="yellow" scale="200 200 200"></a-box>
 			</a-box>
 		</a-scene>
 	</body>
