@@ -5,17 +5,13 @@
 <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.149.0/three.min.js" integrity="sha512-6p9lGA4Cm89KiwN1CixiOVQU2H9e13LeYoN6/Hj/qoUhtrMW5vNiqQz9Z96Z7/I8u89ghL6SPBz9na5HFVzF3g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script type='text/javascript' src='https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js'></script>
+<script src="https://cdn.rawgit.com/mrdoob/three.js/r128/examples/js/controls/DeviceOrientationControls.js"></script>
 </head>
 <body>                                 
 <a-scene embedded arjs="sourceType: webcam;" vr-mode-ui="enabled" false">
   <a-camera gps-new-camera="gpsMinDistance: 10"></a-camera>
   <a-box color="red" gps-new-entity-place="latitude: 59.341179986655405; longitude: 18.013660246332837" scale="30 30 30"></a-box>
 </a-scene>
-
-
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="https://cdn.rawgit.com/mrdoob/three.js/r128/examples/js/controls/DeviceOrientationControls.js"></script>
 <script>
   // Wait for the scene to load before attaching the event listener
   document.querySelector('a-scene').addEventListener('loaded', function () {
