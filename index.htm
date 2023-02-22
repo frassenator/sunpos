@@ -132,6 +132,7 @@ AFRAME.registerComponent('sun-position', {
 </script>
 		<a-scene vr-mode-ui="enabled: false" arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false">
 			<a-camera gps-new-camera="gpsMinDistance: 20"></a-camera>
+			<a-box color="red" scale="1 1 1"></a-box>
 			<a-box id="anchor">
 				<a-sphere id="sun" color="yellow" sun-position></a-sphere>
 			</a-box>
