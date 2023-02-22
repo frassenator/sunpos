@@ -79,7 +79,7 @@ AFRAME.registerComponent('sun-position', {
 				});
 				entity.setAttribute('material', { color: 'grey' } );
 				entity.setAttribute('gps-new-entity-place', {
-					latitude: position.coords.latitude + 0.001,
+					latitude: position.coords.latitude + 0.0001,
 					longitude: position.coords.longitude
 				});
 				//document.querySelector("a-scene").appendChild(entity);
