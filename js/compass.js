@@ -6,7 +6,7 @@ function deviceOrientationListener(event) {
 
   //Check if absolute values have been sent  
   if (typeof event.webkitCompassHeading !== "undefined") {  
-    alpha = event.webkitCompassHeading; //iOS non-standard  
+    alpha = event.webkitCompassHeading; //iOS non-standard
   }
   else {  
     console.log("Your device is reporting relative alpha values, so this compass won't point north");  
@@ -19,7 +19,7 @@ if (window.DeviceOrientationAbsoluteEvent) {
 } // If not, check if the device sends any orientation data  
 else if(window.DeviceOrientationEvent){  
   window.addEventListener("deviceorientation", deviceOrientationListener);  
-} // Send an alert if the device isn't compatible  
+}
 else {  
   console.log("Sorry, try again on a compatible mobile device!");  
 }  
