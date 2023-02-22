@@ -15,11 +15,17 @@ AFRAME.registerComponent('sun-position', {
   schema: {
 	distance: { type: 'number', default: 200 },
 	date: { type: 'string', default: '' },
-	time: { type: 'string', default: '' }
+	time: { type: 'string', default: '' },
+	deviceAlpha: { type: 'number', default: 0 }
   },
 
   init: function () {
 	const el = this.el;
+	
+	// Set the deviceAlpha property to the initial alpha value from the deviceorientation event
+    window.addEventListener('deviceorientation', (event) => {
+      this.data.deviceAlpha = event.alpha;
+    });
 
 	// Get the current position of the device
 	navigator.geolocation.getCurrentPosition(position => {
@@ -40,144 +46,102 @@ AFRAME.registerComponent('sun-position', {
 	  this.updatePositionTime(selectedDate);
 	}
 	  
-	// Add a device orientation event listener to update the orientation of the AR object
-	window.addEventListener('deviceorientation', function(event) {
-	var alpha = event.alpha; // compass direction in degrees
-	var beta = event.beta;   // front-to-back tilt in degrees
-	var gamma = event.gamma; // left-to-right tilt in degrees
-
-	// Logging
-	console.log('Compass: ' + alpha);
-	console.log('Front-to-back tilt: ' + beta);
-	console.log('Left-to-right tilt: ' + gamma);
-
-	// Update the rotation of the AR object
-	//el.setAttribute('rotation', { x: beta, y: alpha, z: -gamma });
 	});
   },
 	
-updatePosition: function (position) {
-  const currentdate = new Date();
+	updatePosition: function (position) {
+	  const currentdate = new Date();
 
-  // Get the date and time selected by the user
-  const dateTimePicker = document.getElementById('date-time-picker');
-  const selectedDate = dateTimePicker.value ? new Date(dateTimePicker.value) : null;
+	  // Get the date and time selected by the user
+	  const dateTimePicker = document.getElementById('date-time-picker');
+	  const selectedDate = dateTimePicker.value ? new Date(dateTimePicker.value) : null;
 
-  if (selectedDate && !isNaN(selectedDate.getTime())) {
-    // Use the selected date and time
-    this.updatePositionTime(selectedDate);
-  } else {
-    // Use the current date and time
-    this.updatePositionTime(currentdate);
-  }
-},
+	  if (selectedDate && !isNaN(selectedDate.getTime())) {
+		// Use the selected date and time
+		this.updatePositionTime(selectedDate);
+	  } else {
+		// Use the current date and time
+		this.updatePositionTime(currentdate);
+	  }
+	},
 
-  updatePositionTime: function (selectedDate) {
-	navigator.geolocation.getCurrentPosition(position => {
+	updatePositionTime: function (selectedDate) {
+		navigator.geolocation.getCurrentPosition(position => {
 
-		const { altitude, azimuth } = SunCalc.getPosition(selectedDate, position.coords.latitude, position.coords.longitude);
-		// Logging
-			console.log("Date used to position Sun: "+selectedDate);
-		
-		// Add a box to the north of the GPS position, this used as the basepoint for relative position of the Sun
-            const entity = document.querySelector("#anchor");
-            entity.setAttribute("scale", {
-                x: 0.1, 
-                y: 0.1,
-                z: 0.1
-            });
-            entity.setAttribute('material', { color: 'grey' } );
-            entity.setAttribute('gps-new-entity-place', {
-                latitude: position.coords.latitude,
-                longitude: position.coords.longitude
-            });
-            //document.querySelector("a-scene").appendChild(entity);
-		
-
-		// Convert altitude and azimuth to X, Y, Z coordinates
-		const x = Math.sin(azimuth) * Math.cos(altitude) * this.data.distance;
-		const y = Math.sin(altitude) * this.data.distance;
-		const z = Math.cos(azimuth) * Math.cos(altitude) * this.data.distance;
-
-		// Custom added
-		const size = this.calculateSize(altitude)*5;
-		
+			const { altitude, azimuth } = SunCalc.getPosition(selectedDate, position.coords.latitude, position.coords.longitude);
 			// Logging
-			console.log("Calculated Size: "+size);
-		
-		// Logging
-		console.log("Calculated Position: x:"+ x + " y:" + y + " z:" + z);
+				console.log("Date used to position Sun: "+selectedDate);
+			
+			// Add a box to the north of the GPS position, this used as the basepoint for relative position of the Sun
+				const entity = document.querySelector("#anchor");
+				entity.setAttribute("scale", {
+					x: 0.1, 
+					y: 0.1,
+					z: 0.1
+				});
+				entity.setAttribute('material', { color: 'grey' } );
+				entity.setAttribute('gps-new-entity-place', {
+					latitude: position.coords.latitude,
+					longitude: position.coords.longitude
+				});
+				//document.querySelector("a-scene").appendChild(entity);
+			
 
-		// Set the position of the sphere
-		this.el.setAttribute('position', { x, y, z });
-		
-		// Custom Added
-		this.el.setAttribute('scale', {x: size, y: size, z: size});
-		
-	});
-  },
+			// ORIGINAL Convert altitude and azimuth to X, Y, Z coordinates
+			/*const x = Math.sin(azimuth) * Math.cos(altitude) * this.data.distance;
+			const y = Math.sin(altitude) * this.data.distance;
+			const z = Math.cos(azimuth) * Math.cos(altitude) * this.data.distance;*/
+			
+			// Get the alpha value from the deviceorientation event
+			const alpha = this.deviceAlpha;
+
+			// Calculate the X, Y, and Z coordinates of the sun sphere based on the alpha value
+			const x = Math.sin((azimuth - alpha) * Math.PI / 180) * Math.cos(altitude) * this.data.distance;
+			const y = Math.sin(altitude) * this.data.distance;
+			const z = Math.cos((azimuth - alpha) * Math.PI / 180) * Math.cos(altitude) * this.data.distance;
+
+
+			// Custom added
+			const size = this.calculateSize(altitude)*5;
+			
+				// Logging
+				console.log("Calculated Size: "+size);
+			
+			// Logging
+			console.log("Calculated Position: x:"+ x + " y:" + y + " z:" + z);
+
+			// Set the position of the sphere
+			this.el.setAttribute('position', { x, y, z });
+			
+			// Custom Added
+			this.el.setAttribute('scale', {x: size, y: size, z: size});
+			
+		});
+	},
   
-  calculateSize: function (altitude) {
-    // Set the radius of the sphere to block the actual sun from the observer's point of view
-    const sphereRadius = 0.53; // in degrees
-    const observerHeight = 1.7; // in meters
-    const objectHeight = Math.tan(altitude) * this.data.distance + observerHeight;
-    const objectSize = sphereRadius / Math.atan(objectHeight / this.data.distance);
-	  
-    return objectSize;
-  }
+	calculateSize: function (altitude) {
+		// Set the radius of the sphere to block the actual sun from the observer's point of view
+		const sphereRadius = 0.53; // in degrees
+		const observerHeight = 1.7; // in meters
+		const objectHeight = Math.tan(altitude) * this.data.distance + observerHeight;
+		const objectSize = sphereRadius / Math.atan(objectHeight / this.data.distance);
+		  
+		return objectSize;
+	}
   
 });
 </script>
-	<a-scene vr-mode-ui='enabled: false' arjs='sourceType: webcam; videoTexture: true; debugUIEnabled: false' renderer='antialias: true; alpha: true'>
-		<a-camera gps-new-camera='gpsMinDistance: 20'></a-camera>
-		<a-entity id="direction-text"></a-entity>
-		<a-box id="anchor">
-			<a-sphere id="sun" color="yellow" sun-position></a-sphere>
-		</a-box>
-	</a-scene>
-	
-	<div style="position: absolute; top: 10px; right: 10px; z-index: 99999;">
-		<label for="date-time-picker">Select a date and time:</label>
-		<input type="datetime-local" id="date-time-picker" name="date-time-picker">
-	</div>
-	<script>
-		// Get the camera element
-const camera = document.querySelector('a-camera');
-
-// Create a DeviceOrientationControls instance
-const controls = new THREE.DeviceOrientationControls(camera.object3D);
-
-// Add the controls to the camera element
-camera.setAttribute('device-orientation', '');
-camera.object3D.add(controls);
-
-// Get the text element
-const text = document.querySelector('#direction-text');
-
-// Listen for the deviceorientation event
-window.addEventListener('deviceorientation', (event) => {
-  // Calculate the current cardinal direction
-  const alpha = event.alpha || 0;
-  const direction = getCardinalDirection(alpha);
-  
-  // Update the text content
-  text.setAttribute('value', direction);
-});
-
-function getCardinalDirection(alpha) {
-  // Convert the alpha value to a compass heading (0-360 degrees)
-  const heading = (alpha + 360) % 360;
-  
-  // Define an array of cardinal directions
-  const directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
-  
-  // Calculate the index of the closest cardinal direction
-  const index = Math.round(heading / 45) % 8;
-  
-  // Return the cardinal direction
-  return directions[index];
-}
-		</script>
+		<a-scene vr-mode-ui='enabled: false' arjs='sourceType: webcam; videoTexture: true; debugUIEnabled: false' renderer='antialias: true; alpha: true'>
+			<a-camera gps-new-camera='gpsMinDistance: 20'></a-camera>
+			<a-entity id="direction-text"></a-entity>
+			<a-box id="anchor">
+				<a-sphere id="sun" color="yellow" sun-position></a-sphere>
+			</a-box>
+		</a-scene>
+		
+		<div style="position: absolute; top: 10px; right: 10px; z-index: 99999;">
+			<label for="date-time-picker">Select a date and time:</label>
+			<input type="datetime-local" id="date-time-picker" name="date-time-picker">
+		</div>
 	</body>
 </html>
