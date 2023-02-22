@@ -38,17 +38,35 @@ AFRAME.registerComponent('sun-position', {
 	});
 
 	// Update the position of the sphere every 10 seconds
+	/*
 	setInterval(() => {
 	  navigator.geolocation.getCurrentPosition(position => {
 		this.updatePosition(position);
 	  });
-	}, 10000);
+	}, 10000);*/
 
 	// Check if a date and time is selected by the user
 	if (this.data.date && this.data.time) {
 	  // Set the selected date and time
 	  const selectedDate = new Date(this.data.date + 'T' + this.data.time);
 	  this.updatePositionTime(selectedDate);
+	}
+	
+	// New animate function instead of setInterval()
+	this.animate = function(time) {
+		// Calculate the time delta
+		const deltaTime = (time - lastTime) / 1000;
+
+		// Only update the position every 10 seconds
+		if (deltaTime >= 10) {
+			navigator.geolocation.getCurrentPosition(position => {
+				this.updatePosition(position);
+			});
+			lastTime = time;
+		}
+
+		// Call requestAnimationFrame to animate the scene
+		requestAnimationFrame(this.animate.bind(this));
 	}
 	  
 	//});
