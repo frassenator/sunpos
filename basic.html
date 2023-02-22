@@ -15,85 +15,40 @@
 		<script>
 
 		navigator.geolocation.getCurrentPosition(position => {
-			
-			
-
-			
-			
 			// Get the current date and time
 			var now = new Date();
-			console.log("Date: "+now);
 
 			// Get the latitude and longitude of your current location (e.g., using the Geolocation API)
 			var latitude = position.coords.latitude;
 			var longitude = position.coords.longitude;
-			console.log("Latitude: "+latitude);
-			console.log("Longitude: "+longitude);
+			
+			// Give Anchor box the current lat and long
+			var anchorBox = document.querySelector("#anchor");
+			anchorBox.setAttribute('gps-new-entity-place', {
+				latitude: position.coords.latitude,
+				longitude: position.coords.longitude
+			});
 			
 			// Calculate the Sun's current position
 			var sunPosition = SunCalc.getPosition(now, latitude, longitude);
-			console.log("Altitude: "+sunPosition.altitude);
-			console.log("Azimuth: "+sunPosition.azimuth);
 			
 			var x = Math.cos(sunPosition.altitude * Math.PI / 180) * Math.sin(sunPosition.azimuth * Math.PI / 180);
 			var y = Math.cos(sunPosition.altitude * Math.PI / 180) * Math.cos(sunPosition.azimuth * Math.PI / 180);
 			var z = Math.sin(sunPosition.altitude * Math.PI / 180);
 			
-			var currentSize = this.calculateSize(sunPosition.altitude);
-			
-			console.log("Sun current Position: x:"+ x + " y:" + y + " z:" + z);
-			console.log("Sun current Size: "+currentSize);
-
-			// Calculate the sunrise and sunset times
-			var times = SunCalc.getTimes(now, latitude, longitude);
-
-			// Calculate the position of the sun at sunrise and sunset
-			var sunrisePosition = SunCalc.getPosition(times.sunrise, latitude, longitude);
-			var sunsetPosition = SunCalc.getPosition(times.sunset, latitude, longitude);
-
-			// Convert the altitude and azimuth values to Cartesian coordinates
-			var sunriseX = Math.cos(sunrisePosition.altitude * Math.PI / 180) * Math.sin(sunrisePosition.azimuth * Math.PI / 180);
-			var sunriseY = Math.cos(sunrisePosition.altitude * Math.PI / 180) * Math.cos(sunrisePosition.azimuth * Math.PI / 180);
-			var sunriseZ = Math.sin(sunrisePosition.altitude * Math.PI / 180);
-			
-			var sunriseSize = this.calculateSize(sunrisePosition.altitude);
-			
-			console.log("Sunrise Position: x:"+ sunriseX + " y:" + sunriseY + " z:" + sunriseZ);
-			console.log("Sunrise Size: "+sunriseSize);
-
-			var sunsetX = Math.cos(sunsetPosition.altitude * Math.PI / 180) * Math.sin(sunsetPosition.azimuth * Math.PI / 180);
-			var sunsetY = Math.cos(sunsetPosition.altitude * Math.PI / 180) * Math.cos(sunsetPosition.azimuth * Math.PI / 180);
-			var sunsetZ = Math.sin(sunsetPosition.altitude * Math.PI / 180);
-			
-			var sunsetSize = this.calculateSize(sunsetPosition.altitude);
-
-			console.log("Sunset Position: x:"+ sunsetX + " y:" + sunsetY + " z:" + sunsetZ);
-			console.log("Sunset Size: "+sunsetSize);
-			
-
+			// Set the position of the sphere
+			var sunBox = document.querySelector("#sun");
+			sunBox.setAttribute('position', { x, y, z });
 		});
-		  
-		function calculateSize(altitude) {
-			// Set the radius of the sphere to block the actual sun from the observer's point of view
-			const sphereRadius = 0.53; // in degrees
-			const observerHeight = 1.7; // in meters
-			const objectHeight = Math.tan(altitude) + observerHeight;
-			const objectSize = sphereRadius / Math.atan(objectHeight);
-			  
-			return objectSize;
-		}
 		</script>
 		
 	</head>
 	<body style="margin: 0;">
-		<!--
 		<a-scene vr-mode-ui="enabled: false" arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false">
 			<a-camera gps-new-camera="gpsMinDistance: 20"></a-camera>
-			<a-box color="red" position="2 2 2" scale="10 10 10"></a-box>
-			<a-box id="anchor">
-				<a-sphere id="sun" color="yellow" sun-position></a-sphere>
+			<a-box id="anchor" color="blue" scale="1 1 1">
+				<a-box id="sun" color="yellow" scale="10 10 10"></a-box>
 			</a-box>
 		</a-scene>
-		-->
 	</body>
 </html>
