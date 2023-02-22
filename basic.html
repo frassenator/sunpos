@@ -32,9 +32,10 @@
 			// Calculate the Sun's current position
 			var sunPosition = SunCalc.getPosition(now, latitude, longitude);
 			
-			var x = Math.cos(sunPosition.altitude * Math.PI / 180) * Math.sin(sunPosition.azimuth * Math.PI / 180);
-			var y = Math.cos(sunPosition.altitude * Math.PI / 180) * Math.cos(sunPosition.azimuth * Math.PI / 180);
-			var z = Math.sin(sunPosition.altitude * Math.PI / 180);
+			var scalingFactor = 1000; // Change this value to adjust the size of the sunBox
+			var x = scalingFactor * Math.cos(sunPosition.altitude * Math.PI / 180) * Math.sin(sunPosition.azimuth * Math.PI / 180);
+			var y = scalingFactor * Math.cos(sunPosition.altitude * Math.PI / 180) * Math.cos(sunPosition.azimuth * Math.PI / 180);
+			var z = scalingFactor * Math.sin(sunPosition.altitude * Math.PI / 180);
 			
 			// Set the position of the sphere
 			var sunBox = document.querySelector("#sun");
@@ -47,7 +48,7 @@
 		<a-scene debug vr-mode-ui="enabled: false" arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: true">
 			<a-camera gps-new-camera="gpsMinDistance: 20"></a-camera>
 			<a-box id="anchor" color="blue" scale="1 1 1">
-				<a-box id="sun" color="yellow" scale="1000 1000 1000"></a-box>
+				<a-box id="sun" color="yellow" scale="100 100 100"></a-box>
 			</a-box>
 		</a-scene>
 	</body>
