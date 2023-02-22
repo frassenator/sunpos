@@ -26,9 +26,12 @@
 			console.log("Azimuth: " +  altitude);
 
 			// Calculate the X, Y, and Z coordinates of the sun sphere
-			const x = Math.sin(azimuth * Math.PI / 180) * Math.cos(altitude);
-			const y = Math.sin(altitude) * this.data.distance;
-			const z = Math.cos(azimuth * Math.PI / 180) * Math.cos(altitude);
+			var altRad = altitude * Math.PI / 180;
+			var azRad = azimuth * Math.PI / 180;
+			
+			var x = Math.cos(altRad) * Math.sin(azRad);
+			var y = Math.cos(altRad) * Math.cos(azRad);
+			var z = Math.sin(altRad);
 
 			console.log("Calculated Position: x:"+ x + " y:" + y + " z:" + z);
 
