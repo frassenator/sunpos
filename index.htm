@@ -3,7 +3,7 @@
 	<head>
 		<script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
-    		<script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+    	<script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/suncalc/1.8.0/suncalc.min.js"></script>
 		<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 	</head>
@@ -70,7 +70,7 @@ AFRAME.registerComponent('sun-position', {
 			// Logging
 				console.log("Date used to position Sun: "+selectedDate);
 			
-			// Add a box to the north of the GPS position, this used as the basepoint for relative position of the Sun
+			// Add a box at the GPS position, this used as the basepoint for relative position of the Sun
 				const entity = document.querySelector("#anchor");
 				entity.setAttribute("scale", {
 					x: 0.1, 
@@ -92,6 +92,9 @@ AFRAME.registerComponent('sun-position', {
 			
 			// Get the alpha value from the deviceorientation event
 			const alpha = this.data.deviceAlpha;
+			
+			// Logging
+			console.log("Alpha: "+alpha);
 
 			// Calculate the X, Y, and Z coordinates of the sun sphere based on the alpha value
 			const x = Math.sin((azimuth - alpha) * Math.PI / 180) * Math.cos(altitude) * this.data.distance;
@@ -101,9 +104,6 @@ AFRAME.registerComponent('sun-position', {
 
 			// Custom added
 			const size = this.calculateSize(altitude)*5;
-			
-				// Logging
-				console.log("Calculated Size: "+size);
 			
 			// Logging
 			console.log("Calculated Position: x:"+ x + " y:" + y + " z:" + z);
@@ -129,9 +129,8 @@ AFRAME.registerComponent('sun-position', {
   
 });
 </script>
-		<a-scene vr-mode-ui='enabled: false' arjs='sourceType: webcam; videoTexture: true; debugUIEnabled: false' renderer='antialias: true; alpha: true'>
-			<a-camera gps-new-camera='gpsMinDistance: 20'></a-camera>
-			<a-entity id="direction-text"></a-entity>
+		<a-scene vr-mode-ui="enabled: false" arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false">
+			<a-camera gps-new-camera="gpsMinDistance: 20"></a-camera>
 			<a-box id="anchor">
 				<a-sphere id="sun" color="yellow" sun-position></a-sphere>
 			</a-box>
