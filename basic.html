@@ -36,6 +36,7 @@
 			
 			// Calculate the Sun's current position
 			var sunPosition = SunCalc.getPosition(now, latitude, longitude);
+			console.log("Altitude: "+sunPosition.altitude+"\n"+"Azimuth: "+sunPosition.azimuth);
 			alert("Altitude: "+sunPosition.altitude+"\n"+"Azimuth: "+sunPosition.azimuth);
 			
 			// Calculate the altitude offset from the horizon
@@ -57,6 +58,7 @@
 			// Set the position of the sphere
 			var sunBox = document.querySelector("#sun");
 			sunBox.setAttribute('position', { x, y, z });
+			console.log("x: " + x+  ", y: " + y + ", z: " + z);
 			alert("x: " + x+  ", y: " + y + ", z: " + z);
 		
 		//});
