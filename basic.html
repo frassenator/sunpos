@@ -34,14 +34,22 @@
 			// Calculate the Sun's current position
 			var sunPosition = SunCalc.getPosition(now, latitude, longitude);
 			alert("Altitude: "+sunPosition.altitude+"\n"+"Azimuth: "+sunPosition.azimuth);
+			
+			// Calculate the altitude offset from the horizon
+  			var horizonOffset = -(sunPosition.altitude - 0.5 * Math.PI);
 
 			// Distance from earth to sun in kilometers (adjusted for scaling)
 			var kmDistance = 150 * 100;
 
-			// Calculate the X, Y, and Z positions of the sun relative to the camera in kilometers
+			/*// Calculate the X, Y, and Z positions of the sun relative to the camera in kilometers
 			var x = Math.cos(sunPosition.altitude) * Math.sin(sunPosition.azimuth) * kmDistance;
 			var y = Math.cos(sunPosition.altitude) * Math.cos(sunPosition.azimuth) * kmDistance;
-			var z = Math.sin(sunPosition.altitude) * kmDistance;
+			var z = Math.sin(sunPosition.altitude) * kmDistance;*/
+			
+			// Calculate the X, Y, and Z positions of the sun relative to the camera in kilometers. Includes horizon offset
+			var x = Math.cos(horizonOffset) * Math.sin(sunPosition.azimuth) * kmDistance;
+			var y = Math.cos(horizonOffset) * Math.cos(sunPosition.azimuth) * kmDistance;
+			var z = Math.sin(horizonOffset) * kmDistance;
 			
 			// Set the position of the sphere
 			var sunBox = document.querySelector("#sun");
