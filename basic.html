@@ -15,8 +15,10 @@
 		<script>
 
 		navigator.geolocation.getCurrentPosition(position => {
+			
+			var currentDate = Date.now();
 
-			const { altitude, azimuth } = SunCalc.getPosition(selectedDate, position.coords.latitude, position.coords.longitude);
+			const { altitude, azimuth } = SunCalc.getPosition(currentDate, position.coords.latitude, position.coords.longitude);
 			
 			console.log("Latitude: " +  position.coords.latitude);
 			console.log("Longitude: " +  position.coords.longitude);
