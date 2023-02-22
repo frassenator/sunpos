@@ -22,7 +22,7 @@
 			// Get the latitude and longitude of your current location (e.g., using the Geolocation API)
 			var latitude = position.coords.latitude;
 			var longitude = position.coords.longitude;
-			alert("Latitude: " + latitude + "\n" + "Longitude: " + longitude);
+			//alert("Latitude: " + latitude + "\n" + "Longitude: " + longitude);
 			
 			// Give Anchor box the current lat and long
 			var anchorBox = document.querySelector("#anchor");
@@ -34,10 +34,23 @@
 			// Calculate the Sun's current position
 			var sunPosition = SunCalc.getPosition(now, latitude, longitude);
 			
+			/*
 			var scalingFactor = 1000; // Change this value to adjust the size of the sunBox
 			var x = scalingFactor * Math.cos(sunPosition.altitude * Math.PI / 180) * Math.sin(sunPosition.azimuth * Math.PI / 180);
 			var y = scalingFactor * Math.cos(sunPosition.altitude * Math.PI / 180) * Math.cos(sunPosition.azimuth * Math.PI / 180);
 			var z = scalingFactor * Math.sin(sunPosition.altitude * Math.PI / 180);
+			*/
+			
+			// Calculate the distance between the Earth and the sun at the given time
+			var earthSunDistance = SunCalc.distance(now, latitude, longitude);
+
+			// Convert the distance to kilometers
+			var kmDistance = earthSunDistance * 149.6 * 1000000;
+
+			// Calculate the X, Y, and Z positions of the sun relative to the camera in kilometers
+			var x = Math.cos(sunPosition.altitude) * Math.sin(sunPosition.azimuth) * kmDistance;
+			var y = Math.cos(sunPosition.altitude) * Math.cos(sunPosition.azimuth) * kmDistance;
+			var z = Math.sin(sunPosition.altitude) * kmDistance;
 			
 			// Set the position of the sphere
 			var sunBox = document.querySelector("#sun");
@@ -52,7 +65,7 @@
 		<a-scene debug vr-mode-ui="enabled: false" arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: true">
 			<a-camera gps-new-camera="gpsMinDistance: 20"></a-camera>
 			<a-box id="anchor" color="blue" scale="1 1 1">
-				<a-box id="sun" color="yellow" scale="200 200 200"></a-box>
+				<a-box id="sun" color="yellow" scale="20000 20000 20000"></a-box>
 			</a-box>
 		</a-scene>
 	</body>
