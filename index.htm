@@ -26,6 +26,7 @@ AFRAME.registerComponent('sun-position', {
 
   init: function () {
 	const el = this.el;
+	const lastTime = Date.now();
 	
 	// Set the deviceAlpha property to the initial alpha value from the deviceorientation event
     window.addEventListener('deviceorientation', (event) => {
