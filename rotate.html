@@ -11,21 +11,6 @@
 			// Get current device orientation and set rotation of scene
 			var setSceneRotation = function(event) {
 				var heading = event.alpha;
-				if (heading !== null) {
-					var sceneEl = document.querySelector('a-scene');
-					<!DOCTYPE html>
-<html>
-	<head>
-		<!-- A-Frame  -->
-		<script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
-
-		<!-- AR.js -->
-		<script type='text/javascript' src='https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js'></script>
-		
-		<script>
-			// Get current device orientation and set rotation of scene
-			var setSceneRotation = function(event) {
-				var heading = event.alpha;
 				var newZ = (-heading * Math.PI / 180);
 				alert("Heading: " + heading +"\n New Z: "+newZ);
 				if (heading !== null) {
