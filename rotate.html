@@ -15,7 +15,7 @@
 				alert("Heading: " + heading +"\n New Z: "+newZ);
 				if (heading !== null) {
 					var sceneEl = document.querySelector('a-scene');
-					sceneEl.setAttribute('rotation', '0 0 '+ newZ);
+					sceneEl.setAttribute('rotation', '0 0 ' + newZ);
 				}
 				// Remove event listener
 				window.removeEventListener('deviceorientation', setSceneRotation, false);
@@ -26,9 +26,9 @@
 	<body style="margin: 0;">
 		<a-scene debug vr-mode-ui="enabled: false" arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: true">
 			<a-camera gps-new-camera="gpsMinDistance: 20" rotation-reader></a-camera>
-			<a-box color="blue" position="1 1 1" scale="1 1 1"></a-box>
+			<a-box color="red" position="1 1 1" scale="1 1 1"></a-box>
 			<a-box color="green" position="1 1 3" scale="1 1 1"></a-box>
-			<a-box color="red" position="1 1 5" scale="1 1 1"></a-box>
+			<a-box color="blue" position="1 1 5" scale="1 1 1"></a-box>
 		</a-scene>
 	</body>
 </html>
