@@ -38,14 +38,6 @@ AFRAME.registerComponent('sun-position', {
 	  this.updatePosition(position);
 	});
 
-	// Update the position of the sphere every 10 seconds
-	/*
-	setInterval(() => {
-	  navigator.geolocation.getCurrentPosition(position => {
-		this.updatePosition(position);
-	  });
-	}, 10000);*/
-
 	// Check if a date and time is selected by the user
 	if (this.data.date && this.data.time) {
 	  // Set the selected date and time
@@ -115,7 +107,7 @@ AFRAME.registerComponent('sun-position', {
 			
 			// Logging
 			console.log("Alpha: "+alpha);
-			alert("Alpha: " + alpha);
+			//alert("Alpha: " + alpha);
 
 			// Calculate the X, Y, and Z coordinates of the sun sphere based on the alpha value
 			const x = Math.sin((azimuth - alpha) * Math.PI / 180) * Math.cos(altitude) * this.data.distance;
