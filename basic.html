@@ -19,13 +19,7 @@
 					var data = this.data;
 					this.axes = new THREE.AxesHelper(data.size);
 					this.el.setObject3D("axes-helper", this.axes);
-				    
-				    	// set position of axes helper to (0, 0, 0) relative to camera
-					var camera = document.querySelector("[gps-camera]");
-					var cameraPosition = camera.components.position.data;
-					var cameraRotation = camera.components.rotation.data;
-					this.axes.position.set(cameraPosition.x, cameraPosition.y, cameraPosition.z);
-					this.axes.rotation.set(cameraRotation.x, cameraRotation.y, cameraRotation.z);
+				  
 					alert("Axes Created");
 			    }
 			});
@@ -35,6 +29,7 @@
 	<body style="margin: 0;">
 		<a-scene debug vr-mode-ui="enabled: false" arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: true">
 			<a-camera gps-new-camera="gpsMinDistance: 20" rotation-reader></a-camera>
+			<a-box color="blue" position="1 1 1" scale="1 1 1"></a-box>
 			<a-entity axes-helper></a-entity>
 		</a-scene>
 	</body>
