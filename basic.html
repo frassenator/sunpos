@@ -12,11 +12,21 @@
 		
 		<!-- Axis Helper -->
 		<script src="js/aframe-axes-helper-component.js"></script>
-
+		
+		<!-- Compass.js -->
+		<script src="js/compass.js"></script>
 		
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/suncalc/1.8.0/suncalc.min.js"></script>
 		
+
+		
 		<script>
+			
+		Compass.watch(function (heading) {
+			console.log("Heading: "+heading);
+			//$('.degrees').text(heading);
+			//$('.compass').css('transform', 'rotate(' + (-heading) + 'deg)');
+		});
 		
 		// Get device orientation event data
 		/*
