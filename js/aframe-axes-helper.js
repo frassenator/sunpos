@@ -9,5 +9,6 @@ AFRAME.registerComponent("axes-helper", {
         var data = this.data;
         this.axes = new THREE.AxesHelper(data.size);
         this.el.setObject3D("axes-helper", this.axes);
+	    alert("Axes Created");
     }
 });
