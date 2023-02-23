@@ -47,7 +47,7 @@
 		else {  
 		  console.log("Sorry, try again on a compatible mobile device!");  
 		}  
-		*/
+		
 
 		navigator.geolocation.getCurrentPosition(position => {
 			// Get the current date and time
@@ -83,7 +83,7 @@
 			var sunBox = document.querySelector("#sun");
 			sunBox.setAttribute('position', { x, y, z });
 		
-		});
+		});*/
 		</script>
 		
 	</head>
@@ -91,9 +91,9 @@
 		<a-scene debug vr-mode-ui="enabled: false" arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: true">
 			<a-camera gps-new-camera="gpsMinDistance: 20" rotation-reader></a-camera>
 			<a-entity axes-helper></a-entity>
-			<a-box id="anchor" color="blue" scale="1 1 1">
+			<!-- <a-box id="anchor" color="blue" scale="1 1 1">
 				<a-box id="sun" color="yellow" scale="20 20 20"></a-box>
-			</a-box>
+			</a-box> -->
 		</a-scene>
 	</body>
 </html>
