@@ -125,7 +125,8 @@ AFRAME.registerComponent('sun-position', {
 			this.el.setAttribute('position', { x, y, z });
 			
 			// Custom Added
-			this.el.setAttribute('scale', {x: size, y: size, z: size});
+			//this.el.setAttribute('scale', {x: size, y: size, z: size});
+			this.el.setAttribute('scale', '5 5 5');
 			
 		});
 	},
@@ -144,7 +145,7 @@ AFRAME.registerComponent('sun-position', {
 </script>
 		<a-scene vr-mode-ui="enabled: false" arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false" inspector="url: https://cdn.jsdelivr.net/gh/aframevr/aframe-inspector@master/dist/aframe-inspector.min.js">
 			<a-camera gps-new-camera="gpsMinDistance: 20"></a-camera>
-			<a-box color="red" position="2 2 2" scale="10 10 10"></a-box>
+			<a-box color="red" position="1 1 1" scale="1 1 1"></a-box>
 			<a-box id="anchor">
 				<a-sphere id="sun" color="yellow" sun-position></a-sphere>
 			</a-box>
