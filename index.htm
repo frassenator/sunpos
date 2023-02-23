@@ -150,7 +150,7 @@ AFRAME.registerComponent('sun-position', {
   
 });
 </script>
-		<a-scene vr-mode-ui="enabled: false" arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false">
+		<a-scene vr-mode-ui="enabled: false" arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false" inspector="url: https://cdn.jsdelivr.net/gh/aframevr/aframe-inspector@master/dist/aframe-inspector.min.js">
 			<a-camera gps-new-camera="gpsMinDistance: 20"></a-camera>
 			<a-box color="red" position="2 2 2" scale="10 10 10"></a-box>
 			<a-box id="anchor">
