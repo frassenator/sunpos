@@ -2,7 +2,7 @@ AFRAME.registerComponent("axes-helper", {
     schema: {
         size: {
             type: "number",
-	    default: 1
+	    default: 5
         }
     },
     init: function () {
