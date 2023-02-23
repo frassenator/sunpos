@@ -18,7 +18,7 @@
 		
 		<script>
 		
-		 // Get device orientation event data  
+		// Get device orientation event data  
 		function deviceOrientationListener(event) {  
 		  var alpha    = event.alpha; //z axis rotation \[0,360)  
 		  var beta     = event.beta; //x axis rotation \[-180, 180\]  
@@ -31,20 +31,22 @@
 		  else {  
 		    console.log("Your device is reporting relative alpha values, so this compass won't point north");  
 		  }
+		  
+		  alert("Alpha: " + alpha);
 		}  
 
 		// Check if device can provide absolute orientation data  
 		if (window.DeviceOrientationAbsoluteEvent) {  
 		  window.addEventListener("DeviceOrientationAbsoluteEvent", deviceOrientationListener); 
-			alert("Absolute Alpha: " + alpha);
 		} // If not, check if the device sends any orientation data  
 		else if(window.DeviceOrientationEvent){  
 		  window.addEventListener("deviceorientation", deviceOrientationListener);
-		  alert("Alpha: " + alpha);
+		  
 		}
 		else {  
 		  console.log("Sorry, try again on a compatible mobile device!");  
 		}  
+
 
 		navigator.geolocation.getCurrentPosition(position => {
 			// Get the current date and time
@@ -79,6 +81,9 @@
 			// Set the position of the sphere
 			var sunBox = document.querySelector("#sun");
 			sunBox.setAttribute('position', { x, y, z });
+			
+			const axesHelper = new THREE.AxesHelper( 5 );
+			scene.add( axesHelper );
 		
 		});
 		</script>
