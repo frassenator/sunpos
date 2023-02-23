@@ -90,7 +90,6 @@ AFRAME.registerComponent('sun-position', {
 			
 			// Add a box at the GPS position, this used as the basepoint for relative position of the Sun
 				const entity = document.querySelector("#camera");
-				const camera = document.querySelector("#anchor");
 				entity.setAttribute("scale", {
 					x: 1, 
 					y: 1,
@@ -101,18 +100,6 @@ AFRAME.registerComponent('sun-position', {
 					latitude: position.coords.latitude,
 					longitude: position.coords.longitude
 				});
-				camera.setAttribute('gps-new-entity-place', {
-					latitude: position.coords.latitude,
-					longitude: position.coords.longitude
-				});
-				//document.querySelector("a-scene").appendChild(entity);
-			
-			// Get the alpha value from the deviceorientation event
-			//const alpha = this.data.deviceAlpha;
-			
-			// Logging
-			console.log("Alpha: "+alpha);
-			//alert("Alpha: " + alpha);
 
 			// Calculate the X, Y, and Z coordinates of the sun sphere based on the alpha value
 			const x = Math.sin(azimuth * Math.PI / 180) * Math.cos(altitude) * this.data.distance;
@@ -149,7 +136,7 @@ AFRAME.registerComponent('sun-position', {
 });
 </script>
 		<a-scene vr-mode-ui="enabled: false" arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false" inspector="url: https://cdn.jsdelivr.net/gh/aframevr/aframe-inspector@master/dist/aframe-inspector.min.js">
-			<a-camera id="camera" gps-new-camera="gpsMinDistance: 20"></a-camera>
+			<a-camera id="camera" gps-new-camera="gpsMinDistance: 20" far="10000000"></a-camera>
 			<a-box id="anchor">
 				<a-sphere id="sun" color="yellow" sun-position></a-sphere>
 			</a-box>
