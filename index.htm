@@ -89,7 +89,8 @@ AFRAME.registerComponent('sun-position', {
 				console.log("Date used to position Sun: "+selectedDate);
 			
 			// Add a box at the GPS position, this used as the basepoint for relative position of the Sun
-				const entity = document.querySelector("#anchor");
+				const entity = document.querySelector("#camera");
+				const camera = document.querySelector("#anchor");
 				entity.setAttribute("scale", {
 					x: 1, 
 					y: 1,
@@ -97,7 +98,11 @@ AFRAME.registerComponent('sun-position', {
 				});
 				entity.setAttribute('material', { color: 'grey' } );
 				entity.setAttribute('gps-new-entity-place', {
-					latitude: position.coords.latitude + 0.0001,
+					latitude: position.coords.latitude,
+					longitude: position.coords.longitude
+				});
+				camera.setAttribute('gps-new-entity-place', {
+					latitude: position.coords.latitude,
 					longitude: position.coords.longitude
 				});
 				//document.querySelector("a-scene").appendChild(entity);
@@ -144,7 +149,7 @@ AFRAME.registerComponent('sun-position', {
 });
 </script>
 		<a-scene vr-mode-ui="enabled: false" arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false" inspector="url: https://cdn.jsdelivr.net/gh/aframevr/aframe-inspector@master/dist/aframe-inspector.min.js">
-			<a-camera gps-new-camera="gpsMinDistance: 20"></a-camera>
+			<a-camera id="camera" gps-new-camera="gpsMinDistance: 20"></a-camera>
 			<a-box id="anchor">
 				<a-sphere id="sun" color="yellow" sun-position></a-sphere>
 			</a-box>
