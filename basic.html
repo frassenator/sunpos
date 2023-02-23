@@ -7,9 +7,6 @@
 		<!-- AR.js -->
 		<script type='text/javascript' src='https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js'></script>
 		
-		<!-- Axis Helper -->
-		<!-- <script src="js/aframe-axes-helper.js"></script> -->
-		
 		<!-- Suncalc -->
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/suncalc/1.8.0/suncalc.min.js"></script>
 		
@@ -22,6 +19,13 @@
 					var data = this.data;
 					this.axes = new THREE.AxesHelper(data.size);
 					this.el.setObject3D("axes-helper", this.axes);
+				    
+				    	// set position of axes helper to (0, 0, 0) relative to camera
+					var camera = document.querySelector("[gps-camera]");
+					var cameraPosition = camera.components.position.data;
+					var cameraRotation = camera.components.rotation.data;
+					this.axes.position.set(cameraPosition.x, cameraPosition.y, cameraPosition.z);
+					this.axes.rotation.set(cameraRotation.x, cameraRotation.y, cameraRotation.z);
 					alert("Axes Created");
 			    }
 			});
