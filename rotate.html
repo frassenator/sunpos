@@ -25,11 +25,12 @@
 		<script>
 			// Get current device orientation and set rotation of scene
 			var setSceneRotation = function(event) {
-				var heading = (event.alpha)-180;
-				alert("Heading: " + heading);
+				var heading = event.alpha;
+				var newZ = (-heading * Math.PI / 180);
+				alert("Heading: " + heading +"\n New Z: "+newZ);
 				if (heading !== null) {
 					var sceneEl = document.querySelector('a-scene');
-					sceneEl.setAttribute('rotation', '0 0 '+ heading);
+					sceneEl.setAttribute('rotation', '0 0 '+ newZ);
 				}
 				// Remove event listener
 				window.removeEventListener('deviceorientation', setSceneRotation, false);
