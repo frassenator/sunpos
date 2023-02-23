@@ -15,9 +15,9 @@
 
 				// Set rotation of scene to align Z axis to true north
 				var sceneEl = document.querySelector('a-scene');
-				var newY = -heading * Math.PI / 180;
-				alert("New Y: " + newY);
-				sceneEl.setAttribute('rotation', '0 ' + newY + ' 0');
+				var newZ = -heading * Math.PI / 180;
+				alert("New Z: " + newZ);
+				sceneEl.setAttribute('rotation', '0 0 ' + newZ);
 			});
 		</script>
 	</head>
