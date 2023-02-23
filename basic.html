@@ -17,19 +17,43 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/suncalc/1.8.0/suncalc.min.js"></script>
 		
 		<script>
+		
+		 // Get device orientation event data  
+		function deviceOrientationListener(event) {  
+		  var alpha    = event.alpha; //z axis rotation \[0,360)  
+		  var beta     = event.beta; //x axis rotation \[-180, 180\]  
+		  var gamma    = event.gamma; //y axis rotation \[-90, 90\]
+
+		  //Check if absolute values have been sent  
+		  if (typeof event.webkitCompassHeading !== "undefined") {  
+		    alpha = event.webkitCompassHeading; //iOS non-standard
+		  }
+		  else {  
+		    console.log("Your device is reporting relative alpha values, so this compass won't point north");  
+		  }
+		}  
+
+		// Check if device can provide absolute orientation data  
+		if (window.DeviceOrientationAbsoluteEvent) {  
+		  window.addEventListener("DeviceOrientationAbsoluteEvent", deviceOrientationListener); 
+			alert("Absolute Alpha: " + alpha);
+		} // If not, check if the device sends any orientation data  
+		else if(window.DeviceOrientationEvent){  
+		  window.addEventListener("deviceorientation", deviceOrientationListener);
+		  alert("Alpha: " + alpha);
+		}
+		else {  
+		  console.log("Sorry, try again on a compatible mobile device!");  
+		}  
 
 		navigator.geolocation.getCurrentPosition(position => {
 			// Get the current date and time
 			//var now = new Date();
 			var now = new Date("2022-07-07 10:00");
-			console.log("Date: "+now);
 
 			// Get the latitude and longitude of your current location (e.g., using the Geolocation API)
 			var latitude = position.coords.latitude;
 			var longitude = position.coords.longitude;
-			//alert("Latitude: " + latitude + "\n" + "Longitude: " + longitude);
-			//var latitude = 59.3401836003304;
-			//var longitude = 18.0136710569334;
 			
 			// Give Anchor box the current lat and long
 			var anchorBox = document.querySelector("#anchor");
@@ -40,19 +64,12 @@
 			
 			// Calculate the Sun's current position
 			var sunPosition = SunCalc.getPosition(now, latitude, longitude);
-			console.log("Altitude: "+sunPosition.altitude+"\n"+"Azimuth: "+sunPosition.azimuth);
-			alert("Altitude: "+sunPosition.altitude+"\n"+"Azimuth: "+sunPosition.azimuth);
 			
 			// Calculate the altitude offset from the horizon
   			var horizonOffset = -(sunPosition.altitude - 0.5 * Math.PI);
 
 			// Distance from earth to sun in kilometers (adjusted for scaling)
 			var kmDistance = 150;
-
-			/*// Calculate the X, Y, and Z positions of the sun relative to the camera in kilometers
-			var x = Math.cos(sunPosition.altitude) * Math.sin(sunPosition.azimuth) * kmDistance;
-			var y = Math.cos(sunPosition.altitude) * Math.cos(sunPosition.azimuth) * kmDistance;
-			var z = Math.sin(sunPosition.altitude) * kmDistance;*/
 			
 			// Calculate the X, Y, and Z positions of the sun relative to the camera in kilometers. Includes horizon offset
 			var x = Math.cos(horizonOffset) * Math.sin(sunPosition.azimuth) * kmDistance;
@@ -62,8 +79,6 @@
 			// Set the position of the sphere
 			var sunBox = document.querySelector("#sun");
 			sunBox.setAttribute('position', { x, y, z });
-			console.log("x: " + x+  ", y: " + y + ", z: " + z);
-			alert("x: " + x+  ", y: " + y + ", z: " + z);
 		
 		});
 		</script>
