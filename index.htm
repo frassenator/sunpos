@@ -103,16 +103,16 @@ AFRAME.registerComponent('sun-position', {
 				//document.querySelector("a-scene").appendChild(entity);
 			
 			// Get the alpha value from the deviceorientation event
-			const alpha = this.data.deviceAlpha;
+			//const alpha = this.data.deviceAlpha;
 			
 			// Logging
 			console.log("Alpha: "+alpha);
 			//alert("Alpha: " + alpha);
 
 			// Calculate the X, Y, and Z coordinates of the sun sphere based on the alpha value
-			const x = Math.sin((azimuth - alpha) * Math.PI / 180) * Math.cos(altitude) * this.data.distance;
+			const x = Math.sin(azimuth * Math.PI / 180) * Math.cos(altitude) * this.data.distance;
 			const y = Math.sin(altitude) * this.data.distance;
-			const z = Math.cos((azimuth - alpha) * Math.PI / 180) * Math.cos(altitude) * this.data.distance;
+			const z = Math.cos(azimuth * Math.PI / 180) * Math.cos(altitude) * this.data.distance;
 
 
 			// Custom added
