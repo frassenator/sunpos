@@ -97,10 +97,10 @@ AFRAME.registerComponent('sun-position', {
 					z: 1
 				});
 				anchor.setAttribute('material', { color: 'grey' } );
-				anchor.setAttribute('gps-new-entity-place', {
+				/*anchor.setAttribute('gps-new-entity-place', {
 					latitude: position.coords.latitude,
 					longitude: position.coords.longitude
-				});
+				});*/
 
 			// Calculate the X, Y, and Z coordinates of the sun sphere based on the alpha value
 			const x = Math.sin(azimuth * Math.PI / 180) * Math.cos(altitude) * this.data.distance;
