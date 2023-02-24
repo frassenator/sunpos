@@ -138,6 +138,7 @@
 			if (heading !== null) {
 				var sceneEl = document.querySelector('a-scene');
 				sceneEl.setAttribute('rotation', '0 0 ' + (-heading * Math.PI / 180));
+				console.log("Heading: " + heading + "\n Scene rotated");
 			}
 			// Remove event listener
 			window.removeEventListener('deviceorientation', setSceneRotation, false);
