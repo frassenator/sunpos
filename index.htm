@@ -23,7 +23,6 @@
 		var setSceneRotation = function(event) {
 			var heading = event.alpha;
 			if (heading !== null) {
-				alert("New Scene Rotation");
 				var sceneEl = document.querySelector('a-scene');
 				sceneEl.setAttribute('rotation', '0 0 ' + (-heading * Math.PI / 180));
 			}
