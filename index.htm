@@ -98,19 +98,19 @@
 						});
 
 					// Calculate the X, Y, and Z coordinates of the sun sphere based on the alpha value
-					//const x = Math.sin(azimuth * Math.PI / 180) * Math.cos(altitude) * this.data.distance;
-					//const y = Math.sin(altitude) * this.data.distance;
-					//const z = Math.cos(azimuth * Math.PI / 180) * Math.cos(altitude) * this.data.distance;
+					const x = Math.sin(azimuth * Math.PI / 180) * Math.cos(altitude) * this.data.distance;
+					const y = Math.sin(altitude) * this.data.distance;
+					const z = Math.cos(azimuth * Math.PI / 180) * Math.cos(altitude) * this.data.distance;
 
 
 					// Custom added
 					//const size = this.calculateSize(altitude)*8;
 
 					// Logging
-					//console.log("Calculated Position: x:"+ x + " y:" + y + " z:" + z);
+					console.log("Calculated Position: x:"+ x + " y:" + y + " z:" + z);
 
 					// Set the position of the sphere
-					//this.el.setAttribute('position', { x, y, z });
+					this.el.setAttribute('position', { x, y, z });
 
 					// Custom Added
 					//this.el.setAttribute('scale', {x: size, y: size, z: size});
