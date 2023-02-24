@@ -90,6 +90,10 @@ AFRAME.registerComponent('sun-position', {
 			
 			// Add a box at the GPS position, this used as the basepoint for relative position of the Sun
 				const entity = document.querySelector("#anchor");
+			
+				const scene = document.querySelector("#scene");
+				const camera = document.querySelector("#camera");
+			
 				entity.setAttribute("scale", {
 					x: 1, 
 					y: 1,
@@ -97,6 +101,11 @@ AFRAME.registerComponent('sun-position', {
 				});
 				entity.setAttribute('material', { color: 'grey' } );
 				entity.setAttribute('gps-new-entity-place', {
+					latitude: position.coords.latitude,
+					longitude: position.coords.longitude
+				});
+				
+				camera.setAttribute('gps-new-entity-place', {
 					latitude: position.coords.latitude,
 					longitude: position.coords.longitude
 				});
