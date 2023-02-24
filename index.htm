@@ -132,6 +132,9 @@
 				sceneEl.setAttribute('rotation', '0 0 ' + (-heading * Math.PI / 180));
 				console.log("Heading: " + heading + "\n Scene rotated");
 			}
+			else {
+				console.log("No device orientation data found");
+			}
 			// Remove event listener
 			window.removeEventListener('deviceorientation', setSceneRotation, false);
 		};
