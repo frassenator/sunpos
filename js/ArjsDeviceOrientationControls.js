@@ -1,16 +1,3 @@
-/**
- * @author richt / http://richt.me
- * @author WestLangley / http://github.com/WestLangley
- *
- * W3C Device Orientation control (http://w3c.github.io/deviceorientation/spec-source-orientation.html)
- */
-
-/* NOTE that this is a modified version of THREE.DeviceOrientationControls to
- * allow exponential smoothing, for use in AR.js.
- *
- * Modifications Nick Whitelegg (nickw1 github)
- */
-
 import * as THREE from "three";
 
 const ArjsDeviceOrientationControls = function (object) {
