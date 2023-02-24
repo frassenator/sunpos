@@ -25,13 +25,8 @@
 			if (heading !== null) {
 				var sceneEl = document.querySelector('a-scene');
 				sceneEl.setAttribute('rotation', '0 0 ' + (-heading * Math.PI / 180));
-			}
-			// Remove event listener
-			window.removeEventListener('deviceorientation', setSceneRotation, false);
-		};
-		window.addEventListener('deviceorientation', setSceneRotation, false);
-		
-		AFRAME.registerComponent('sun-position', {
+				
+				AFRAME.registerComponent('sun-position', {
 		  schema: {
 			distance: { type: 'number', default: 200 },
 			date: { type: 'string', default: '' },
@@ -144,6 +139,12 @@
 			}
 
 		});
+			}
+			// Remove event listener
+			window.removeEventListener('deviceorientation', setSceneRotation, false);
+		};
+		window.addEventListener('deviceorientation', setSceneRotation, false);
+		
 	};
 </script>
 		<a-scene vr-mode-ui="enabled: false" arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false" renderer='antialias: true; alpha: true' inspector="url: https://cdn.jsdelivr.net/gh/aframevr/aframe-inspector@master/dist/aframe-inspector.min.js">
