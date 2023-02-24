@@ -17,6 +17,18 @@
 	</head>
 	<body style="margin: 0;">
 <script>
+AFRAME.registerComponent("axes-helper", {
+    schema: {
+		size: { type: "number", default: 5 }
+    },
+    init: function () {
+		var data = this.data;
+		this.axes = new THREE.AxesHelper(data.size);
+		this.el.setObject3D("axes-helper", this.axes);
+
+		alert("Axes Created");
+    }
+});
 AFRAME.registerComponent('sun-position', {
   schema: {
 	distance: { type: 'number', default: 200 },
@@ -133,6 +145,7 @@ AFRAME.registerComponent('sun-position', {
 </script>
 		<a-scene vr-mode-ui="enabled: false" arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false" renderer='antialias: true; alpha: true' inspector="url: https://cdn.jsdelivr.net/gh/aframevr/aframe-inspector@master/dist/aframe-inspector.min.js">
 			<a-camera id="camera" gps-new-camera="gpsMinDistance: 5"></a-camera>
+			<a-entity axes-helper></a-entity>
 			<a-box id="anchor" color="grey" scale="1 1 1">
 				<a-box id="north" position="0 1 4" scale="1 1 1"></a-box>
 				<a-sphere id="sun" color="yellow" sun-position></a-sphere>
