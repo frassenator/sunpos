@@ -98,19 +98,19 @@
 						});
 
 					// Calculate the X, Y, and Z coordinates of the sun sphere based on the alpha value
-					const x = Math.sin(azimuth * Math.PI / 180) * Math.cos(altitude) * this.data.distance;
-					const y = Math.sin(altitude) * this.data.distance;
-					const z = Math.cos(azimuth * Math.PI / 180) * Math.cos(altitude) * this.data.distance;
+					//const x = Math.sin(azimuth * Math.PI / 180) * Math.cos(altitude) * this.data.distance;
+					//const y = Math.sin(altitude) * this.data.distance;
+					//const z = Math.cos(azimuth * Math.PI / 180) * Math.cos(altitude) * this.data.distance;
 
 
 					// Custom added
-					const size = this.calculateSize(altitude)*8;
+					//const size = this.calculateSize(altitude)*8;
 
 					// Logging
-					console.log("Calculated Position: x:"+ x + " y:" + y + " z:" + z);
+					//console.log("Calculated Position: x:"+ x + " y:" + y + " z:" + z);
 
 					// Set the position of the sphere
-					this.el.setAttribute('position', { x, y, z });
+					//this.el.setAttribute('position', { x, y, z });
 
 					// Custom Added
 					//this.el.setAttribute('scale', {x: size, y: size, z: size});
@@ -137,7 +137,7 @@
 			var heading = event.alpha;
 			if (heading !== null) {
 				var sceneEl = document.querySelector('a-scene');
-				//sceneEl.setAttribute('rotation', '0 0 ' + (-heading * Math.PI / 180));
+				sceneEl.setAttribute('rotation', '0 0 ' + (-heading * Math.PI / 180));
 				console.log("Heading: " + heading + "\n Scene rotated");
 			}
 			// Remove event listener
