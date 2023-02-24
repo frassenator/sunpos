@@ -17,137 +17,140 @@
 	</head>
 	<body style="margin: 0;">
 <script>
-AFRAME.registerComponent("axes-helper", {
-    schema: {
-		size: { type: "number", default: 5 }
-    },
-    init: function () {
-		var data = this.data;
-		this.axes = new THREE.AxesHelper(data.size);
-		this.el.setObject3D("axes-helper", this.axes);
+	window.onload = () => {
+		
+		// Get current device orientation and set rotation of scene
+		var setSceneRotation = function(event) {
+			var heading = event.alpha;
+			if (heading !== null) {
+				alert("New Scene Rotation");
+				var sceneEl = document.querySelector('a-scene');
+				sceneEl.setAttribute('rotation', '0 0 ' + (-heading * Math.PI / 180));
+			}
+			// Remove event listener
+			window.removeEventListener('deviceorientation', setSceneRotation, false);
+		};
+		window.addEventListener('deviceorientation', setSceneRotation, false);
+		
+		AFRAME.registerComponent('sun-position', {
+		  schema: {
+			distance: { type: 'number', default: 200 },
+			date: { type: 'string', default: '' },
+			time: { type: 'string', default: '' },
+			deviceAlpha: { type: 'number', default: 0 }
+		  },
 
-		alert("Axes Created");
-    }
-});
-AFRAME.registerComponent('sun-position', {
-  schema: {
-	distance: { type: 'number', default: 200 },
-	date: { type: 'string', default: '' },
-	time: { type: 'string', default: '' },
-	deviceAlpha: { type: 'number', default: 0 }
-  },
+		  init: function () {
+			const el = this.el;
+			const lastTime = Date.now();
 
-  init: function () {
-	const el = this.el;
-	const lastTime = Date.now();
-	
-	// Set the deviceAlpha property to the initial alpha value from the deviceorientation event
-    window.addEventListener('deviceorientation', (event) => {
-      this.data.deviceAlpha = event.alpha;
-    });
+			// Set the deviceAlpha property to the initial alpha value from the deviceorientation event
+		    window.addEventListener('deviceorientation', (event) => {
+		      this.data.deviceAlpha = event.alpha;
+		    });
 
-	// Get the current position of the device
-	navigator.geolocation.getCurrentPosition(position => {
-	  this.updatePosition(position);
-	});
-
-	// Check if a date and time is selected by the user
-	if (this.data.date && this.data.time) {
-	  // Set the selected date and time
-	  const selectedDate = new Date(this.data.date + 'T' + this.data.time);
-	  this.updatePositionTime(selectedDate);
-	}
-	
-	// New animate function instead of setInterval()
-	this.animate = function(time) {
-		// Calculate the time delta
-		const deltaTime = (time - lastTime) / 1000;
-
-		// Only update the position every 10 seconds
-		if (deltaTime >= 10) {
+			// Get the current position of the device
 			navigator.geolocation.getCurrentPosition(position => {
-				this.updatePosition(position);
+			  this.updatePosition(position);
 			});
-			lastTime = time;
-		}
 
-		// Call requestAnimationFrame to animate the scene
-		requestAnimationFrame(this.animate.bind(this));
-	}
-	  
-	//});
-  },
-	
-	updatePosition: function (position) {
-	  const currentdate = new Date();
+			// Check if a date and time is selected by the user
+			if (this.data.date && this.data.time) {
+			  // Set the selected date and time
+			  const selectedDate = new Date(this.data.date + 'T' + this.data.time);
+			  this.updatePositionTime(selectedDate);
+			}
 
-	  // Get the date and time selected by the user
-	  const dateTimePicker = document.getElementById('date-time-picker');
-	  const selectedDate = dateTimePicker.value ? new Date(dateTimePicker.value) : null;
+			// New animate function instead of setInterval()
+			this.animate = function(time) {
+				// Calculate the time delta
+				const deltaTime = (time - lastTime) / 1000;
 
-	  if (selectedDate && !isNaN(selectedDate.getTime())) {
-		// Use the selected date and time
-		this.updatePositionTime(selectedDate);
-	  } else {
-		// Use the current date and time
-		this.updatePositionTime(currentdate);
-	  }
-	},
+				// Only update the position every 10 seconds
+				if (deltaTime >= 10) {
+					navigator.geolocation.getCurrentPosition(position => {
+						this.updatePosition(position);
+					});
+					lastTime = time;
+				}
 
-	updatePositionTime: function (selectedDate) {
-		navigator.geolocation.getCurrentPosition(position => {
+				// Call requestAnimationFrame to animate the scene
+				requestAnimationFrame(this.animate.bind(this));
+			}
 
-			const { altitude, azimuth } = SunCalc.getPosition(selectedDate, position.coords.latitude, position.coords.longitude);
-			// Logging
-				console.log("Date used to position Sun: "+selectedDate);
-			
-			// Add a box at the GPS position, this used as the basepoint for relative position of the Sun
-				const anchor = document.querySelector("#anchor");
+			//});
+		  },
 
-				anchor.setAttribute('gps-new-entity-place', {
-					latitude: position.coords.latitude,
-					longitude: position.coords.longitude
+			updatePosition: function (position) {
+			  const currentdate = new Date();
+
+			  // Get the date and time selected by the user
+			  const dateTimePicker = document.getElementById('date-time-picker');
+			  const selectedDate = dateTimePicker.value ? new Date(dateTimePicker.value) : null;
+
+			  if (selectedDate && !isNaN(selectedDate.getTime())) {
+				// Use the selected date and time
+				this.updatePositionTime(selectedDate);
+			  } else {
+				// Use the current date and time
+				this.updatePositionTime(currentdate);
+			  }
+			},
+
+			updatePositionTime: function (selectedDate) {
+				navigator.geolocation.getCurrentPosition(position => {
+
+					const { altitude, azimuth } = SunCalc.getPosition(selectedDate, position.coords.latitude, position.coords.longitude);
+					// Logging
+						console.log("Date used to position Sun: "+selectedDate);
+
+					// Add a box at the GPS position, this used as the basepoint for relative position of the Sun
+						const anchor = document.querySelector("#anchor");
+
+						anchor.setAttribute('gps-new-entity-place', {
+							latitude: position.coords.latitude,
+							longitude: position.coords.longitude
+						});
+
+					// Calculate the X, Y, and Z coordinates of the sun sphere based on the alpha value
+					const x = Math.sin(azimuth * Math.PI / 180) * Math.cos(altitude) * this.data.distance;
+					const y = Math.sin(altitude) * this.data.distance;
+					const z = Math.cos(azimuth * Math.PI / 180) * Math.cos(altitude) * this.data.distance;
+
+
+					// Custom added
+					const size = this.calculateSize(altitude)*8;
+
+					// Logging
+					console.log("Calculated Position: x:"+ x + " y:" + y + " z:" + z);
+
+					// Set the position of the sphere
+					this.el.setAttribute('position', { x, y, z });
+
+					// Custom Added
+					//this.el.setAttribute('scale', {x: size, y: size, z: size});
+					this.el.setAttribute('scale', '5 5 5');
+
 				});
+			},
 
-			// Calculate the X, Y, and Z coordinates of the sun sphere based on the alpha value
-			const x = Math.sin(azimuth * Math.PI / 180) * Math.cos(altitude) * this.data.distance;
-			const y = Math.sin(altitude) * this.data.distance;
-			const z = Math.cos(azimuth * Math.PI / 180) * Math.cos(altitude) * this.data.distance;
+			calculateSize: function (altitude) {
+				// Set the radius of the sphere to block the actual sun from the observer's point of view
+				const sphereRadius = 0.53; // in degrees
+				const observerHeight = 1.7; // in meters
+				const objectHeight = Math.tan(altitude) * this.data.distance + observerHeight;
+				const objectSize = sphereRadius / Math.atan(objectHeight / this.data.distance);
 
+				return objectSize;
+			}
 
-			// Custom added
-			const size = this.calculateSize(altitude)*8;
-			
-			// Logging
-			console.log("Calculated Position: x:"+ x + " y:" + y + " z:" + z);
-
-			// Set the position of the sphere
-			this.el.setAttribute('position', { x, y, z });
-			
-			// Custom Added
-			//this.el.setAttribute('scale', {x: size, y: size, z: size});
-			this.el.setAttribute('scale', '5 5 5');
-			
 		});
-	},
-  
-	calculateSize: function (altitude) {
-		// Set the radius of the sphere to block the actual sun from the observer's point of view
-		const sphereRadius = 0.53; // in degrees
-		const observerHeight = 1.7; // in meters
-		const objectHeight = Math.tan(altitude) * this.data.distance + observerHeight;
-		const objectSize = sphereRadius / Math.atan(objectHeight / this.data.distance);
-		  
-		return objectSize;
-	}
-  
-});
+	};
 </script>
 		<a-scene vr-mode-ui="enabled: false" arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false" renderer='antialias: true; alpha: true' inspector="url: https://cdn.jsdelivr.net/gh/aframevr/aframe-inspector@master/dist/aframe-inspector.min.js">
 			<a-camera id="camera" gps-new-camera="gpsMinDistance: 5"></a-camera>
-			<a-entity axes-helper></a-entity>
-			<a-box id="anchor" color="grey" scale="1 1 1">
-				<a-box id="north" position="0 1 4" scale="1 1 1"></a-box>
+			<a-box id="anchor" color="grey" scale="0.5 0.5 0.5">
+				<a-box id="north" color="blue" position="0 1 4" scale="1 1 1"></a-box>
 				<a-sphere id="sun" color="yellow" sun-position></a-sphere>
 			</a-box>
 		</a-scene>
