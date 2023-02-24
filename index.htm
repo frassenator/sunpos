@@ -17,16 +17,7 @@
 	</head>
 	<body style="margin: 0;">
 <script>
-	window.onload = () => {
-		
-		// Get current device orientation and set rotation of scene
-		var setSceneRotation = function(event) {
-			var heading = event.alpha;
-			if (heading !== null) {
-				var sceneEl = document.querySelector('a-scene');
-				sceneEl.setAttribute('rotation', '0 0 ' + (-heading * Math.PI / 180));
-				
-				AFRAME.registerComponent('sun-position', {
+	AFRAME.registerComponent('sun-position', {
 		  schema: {
 			distance: { type: 'number', default: 200 },
 			date: { type: 'string', default: '' },
@@ -83,11 +74,11 @@
 			  const selectedDate = dateTimePicker.value ? new Date(dateTimePicker.value) : null;
 
 			  if (selectedDate && !isNaN(selectedDate.getTime())) {
-				// Use the selected date and time
-				this.updatePositionTime(selectedDate);
+				  // Use the selected date and time
+				  this.updatePositionTime(selectedDate);
 			  } else {
-				// Use the current date and time
-				this.updatePositionTime(currentdate);
+				  // Use the current date and time
+				  this.updatePositionTime(currentdate);
 			  }
 			},
 
@@ -139,6 +130,14 @@
 			}
 
 		});
+	window.onload = () => {
+		
+		// Get current device orientation and set rotation of scene
+		var setSceneRotation = function(event) {
+			var heading = event.alpha;
+			if (heading !== null) {
+				var sceneEl = document.querySelector('a-scene');
+				sceneEl.setAttribute('rotation', '0 0 ' + (-heading * Math.PI / 180));
 			}
 			// Remove event listener
 			window.removeEventListener('deviceorientation', setSceneRotation, false);
