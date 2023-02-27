@@ -55,6 +55,7 @@
 				// Give North Position box the current lat and long
 				var northPos = document.querySelector("#north-position");
 				var { northLatitude, northLongitude } = getNewCoordinate(latitude, longitude, 50, "north");
+				alert("North Latitude: "+northLatitude+" North Longitude: "+northLongitude)
 				northPos.setAttribute("gps-new-entity-place", {
 					latitude: northLatitude,
 					longitude: northLongitude
