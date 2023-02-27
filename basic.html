@@ -53,37 +53,38 @@
 				});
 				
 				// Give North Position box the current lat and long
-				var northPos = document.querySelector("#north-position");
-				var newPosition = getNewCoordinate(latitude, longitude, 50, "north");
-				console.log(newPosition);
-				northPos.setAttribute("gps-new-entity-place", {
-					latitude: newPosition.latitude,
-					longitude: newPosition.longitude
+				var northObject = document.querySelector("#north-position");
+				var northPosition = getNewCoordinate(latitude, longitude, 50, "north");
+				northObject.setAttribute("gps-new-entity-place", {
+					latitude: northPosition.latitude,
+					longitude: northPosition.longitude
 				});
 				
 				// Give South Position box the current lat and long
-				var southPos = document.querySelector("#south-position");
-				var { southLatitude, southLongitude } = getNewCoordinate(latitude, longitude, 50, "south");
-				southPos.setAttribute("gps-new-entity-place", {
-					latitude: southLatitude,
-					longitude: southLongitude
+				var southObject = document.querySelector("#south-position");
+				var southPosition = getNewCoordinate(latitude, longitude, 50, "south");
+				southObject.setAttribute("gps-new-entity-place", {
+					latitude: southPosition.latitude,
+					longitude: southPosition.longitude
 				});
 				
 				// Give East Position box the current lat and long
-				var eastPos = document.querySelector("#east-position");
-				var { eastLatitude, eastLongitude } = getNewCoordinate(latitude, longitude, 50, "east");
-				eastPos.setAttribute("gps-new-entity-place", {
-					latitude: eastLatitude,
-					longitude: eastLongitude
+				var eastObject = document.querySelector("#east-position");
+				var eastPosition = getNewCoordinate(latitude, longitude, 50, "east");
+				eastObject.setAttribute("gps-new-entity-place", {
+					latitude: eastPosition.latitude,
+					longitude: eastPosition.longitude
 				});
 				
 				// Give West Position box the current lat and long
-				var westPos = document.querySelector("#west-position");
-				var { westLatitude, westLongitude } = getNewCoordinate(latitude, longitude, 50, "west");
-				westPos.setAttribute("gps-new-entity-place", {
-					latitude: westLatitude,
-					longitude: westLongitude
+				var westObject = document.querySelector("#west-position");
+				var westPosition = getNewCoordinate(latitude, longitude, 50, "west");
+				westObject.setAttribute("gps-new-entity-place", {
+					latitude: westPosition.latitude,
+					longitude: westPosition.longitude
 				});
+				
+
 			});
 		</script>
 		
