@@ -26,16 +26,16 @@
 
 			function getBearing(direction) {
 			  switch (direction) {
-			    case 'north':
+			    case "north":
 			      return 0;
-			    case 'south':
+			    case "south":
 			      return Math.PI;
-			    case 'east':
+			    case "east":
 			      return Math.PI / 2;
-			    case 'west':
+			    case "west":
 			      return 3 * Math.PI / 2;
 			    default:
-			      throw new Error(`Invalid direction: ${direction}`);
+			      throw new Error("Invalid direction: ${direction}");
 			  }
 			}
 
@@ -47,39 +47,39 @@
 
 				// Give Current Position box the current lat and long
 				var currentPos = document.querySelector("#current-position");
-				currentPos.setAttribute('gps-new-entity-place', {
+				currentPos.setAttribute("gps-new-entity-place", {
 					latitude: latitude,
 					longitude: longitude
 				});
 				
 				// Give North Position box the current lat and long
 				var northPos = document.querySelector("#north-position");
-				const { north-latitude, north-longitude } = getNewCoordinate(latitude, longitude, 50, 'north');
-				northPos.setAttribute('gps-new-entity-place', {
+				var { north-latitude, north-longitude } = getNewCoordinate(latitude, longitude, 50, "north");
+				northPos.setAttribute("gps-new-entity-place", {
 					latitude: north-latitude,
 					longitude: north-longitude
 				});
 				
 				// Give South Position box the current lat and long
 				var southPos = document.querySelector("#south-position");
-				const { south-latitude, south-longitude } = getNewCoordinate(latitude, longitude, 50, 'south');
-				southPos.setAttribute('gps-new-entity-place', {
+				var { south-latitude, south-longitude } = getNewCoordinate(latitude, longitude, 50, "south");
+				southPos.setAttribute("gps-new-entity-place", {
 					latitude: south-latitude,
 					longitude: south-longitude
 				});
 				
 				// Give East Position box the current lat and long
 				var eastPos = document.querySelector("#east-position");
-				const { east-latitude, east-longitude } = getNewCoordinate(latitude, longitude, 50, 'east');
-				eastPos.setAttribute('gps-new-entity-place', {
+				var { east-latitude, east-longitude } = getNewCoordinate(latitude, longitude, 50, "east");
+				eastPos.setAttribute("gps-new-entity-place", {
 					latitude: east-latitude,
 					longitude: east-longitude
 				});
 				
 				// Give West Position box the current lat and long
 				var westPos = document.querySelector("#west-position");
-				const { west-latitude, west-longitude } = getNewCoordinate(latitude, longitude, 50, 'west');
-				westPos.setAttribute('gps-new-entity-place', {
+				var { west-latitude, west-longitude } = getNewCoordinate(latitude, longitude, 50, "west");
+				westPos.setAttribute("gps-new-entity-place", {
 					latitude: west-latitude,
 					longitude: west-longitude
 				});
@@ -88,7 +88,7 @@
 		
 	</head>
 	<body style="margin: 0;">
-		<a-scene vr-mode-ui="enabled: false" arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false" renderer='antialias: true; alpha: true' inspector="url: https://cdn.jsdelivr.net/gh/aframevr/aframe-inspector@master/dist/aframe-inspector.min.js">
+		<a-scene vr-mode-ui="enabled: false" arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false" renderer="antialias: true; alpha: true" inspector="url: https://cdn.jsdelivr.net/gh/aframevr/aframe-inspector@master/dist/aframe-inspector.min.js">
 			<a-camera gps-new-camera="gpsMinDistance: 20"></a-camera>
 			<a-box id="current-position" scale="1 1 1" color="grey"></a-box>
 			<a-box id="north-position" scale="1 1 1" color="blue"></a-box>
