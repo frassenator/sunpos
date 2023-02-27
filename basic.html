@@ -7,6 +7,7 @@
 		
 		<script>
 			function getNewCoordinate(latitude, longitude, distance, direction) {
+				console.log("getNewCoordinate Function initiated");
 			  const radius = 6371000; // Earth's radius in meters
 			  const lat1 = latitude * Math.PI / 180; // Convert latitude to radians
 			  const lon1 = longitude * Math.PI / 180; // Convert longitude to radians
@@ -19,7 +20,9 @@
 
 			  // Convert new latitude and longitude back to degrees
 			  const newLatitude = lat2 * 180 / Math.PI;
+				console.log("New Latitude calculated: "+newLatitude);
 			  const newLongitude = lon2 * 180 / Math.PI;
+				console.log("New Longitude calculated: "+newLongitude);
 
 			  return { latitude: newLatitude, longitude: newLongitude };
 			}
@@ -55,7 +58,6 @@
 				// Give North Position box the current lat and long
 				var northPos = document.querySelector("#north-position");
 				var { northLatitude, northLongitude } = getNewCoordinate(latitude, longitude, 50, "north");
-				alert("North Latitude: "+northLatitude+" North Longitude: "+northLongitude)
 				northPos.setAttribute("gps-new-entity-place", {
 					latitude: northLatitude,
 					longitude: northLongitude
