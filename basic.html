@@ -54,34 +54,34 @@
 				
 				// Give North Position box the current lat and long
 				var northPos = document.querySelector("#north-position");
-				var { north-latitude, north-longitude } = getNewCoordinate(latitude, longitude, 50, "north");
+				var { northLatitude, northLongitude } = getNewCoordinate(latitude, longitude, 50, "north");
 				northPos.setAttribute("gps-new-entity-place", {
-					latitude: north-latitude,
-					longitude: north-longitude
+					latitude: northLatitude,
+					longitude: northLongitude
 				});
 				
 				// Give South Position box the current lat and long
 				var southPos = document.querySelector("#south-position");
-				var { south-latitude, south-longitude } = getNewCoordinate(latitude, longitude, 50, "south");
+				var { southLatitude, southLongitude } = getNewCoordinate(latitude, longitude, 50, "south");
 				southPos.setAttribute("gps-new-entity-place", {
-					latitude: south-latitude,
-					longitude: south-longitude
+					latitude: southLatitude,
+					longitude: southLongitude
 				});
 				
 				// Give East Position box the current lat and long
 				var eastPos = document.querySelector("#east-position");
-				var { east-latitude, east-longitude } = getNewCoordinate(latitude, longitude, 50, "east");
+				var { eastLatitude, eastLongitude } = getNewCoordinate(latitude, longitude, 50, "east");
 				eastPos.setAttribute("gps-new-entity-place", {
-					latitude: east-latitude,
-					longitude: east-longitude
+					latitude: eastLatitude,
+					longitude: eastLongitude
 				});
 				
 				// Give West Position box the current lat and long
 				var westPos = document.querySelector("#west-position");
-				var { west-latitude, west-longitude } = getNewCoordinate(latitude, longitude, 50, "west");
+				var { westLatitude, westLongitude } = getNewCoordinate(latitude, longitude, 50, "west");
 				westPos.setAttribute("gps-new-entity-place", {
-					latitude: west-latitude,
-					longitude: west-longitude
+					latitude: westLatitude,
+					longitude: westLongitude
 				});
 			});
 		</script>
