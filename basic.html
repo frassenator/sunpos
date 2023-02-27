@@ -8,14 +8,14 @@
 		<script>
 			function getNewCoordinate(latitude, longitude, distance, direction) {
 			  const radius = 6371000; // Earth's radius in meters
+				
 			  const lat1 = latitude * Math.PI / 180; // Convert latitude to radians
 			  const lon1 = longitude * Math.PI / 180; // Convert longitude to radians
+				
 			  const bearing = getBearing(direction); // Calculate bearing in radians
 
-			  const lat2 = Math.asin(Math.sin(lat1) * Math.cos(distance / radius) +
-						  Math.cos(lat1) * Math.sin(distance / radius) * Math.cos(bearing));
-			  const lon2 = lon1 + Math.atan2(Math.sin(bearing) * Math.sin(distance / radius) * Math.cos(lat1),
-							 Math.cos(distance / radius) - Math.sin(lat1) * Math.sin(lat2));
+			  const lat2 = Math.asin(Math.sin(lat1) * Math.cos(distance / radius) + Math.cos(lat1) * Math.sin(distance / radius) * Math.cos(bearing));
+			  const lon2 = lon1 + Math.atan2(Math.sin(bearing) * Math.sin(distance / radius) * Math.cos(lat1), Math.cos(distance / radius) - Math.sin(lat1) * Math.sin(lat2));
 
 			  // Convert new latitude and longitude back to degrees
 			  const newLatitude = lat2 * 180 / Math.PI;
