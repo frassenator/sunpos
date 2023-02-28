@@ -178,8 +178,8 @@
 		
 	</head>
 	<body style="margin: 0;">
-		<a-scene vr-mode-ui="enabled: false" arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false" renderer="antialias: true; alpha: true" inspector="url: https://cdn.jsdelivr.net/gh/aframevr/aframe-inspector@master/dist/aframe-inspector.min.js">
-			<a-camera gps-new-camera="gpsMinDistance: 20"></a-camera>
+		<a-scene debug vr-mode-ui="enabled: false" arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false" renderer="antialias: true; alpha: true">
+			<a-camera gps-new-camera="gpsMinDistance: 5"></a-camera>
 			
 			<a-box id="current-position" currentposition scale="1 1 1" color="grey"></a-box>
 			
