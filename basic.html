@@ -6,7 +6,98 @@
 		<script src="https://raw.githack.com/AR-js-org/AR.js/master/three.js/build/ar-threex-location-only.js"></script>
     		<script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
 		
-		<script>
+		<script>	
+			function getCurrentLocation() {
+			  if (navigator.geolocation) {
+			    navigator.geolocation.getCurrentPosition(function(position) {
+			      const longitude = position.coords.longitude;
+			      const latitude = position.coords.latitude;
+			    });
+			  } else {
+			    console.log("Geolocation is not supported by this browser.");
+			  }
+			}
+			
+			var gpsPosition = getCurrentLocation();
+			var latitude = gpsPosition.latitude;
+			var longitude = gpsPosition.longitude;
+			
+			console.log("Current position: "+latitude+" "+longitude);
+				
+			AFRAME.registerComponent('currentposition', {
+			  init: function () {
+
+				const entity = this.el;
+				console.log("Component \"currentposition\" registered");
+
+				// Give Current Position box the current lat and long
+				entity.setAttribute("gps-new-entity-place", {
+					latitude: latitude,
+					longitude: longitude
+				});
+				console.log("Current position set within component");
+			  },
+			});
+				
+			AFRAME.registerComponent('northposition', {
+			  init: function () {
+
+				const entity = this.el;
+
+				// Give North Position box the current lat and long
+				var northPosition = getNewCoordinate(latitude, longitude, 50, "north");
+				entity.setAttribute("gps-new-entity-place", {
+					latitude: northPosition.latitude,
+					longitude: northPosition.longitude
+				});
+				console.log("Current North Position: "+northPosition.latitude+" "+northPosition.longitude);
+			  },
+			});
+				
+			AFRAME.registerComponent('southposition', {
+			  init: function () {
+
+				const entity = this.el;
+
+				// Give South Position box the current lat and long
+				var southPosition = getNewCoordinate(latitude, longitude, 50, "south");
+				entity.setAttribute("gps-new-entity-place", {
+					latitude: southPosition.latitude,
+					longitude: southPosition.longitude
+				});
+				console.log("Current South Position: "+southPosition.latitude+" "+southPosition.longitude);
+			  },
+			});
+				
+			AFRAME.registerComponent('eastposition', {
+			  init: function () {
+
+				const entity = this.el;
+
+				// Give East Position box the current lat and long
+				var eastPosition = getNewCoordinate(latitude, longitude, 50, "east");
+				entity.setAttribute("gps-new-entity-place", {
+					latitude: eastPosition.latitude,
+					longitude: eastPosition.longitude
+				});
+				console.log("Current East Position: "+eastPosition.latitude+" "+eastPosition.longitude);
+			  },
+			});
+				
+			AFRAME.registerComponent('westposition', {
+			  init: function () {
+
+				const entity = this.el;
+
+				// Give West Position box the current lat and long
+				var westPosition = getNewCoordinate(latitude, longitude, 50, "west");
+				entity.setAttribute("gps-new-entity-place", {
+					latitude: westPosition.latitude,
+					longitude: westPosition.longitude
+				});
+				console.log("Current West Position: "+westPosition.latitude+" "+westPosition.longitude);
+			  },
+			});
 			function getNewCoordinate(latitude, longitude, distance, direction) {
 			  const radius = 6371000; // Earth's radius in meters
 				
@@ -39,90 +130,6 @@
 			      throw new Error("Invalid direction: ${direction}");
 			  }
 			}
-
-			navigator.geolocation.getCurrentPosition(position => {
-				
-				// Get the latitude and longitude of current location
-				var latitude = position.coords.latitude;
-				var longitude = position.coords.longitude;
-				console.log("Current Position: "+latitude+" "+longitude);
-				
-				AFRAME.registerComponent('currentposition', {
-				  init: function () {
-					  
-					const entity = this.el;
-					console.log("Component \"currentposition\" registered");
-					  
-				  	// Give Current Position box the current lat and long
-					// var currentPos = document.querySelector("#current-position");
-					entity.setAttribute("gps-new-entity-place", {
-						latitude: latitude,
-						longitude: longitude
-					});
-					console.log("Current position set within component");
-				  },
-				});
-				
-				AFRAME.registerComponent('northposition', {
-				  init: function () {
-					  
-					const entity = this.el;
-					  
-				  	// Give North Position box the current lat and long
-					var northPosition = getNewCoordinate(latitude, longitude, 50, "north");
-					entity.setAttribute("gps-new-entity-place", {
-						latitude: northPosition.latitude,
-						longitude: northPosition.longitude
-					});
-					console.log("Current North Position: "+northPosition.latitude+" "+northPosition.longitude);
-				  },
-				});
-				
-				AFRAME.registerComponent('southposition', {
-				  init: function () {
-					  
-					const entity = this.el;
-					  
-				  	// Give South Position box the current lat and long
-					var southPosition = getNewCoordinate(latitude, longitude, 50, "south");
-					entity.setAttribute("gps-new-entity-place", {
-						latitude: southPosition.latitude,
-						longitude: southPosition.longitude
-					});
-					console.log("Current South Position: "+southPosition.latitude+" "+southPosition.longitude);
-				  },
-				});
-				
-				AFRAME.registerComponent('eastposition', {
-				  init: function () {
-					  
-					const entity = this.el;
-					  
-				  	// Give East Position box the current lat and long
-					var eastPosition = getNewCoordinate(latitude, longitude, 50, "east");
-					entity.setAttribute("gps-new-entity-place", {
-						latitude: eastPosition.latitude,
-						longitude: eastPosition.longitude
-					});
-					console.log("Current East Position: "+eastPosition.latitude+" "+eastPosition.longitude);
-				  },
-				});
-				
-				AFRAME.registerComponent('westposition', {
-				  init: function () {
-					  
-					const entity = this.el;
-					  
-				  	// Give West Position box the current lat and long
-					var westPosition = getNewCoordinate(latitude, longitude, 50, "west");
-					entity.setAttribute("gps-new-entity-place", {
-						latitude: westPosition.latitude,
-						longitude: westPosition.longitude
-					});
-					console.log("Current West Position: "+westPosition.latitude+" "+westPosition.longitude);
-				  },
-				});	
-			});
 		</script>
 		
 	</head>
