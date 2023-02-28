@@ -9,6 +9,8 @@
 		<script>
 			AFRAME.registerComponent("currentposition", {
 				init: function () {
+					
+					const entity = this.el;
 
 					function success(pos) {
 						var currentPosition = pos.coords;
@@ -17,8 +19,6 @@
 						console.log(`Latitude : ${currentPosition.latitude}`);
 						console.log(`Longitude: ${currentPosition.longitude}`);
 						console.log(`More or less ${currentPosition.accuracy} meters.`);
-						
-						const entity = this.el;
 						
 						// Give Current Position box the current lat and long
 						entity.setAttribute("gps-new-entity-place", {
@@ -42,11 +42,11 @@
 			
 			AFRAME.registerComponent("northposition", {
 				init: function () {
+					
+					const entity = this.el;
 
 					function success(pos) {
 						const currentPosition = pos.coords;
-						const entity = this.el;
-
 						const northPosition = getNewCoordinate(currentPosition.latitude, currentPosition.longitude, 50, "north");
 						entity.setAttribute("gps-new-entity-place", {
 							latitude: northPosition.latitude,
