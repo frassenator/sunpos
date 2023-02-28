@@ -22,10 +22,10 @@
 						
 						// Give Current Position box the current lat and long
 						entity.setAttribute("gps-new-entity-place", {
-							latitude: latitude,
-							longitude: longitude
+							latitude: currentPosition.latitude,
+							longitude: currentPosition.longitude
 						});
-						alert("Current position set within component");
+						console.log("Current position set within component");
 					}
 
 					navigator.geolocation.getCurrentPosition(success,
@@ -52,7 +52,7 @@
 							latitude: northPosition.latitude,
 							longitude: northPosition.longitude
 						});
-						alert("Current North Position: "+northPosition.latitude+" "+northPosition.longitude);
+						console.log("Current North Position: "+northPosition.latitude+" "+northPosition.longitude);
 					}
 
 					navigator.geolocation.getCurrentPosition(success,
