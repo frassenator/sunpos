@@ -14,6 +14,7 @@ function main() {
 
 	// Create the device orientation tracker
 	const deviceOrientationControls = new THREEx.DeviceOrientationControls(camera);
+	console.log(deviceOrientationControls);
 
 	// Change this to a location close to you (e.g. 0.001 degrees of latitude north of you)
 	arjs.add(box, 59.340398449707735, 18.01328273825269); 
