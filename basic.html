@@ -45,13 +45,22 @@
 				// Get the latitude and longitude of current location
 				var latitude = position.coords.latitude;
 				var longitude = position.coords.longitude;
-
-				// Give Current Position box the current lat and long
-				var currentPos = document.querySelector("#current-position");
-				currentPos.setAttribute("gps-new-entity-place", {
-					latitude: latitude,
-					longitude: longitude
+				
+				AFRAME.registerComponent('currentPosition', {
+				  init: function () {
+					  
+					const entity = this.el;
+					  
+				  	// Give Current Position box the current lat and long
+					// var currentPos = document.querySelector("#current-position");
+					entity.setAttribute("gps-new-entity-place", {
+						latitude: latitude,
+						longitude: longitude
+					});
+				  },
 				});
+
+				
 				
 				// Give North Position box the current lat and long
 				var northObject = document.querySelector("#north-position");
@@ -94,12 +103,12 @@
 		<a-scene vr-mode-ui="enabled: false" arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false" renderer="antialias: true; alpha: true" inspector="url: https://cdn.jsdelivr.net/gh/aframevr/aframe-inspector@master/dist/aframe-inspector.min.js">
 			<a-camera gps-new-camera="gpsMinDistance: 20"></a-camera>
 			
-			<a-box id="current-position" scale="1 1 1" color="grey"></a-box>
+			<a-box id="current-position" currentPosition scale="1 1 1" color="grey"></a-box>
 			
-			<a-box id="north-position" scale="1 1 1" color="blue"></a-box>
-			<a-box id="south-position" scale="1 1 1" color="red"></a-box>
-			<a-box id="east-position" scale="1 1 1" color="green"></a-box>
-			<a-box id="west-position" scale="1 1 1" color="yellow"></a-box>
+			<a-box id="north-position" northPosition scale="1 1 1" color="blue"></a-box>
+			<a-box id="south-position" southPosition scale="1 1 1" color="red"></a-box>
+			<a-box id="east-position" eastPosition scale="1 1 1" color="green"></a-box>
+			<a-box id="west-position" westPosition scale="1 1 1" color="yellow"></a-box>
 		</a-scene>
 	</body>
 </html>
