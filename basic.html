@@ -46,7 +46,7 @@
 				var latitude = position.coords.latitude;
 				var longitude = position.coords.longitude;
 				
-				AFRAME.registerComponent('currentPosition', {
+				AFRAME.registerComponent('currentposition', {
 				  init: function () {
 					  
 					const entity = this.el;
@@ -57,44 +57,69 @@
 						latitude: latitude,
 						longitude: longitude
 					});
+					console.log("Current Position: "+latitude+" "+longitude);
 				  },
 				});
-
 				
-				
-				// Give North Position box the current lat and long
-				var northObject = document.querySelector("#north-position");
-				var northPosition = getNewCoordinate(latitude, longitude, 50, "north");
-				northObject.setAttribute("gps-new-entity-place", {
-					latitude: northPosition.latitude,
-					longitude: northPosition.longitude
+				AFRAME.registerComponent('northposition', {
+				  init: function () {
+					  
+					const entity = this.el;
+					  
+				  	// Give North Position box the current lat and long
+					var northPosition = getNewCoordinate(latitude, longitude, 50, "north");
+					entity.setAttribute("gps-new-entity-place", {
+						latitude: northPosition.latitude,
+						longitude: northPosition.longitude
+					});
+					console.log("Current North Position: "+northPosition.latitude+" "+northPosition.longitude);
+				  },
 				});
 				
-				// Give South Position box the current lat and long
-				var southObject = document.querySelector("#south-position");
-				var southPosition = getNewCoordinate(latitude, longitude, 50, "south");
-				southObject.setAttribute("gps-new-entity-place", {
-					latitude: southPosition.latitude,
-					longitude: southPosition.longitude
+				AFRAME.registerComponent('southposition', {
+				  init: function () {
+					  
+					const entity = this.el;
+					  
+				  	// Give South Position box the current lat and long
+					var southPosition = getNewCoordinate(latitude, longitude, 50, "south");
+					entity.setAttribute("gps-new-entity-place", {
+						latitude: southPosition.latitude,
+						longitude: southPosition.longitude
+					});
+					console.log("Current South Position: "+southPosition.latitude+" "+southPosition.longitude);
+				  },
 				});
 				
-				// Give East Position box the current lat and long
-				var eastObject = document.querySelector("#east-position");
-				var eastPosition = getNewCoordinate(latitude, longitude, 50, "east");
-				eastObject.setAttribute("gps-new-entity-place", {
-					latitude: eastPosition.latitude,
-					longitude: eastPosition.longitude
+				AFRAME.registerComponent('eastposition', {
+				  init: function () {
+					  
+					const entity = this.el;
+					  
+				  	// Give East Position box the current lat and long
+					var eastPosition = getNewCoordinate(latitude, longitude, 50, "east");
+					entity.setAttribute("gps-new-entity-place", {
+						latitude: eastPosition.latitude,
+						longitude: eastPosition.longitude
+					});
+					console.log("Current East Position: "+eastPosition.latitude+" "+eastPosition.longitude);
+				  },
 				});
 				
-				// Give West Position box the current lat and long
-				var westObject = document.querySelector("#west-position");
-				var westPosition = getNewCoordinate(latitude, longitude, 50, "west");
-				westObject.setAttribute("gps-new-entity-place", {
-					latitude: westPosition.latitude,
-					longitude: westPosition.longitude
-				});
-				
-
+				AFRAME.registerComponent('westposition', {
+				  init: function () {
+					  
+					const entity = this.el;
+					  
+				  	// Give West Position box the current lat and long
+					var westPosition = getNewCoordinate(latitude, longitude, 50, "west");
+					entity.setAttribute("gps-new-entity-place", {
+						latitude: westPosition.latitude,
+						longitude: westPosition.longitude
+					});
+					console.log("Current West Position: "+westPosition.latitude+" "+westPosition.longitude);
+				  },
+				});	
 			});
 		</script>
 		
@@ -103,12 +128,12 @@
 		<a-scene vr-mode-ui="enabled: false" arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false" renderer="antialias: true; alpha: true" inspector="url: https://cdn.jsdelivr.net/gh/aframevr/aframe-inspector@master/dist/aframe-inspector.min.js">
 			<a-camera gps-new-camera="gpsMinDistance: 20"></a-camera>
 			
-			<a-box id="current-position" currentPosition scale="1 1 1" color="grey"></a-box>
+			<a-box id="current-position" currentposition scale="1 1 1" color="grey"></a-box>
 			
-			<a-box id="north-position" northPosition scale="1 1 1" color="blue"></a-box>
-			<a-box id="south-position" southPosition scale="1 1 1" color="red"></a-box>
-			<a-box id="east-position" eastPosition scale="1 1 1" color="green"></a-box>
-			<a-box id="west-position" westPosition scale="1 1 1" color="yellow"></a-box>
+			<a-box id="north-position" northposition scale="1 1 1" color="blue"></a-box>
+			<a-box id="south-position" southposition scale="1 1 1" color="red"></a-box>
+			<a-box id="east-position" eastposition scale="1 1 1" color="green"></a-box>
+			<a-box id="west-position" westposition scale="1 1 1" color="yellow"></a-box>
 		</a-scene>
 	</body>
 </html>
