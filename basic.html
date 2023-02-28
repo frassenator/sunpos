@@ -39,66 +39,33 @@
 						})
 				}
 			})
-				
-			AFRAME.registerComponent('northposition', {
-			  init: function () {
+			
+			AFRAME.registerComponent("northposition", {
+				init: function () {
 
-				const entity = this.el;
+					function success(pos) {
+						const currentPosition = pos.coords;
+						const entity = this.el;
 
-				// Give North Position box the current lat and long
-				var northPosition = getNewCoordinate(latitude, longitude, 50, "north");
-				entity.setAttribute("gps-new-entity-place", {
-					latitude: northPosition.latitude,
-					longitude: northPosition.longitude
-				});
-				alert("Current North Position: "+northPosition.latitude+" "+northPosition.longitude);
-			  },
-			});
-				
-			AFRAME.registerComponent('southposition', {
-			  init: function () {
+						const northPosition = getNewCoordinate(currentPosition.latitude, currentPosition.longitude, 50, "north");
+						entity.setAttribute("gps-new-entity-place", {
+							latitude: northPosition.latitude,
+							longitude: northPosition.longitude
+						});
+						alert("Current North Position: "+northPosition.latitude+" "+northPosition.longitude);
+					}
 
-				const entity = this.el;
-
-				// Give South Position box the current lat and long
-				var southPosition = getNewCoordinate(latitude, longitude, 50, "south");
-				entity.setAttribute("gps-new-entity-place", {
-					latitude: southPosition.latitude,
-					longitude: southPosition.longitude
-				});
-				console.log("Current South Position: "+southPosition.latitude+" "+southPosition.longitude);
-			  },
-			});
-				
-			AFRAME.registerComponent('eastposition', {
-			  init: function () {
-
-				const entity = this.el;
-
-				// Give East Position box the current lat and long
-				var eastPosition = getNewCoordinate(latitude, longitude, 50, "east");
-				entity.setAttribute("gps-new-entity-place", {
-					latitude: eastPosition.latitude,
-					longitude: eastPosition.longitude
-				});
-				console.log("Current East Position: "+eastPosition.latitude+" "+eastPosition.longitude);
-			  },
-			});
-				
-			AFRAME.registerComponent('westposition', {
-			  init: function () {
-
-				const entity = this.el;
-
-				// Give West Position box the current lat and long
-				var westPosition = getNewCoordinate(latitude, longitude, 50, "west");
-				entity.setAttribute("gps-new-entity-place", {
-					latitude: westPosition.latitude,
-					longitude: westPosition.longitude
-				});
-				console.log("Current West Position: "+westPosition.latitude+" "+westPosition.longitude);
-			  },
-			});
+					navigator.geolocation.getCurrentPosition(success,
+						(err) => {
+							console.warn(`ERROR(${err.code}): ${err.message}`);
+						},
+						{
+							enableHighAccuracy: true,
+							timeout: 5000,
+							maximumAge: 0
+						})
+				}
+			})
 					
 			function getNewCoordinate(latitude, longitude, distance, direction) {
 			  const radius = 6371000; // Earth's radius in meters
