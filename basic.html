@@ -12,14 +12,19 @@
 			    navigator.geolocation.getCurrentPosition(function(position) {
 			      const longitude = position.coords.longitude;
 			      const latitude = position.coords.latitude;
-			      return [longitude, latitude];
+				return {
+					'longitude': longitude,
+					'latitude': latitude
+				};
 			    });
 			  } else {
 			    console.log("Geolocation is not supported by this browser.");
 			  }
 			}
 			
-			var [longitude, latitude] = getCurrentLocation;
+			var gps = getCurrentLocation();
+			var latitude = gps.latitude;
+			var longitude  = gps.longitude;
 			console.log("Current position: "+latitude+" "+longitude);
 				
 			AFRAME.registerComponent('currentposition', {
