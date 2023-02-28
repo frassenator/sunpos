@@ -45,11 +45,13 @@
 				// Get the latitude and longitude of current location
 				var latitude = position.coords.latitude;
 				var longitude = position.coords.longitude;
+				console.log("Current Position: "+latitude+" "+longitude);
 				
 				AFRAME.registerComponent('currentposition', {
 				  init: function () {
 					  
 					const entity = this.el;
+					console.log("Component \"currentposition\" registered");
 					  
 				  	// Give Current Position box the current lat and long
 					// var currentPos = document.querySelector("#current-position");
@@ -57,7 +59,7 @@
 						latitude: latitude,
 						longitude: longitude
 					});
-					console.log("Current Position: "+latitude+" "+longitude);
+					console.log("Current Position registered");
 				  },
 				});
 				
