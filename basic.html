@@ -14,18 +14,12 @@
 
 					function success(pos) {
 						var currentPosition = pos.coords;
-
-						console.log('Your current position is:');
-						console.log(`Latitude : ${currentPosition.latitude}`);
-						console.log(`Longitude: ${currentPosition.longitude}`);
-						console.log(`More or less ${currentPosition.accuracy} meters.`);
 						
-						// Give Current Position box the current lat and long
 						entity.setAttribute("gps-new-entity-place", {
 							latitude: currentPosition.latitude,
 							longitude: currentPosition.longitude
 						});
-						console.log("Current position set within component");
+						console.log("Current Position: "+currentPosition.latitude+" "+currentPosition.longitude);
 					}
 
 					navigator.geolocation.getCurrentPosition(success,
@@ -47,12 +41,93 @@
 
 					function success(pos) {
 						const currentPosition = pos.coords;
-						const northPosition = getNewCoordinate(currentPosition.latitude, currentPosition.longitude, 50, "north");
+						const newPosition = getNewCoordinate(currentPosition.latitude, currentPosition.longitude, 100, "north");
 						entity.setAttribute("gps-new-entity-place", {
-							latitude: northPosition.latitude,
-							longitude: northPosition.longitude
+							latitude: newPosition.latitude,
+							longitude: newPosition.longitude
 						});
-						console.log("Current North Position: "+northPosition.latitude+" "+northPosition.longitude);
+						console.log("Current North Position: "+newPosition.latitude+" "+newPosition.longitude);
+					}
+
+					navigator.geolocation.getCurrentPosition(success,
+						(err) => {
+							console.warn(`ERROR(${err.code}): ${err.message}`);
+						},
+						{
+							enableHighAccuracy: true,
+							timeout: 5000,
+							maximumAge: 0
+						})
+				}
+			})
+			
+			AFRAME.registerComponent("southposition", {
+				init: function () {
+					
+					const entity = this.el;
+
+					function success(pos) {
+						const currentPosition = pos.coords;
+						const newPosition = getNewCoordinate(currentPosition.latitude, currentPosition.longitude, 100, "south");
+						entity.setAttribute("gps-new-entity-place", {
+							latitude: newPosition.latitude,
+							longitude: newPosition.longitude
+						});
+						console.log("Current South Position: "+newPosition.latitude+" "+newPosition.longitude);
+					}
+
+					navigator.geolocation.getCurrentPosition(success,
+						(err) => {
+							console.warn(`ERROR(${err.code}): ${err.message}`);
+						},
+						{
+							enableHighAccuracy: true,
+							timeout: 5000,
+							maximumAge: 0
+						})
+				}
+			})
+			
+			AFRAME.registerComponent("eastposition", {
+				init: function () {
+					
+					const entity = this.el;
+
+					function success(pos) {
+						const currentPosition = pos.coords;
+						const newPosition = getNewCoordinate(currentPosition.latitude, currentPosition.longitude, 100, "east");
+						entity.setAttribute("gps-new-entity-place", {
+							latitude: newPosition.latitude,
+							longitude: newPosition.longitude
+						});
+						console.log("Current East Position: "+newPosition.latitude+" "+newPosition.longitude);
+					}
+
+					navigator.geolocation.getCurrentPosition(success,
+						(err) => {
+							console.warn(`ERROR(${err.code}): ${err.message}`);
+						},
+						{
+							enableHighAccuracy: true,
+							timeout: 5000,
+							maximumAge: 0
+						})
+				}
+			})
+			
+			AFRAME.registerComponent("westposition", {
+				init: function () {
+					
+					const entity = this.el;
+
+					function success(pos) {
+						const currentPosition = pos.coords;
+						const newPosition = getNewCoordinate(currentPosition.latitude, currentPosition.longitude, 100, "west");
+						entity.setAttribute("gps-new-entity-place", {
+							latitude: newPosition.latitude,
+							longitude: newPosition.longitude
+						});
+						console.log("Current East Position: "+newPosition.latitude+" "+newPosition.longitude);
 					}
 
 					navigator.geolocation.getCurrentPosition(success,
