@@ -15,20 +15,20 @@
 				
 					const latitude = e.detail.position.latitude;
 					const longitude = e.detail.position.longitude;
-					console.log("Current position: "+latitude+" "+longitude);
+					alert("Current position: "+latitude+" "+longitude);
 					
 					AFRAME.registerComponent('currentposition', {
 					  init: function () {
 
 						const entity = this.el;
-						console.log("Component \"currentposition\" registered");
+						alert("Component \"currentposition\" registered");
 
 						// Give Current Position box the current lat and long
 						entity.setAttribute("gps-new-entity-place", {
 							latitude: latitude,
 							longitude: longitude
 						});
-						console.log("Current position set within component");
+						alert("Current position set within component");
 					  },
 					});
 				
@@ -43,7 +43,7 @@
 							latitude: northPosition.latitude,
 							longitude: northPosition.longitude
 						});
-						console.log("Current North Position: "+northPosition.latitude+" "+northPosition.longitude);
+						alert("Current North Position: "+northPosition.latitude+" "+northPosition.longitude);
 					  },
 					});
 				
