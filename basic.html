@@ -41,7 +41,7 @@
 
 					function success(pos) {
 						const currentPosition = pos.coords;
-						const newPosition = getNewCoordinate(currentPosition.latitude, currentPosition.longitude, 20, "north");
+						const newPosition = getNewCoordinate(currentPosition.latitude, currentPosition.longitude, 50, "north");
 						entity.setAttribute("gps-new-entity-place", {
 							latitude: newPosition.latitude,
 							longitude: newPosition.longitude
@@ -68,7 +68,7 @@
 
 					function success(pos) {
 						const currentPosition = pos.coords;
-						const newPosition = getNewCoordinate(currentPosition.latitude, currentPosition.longitude, 20, "south");
+						const newPosition = getNewCoordinate(currentPosition.latitude, currentPosition.longitude, 50, "south");
 						entity.setAttribute("gps-new-entity-place", {
 							latitude: newPosition.latitude,
 							longitude: newPosition.longitude
@@ -95,7 +95,7 @@
 
 					function success(pos) {
 						const currentPosition = pos.coords;
-						const newPosition = getNewCoordinate(currentPosition.latitude, currentPosition.longitude, 20, "east");
+						const newPosition = getNewCoordinate(currentPosition.latitude, currentPosition.longitude, 50, "east");
 						entity.setAttribute("gps-new-entity-place", {
 							latitude: newPosition.latitude,
 							longitude: newPosition.longitude
@@ -122,7 +122,7 @@
 
 					function success(pos) {
 						const currentPosition = pos.coords;
-						const newPosition = getNewCoordinate(currentPosition.latitude, currentPosition.longitude, 20, "west");
+						const newPosition = getNewCoordinate(currentPosition.latitude, currentPosition.longitude, 50, "west");
 						entity.setAttribute("gps-new-entity-place", {
 							latitude: newPosition.latitude,
 							longitude: newPosition.longitude
@@ -183,10 +183,10 @@
 			
 			<a-box id="current-position" currentposition scale="1 1 1" color="grey"></a-box>
 			
-			<a-box id="north-position" northposition scale="1 1 1" color="blue"></a-box>
-			<a-box id="south-position" southposition scale="1 1 1" color="red"></a-box>
-			<a-box id="east-position" eastposition scale="1 1 1" color="green"></a-box>
-			<a-box id="west-position" westposition scale="1 1 1" color="yellow"></a-box>
+			<a-box id="north-position" northposition scale="10 10 10" color="blue"></a-box>
+			<a-box id="south-position" southposition scale="10 10 10" color="red"></a-box>
+			<a-box id="east-position" eastposition scale="10 10 10" color="green"></a-box>
+			<a-box id="west-position" westposition scale="10 10 10" color="yellow"></a-box>
 		</a-scene>
 	</body>
 </html>
