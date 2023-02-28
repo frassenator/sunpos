@@ -4,135 +4,129 @@
 		<!-- <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script> -->
 		<script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
 		<script src="https://raw.githack.com/AR-js-org/AR.js/master/three.js/build/ar-threex-location-only.js"></script>
-    		<script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
+    	<script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
 		
 		<script>	
-			function getCurrentLocation() {
-			  if (navigator.geolocation) {
-			    navigator.geolocation.getCurrentPosition(function(position) {
-			      const longitude = position.coords.longitude;
-			      const latitude = position.coords.latitude;
-				return {
-					'longitude': longitude,
-					'latitude': latitude
-				};
-			    });
-			  } else {
-			    console.log("Geolocation is not supported by this browser.");
-			  }
-			}
+			window.onload = () => {
 			
-			var gps = getCurrentLocation;
-			var latitude = gps.latitude;
-			var longitude  = gps.longitude;
-			console.log("Current position: "+latitude+" "+longitude);
+				const el = document.querySelector("[gps-new-camera]");
 				
-			AFRAME.registerComponent('currentposition', {
-			  init: function () {
+				el.addEventListener("gps-camera-update-position", async(e) => {
+				
+					const latitude = e.detail.position.latitude;
+					const longitude = e.detail.position.longitude;
+					console.log("Current position: "+latitude+" "+longitude);
+					
+					AFRAME.registerComponent('currentposition', {
+					  init: function () {
 
-				const entity = this.el;
-				console.log("Component \"currentposition\" registered");
+						const entity = this.el;
+						console.log("Component \"currentposition\" registered");
 
-				// Give Current Position box the current lat and long
-				entity.setAttribute("gps-new-entity-place", {
-					latitude: latitude,
-					longitude: longitude
+						// Give Current Position box the current lat and long
+						entity.setAttribute("gps-new-entity-place", {
+							latitude: latitude,
+							longitude: longitude
+						});
+						console.log("Current position set within component");
+					  },
+					});
+				
+					AFRAME.registerComponent('northposition', {
+					  init: function () {
+
+						const entity = this.el;
+
+						// Give North Position box the current lat and long
+						var northPosition = getNewCoordinate(latitude, longitude, 50, "north");
+						entity.setAttribute("gps-new-entity-place", {
+							latitude: northPosition.latitude,
+							longitude: northPosition.longitude
+						});
+						console.log("Current North Position: "+northPosition.latitude+" "+northPosition.longitude);
+					  },
+					});
+				
+					AFRAME.registerComponent('southposition', {
+					  init: function () {
+
+						const entity = this.el;
+
+						// Give South Position box the current lat and long
+						var southPosition = getNewCoordinate(latitude, longitude, 50, "south");
+						entity.setAttribute("gps-new-entity-place", {
+							latitude: southPosition.latitude,
+							longitude: southPosition.longitude
+						});
+						console.log("Current South Position: "+southPosition.latitude+" "+southPosition.longitude);
+					  },
+					});
+				
+					AFRAME.registerComponent('eastposition', {
+					  init: function () {
+
+						const entity = this.el;
+
+						// Give East Position box the current lat and long
+						var eastPosition = getNewCoordinate(latitude, longitude, 50, "east");
+						entity.setAttribute("gps-new-entity-place", {
+							latitude: eastPosition.latitude,
+							longitude: eastPosition.longitude
+						});
+						console.log("Current East Position: "+eastPosition.latitude+" "+eastPosition.longitude);
+					  },
+					});
+				
+					AFRAME.registerComponent('westposition', {
+					  init: function () {
+
+						const entity = this.el;
+
+						// Give West Position box the current lat and long
+						var westPosition = getNewCoordinate(latitude, longitude, 50, "west");
+						entity.setAttribute("gps-new-entity-place", {
+							latitude: westPosition.latitude,
+							longitude: westPosition.longitude
+						});
+						console.log("Current West Position: "+westPosition.latitude+" "+westPosition.longitude);
+					  },
+					});
+					
+					function getNewCoordinate(latitude, longitude, distance, direction) {
+					  const radius = 6371000; // Earth's radius in meters
+						
+					  const lat1 = latitude * Math.PI / 180; // Convert latitude to radians
+					  const lon1 = longitude * Math.PI / 180; // Convert longitude to radians
+						
+					  const bearing = getBearing(direction); // Calculate bearing in radians
+
+					  const lat2 = Math.asin(Math.sin(lat1) * Math.cos(distance / radius) + Math.cos(lat1) * Math.sin(distance / radius) * Math.cos(bearing));
+					  const lon2 = lon1 + Math.atan2(Math.sin(bearing) * Math.sin(distance / radius) * Math.cos(lat1), Math.cos(distance / radius) - Math.sin(lat1) * Math.sin(lat2));
+
+					  // Convert new latitude and longitude back to degrees
+					  const newLatitude = lat2 * 180 / Math.PI;
+					  const newLongitude = lon2 * 180 / Math.PI;
+
+					  return { latitude: newLatitude, longitude: newLongitude };
+					}
+
+					function getBearing(direction) {
+					  switch (direction) {
+						case "north":
+						  return 0;
+						case "south":
+						  return Math.PI;
+						case "east":
+						  return Math.PI / 2;
+						case "west":
+						  return 3 * Math.PI / 2;
+						default:
+						  throw new Error("Invalid direction: ${direction}");
+					  }
+					}
+
 				});
-				console.log("Current position set within component");
-			  },
-			});
-				
-			AFRAME.registerComponent('northposition', {
-			  init: function () {
-
-				const entity = this.el;
-
-				// Give North Position box the current lat and long
-				var northPosition = getNewCoordinate(latitude, longitude, 50, "north");
-				entity.setAttribute("gps-new-entity-place", {
-					latitude: northPosition.latitude,
-					longitude: northPosition.longitude
-				});
-				console.log("Current North Position: "+northPosition.latitude+" "+northPosition.longitude);
-			  },
-			});
-				
-			AFRAME.registerComponent('southposition', {
-			  init: function () {
-
-				const entity = this.el;
-
-				// Give South Position box the current lat and long
-				var southPosition = getNewCoordinate(latitude, longitude, 50, "south");
-				entity.setAttribute("gps-new-entity-place", {
-					latitude: southPosition.latitude,
-					longitude: southPosition.longitude
-				});
-				console.log("Current South Position: "+southPosition.latitude+" "+southPosition.longitude);
-			  },
-			});
-				
-			AFRAME.registerComponent('eastposition', {
-			  init: function () {
-
-				const entity = this.el;
-
-				// Give East Position box the current lat and long
-				var eastPosition = getNewCoordinate(latitude, longitude, 50, "east");
-				entity.setAttribute("gps-new-entity-place", {
-					latitude: eastPosition.latitude,
-					longitude: eastPosition.longitude
-				});
-				console.log("Current East Position: "+eastPosition.latitude+" "+eastPosition.longitude);
-			  },
-			});
-				
-			AFRAME.registerComponent('westposition', {
-			  init: function () {
-
-				const entity = this.el;
-
-				// Give West Position box the current lat and long
-				var westPosition = getNewCoordinate(latitude, longitude, 50, "west");
-				entity.setAttribute("gps-new-entity-place", {
-					latitude: westPosition.latitude,
-					longitude: westPosition.longitude
-				});
-				console.log("Current West Position: "+westPosition.latitude+" "+westPosition.longitude);
-			  },
-			});
-			function getNewCoordinate(latitude, longitude, distance, direction) {
-			  const radius = 6371000; // Earth's radius in meters
-				
-			  const lat1 = latitude * Math.PI / 180; // Convert latitude to radians
-			  const lon1 = longitude * Math.PI / 180; // Convert longitude to radians
-				
-			  const bearing = getBearing(direction); // Calculate bearing in radians
-
-			  const lat2 = Math.asin(Math.sin(lat1) * Math.cos(distance / radius) + Math.cos(lat1) * Math.sin(distance / radius) * Math.cos(bearing));
-			  const lon2 = lon1 + Math.atan2(Math.sin(bearing) * Math.sin(distance / radius) * Math.cos(lat1), Math.cos(distance / radius) - Math.sin(lat1) * Math.sin(lat2));
-
-			  // Convert new latitude and longitude back to degrees
-			  const newLatitude = lat2 * 180 / Math.PI;
-			  const newLongitude = lon2 * 180 / Math.PI;
-
-			  return { latitude: newLatitude, longitude: newLongitude };
-			}
-
-			function getBearing(direction) {
-			  switch (direction) {
-			    case "north":
-			      return 0;
-			    case "south":
-			      return Math.PI;
-			    case "east":
-			      return Math.PI / 2;
-			    case "west":
-			      return 3 * Math.PI / 2;
-			    default:
-			      throw new Error("Invalid direction: ${direction}");
-			  }
-			}
+			};
 		</script>
 		
 	</head>
