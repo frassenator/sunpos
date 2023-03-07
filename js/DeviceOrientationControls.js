@@ -1,10 +1,3 @@
-import {
-	Euler,
-	MathUtils,
-	Quaternion,
-	Vector3
-} from "https://cdnjs.cloudflare.com/ajax/libs/three.js/r135/three.module.min.js";
-
 const DeviceOrientationControls = function ( object ) {
 
 	const scope = this;
