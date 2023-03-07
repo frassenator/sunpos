@@ -13,9 +13,10 @@
 				longitude: { default: 0 },
 			  },
 			  init: function () {
+				const entity = this.el;
 				navigator.geolocation.getCurrentPosition(
 				  (pos) => {
-					this.el.setAttribute("geolocation", {
+					entity.setAttribute("geolocation", {
 					  latitude: pos.coords.latitude,
 					  longitude: pos.coords.longitude,
 					});
