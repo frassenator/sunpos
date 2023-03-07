@@ -17,11 +17,9 @@
 							longitude: pos.coords.longitude
 						};
 						
-						entity.setAttribute("gps-new-entity-place", {latitude: position.latitude, longitude: position.longitude,});
-						console.log("Current Position: " + position.latitude + " " + position.longitude);
-						
-						//entity.setAttribute("position", position);
+						entity.setAttribute("gps-new-entity-place", position);
 						entity.emit("positionChanged", position);
+						console.log("Current Position: " + position);
 					}
 
 					navigator.geolocation.getCurrentPosition(success,
@@ -39,8 +37,10 @@
 			AFRAME.registerComponent("northposition", {
 				init: function () {
 					const entity = this.el;
+					console.log("North component initiated");
 
 					entity.addEventListener("positionChanged", function(event) {
+						console.log("North event listener triggered");
 						const currentPosition = event.detail;
 						const newPosition = getNewCoordinate(currentPosition.latitude, currentPosition.longitude, 50, "north");
 						entity.setAttribute("gps-new-entity-place", {
