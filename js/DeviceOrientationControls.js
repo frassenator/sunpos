@@ -13,6 +13,8 @@ THREE.DeviceOrientationControls = function ( object ) {
 	this.screenOrientation = 0;
 
 	this.alphaOffset = 0; // radians
+	
+	this.alphaOffsetAngle = 0; // added line to set alphaOffsetAngle to 0
 
 	var onDeviceOrientationChangeEvent = function ( event ) {
 
@@ -51,7 +53,10 @@ THREE.DeviceOrientationControls = function ( object ) {
 		onScreenOrientationChangeEvent(); // run once on load
 
 		window.addEventListener( 'orientationchange', onScreenOrientationChangeEvent, false );
-		window.addEventListener( 'deviceorientation', onDeviceOrientationChangeEvent, false );
+		//window.addEventListener( 'deviceorientation', onDeviceOrientationChangeEvent, false );
+		window.addEventListener('deviceorientationabsolute', _onDeviceOrientationChangeEvent, false);
+		window.addEventListener('deviceorientation', _onDeviceOrientationChangeEvent, false);
+
 
 		scope.enabled = true;
 
@@ -59,9 +64,11 @@ THREE.DeviceOrientationControls = function ( object ) {
 
 	this.disconnect = function () {
 
-		window.removeEventListener( 'orientationchange', onScreenOrientationChangeEvent, false );
-		window.removeEventListener( 'deviceorientation', onDeviceOrientationChangeEvent, false );
-
+		window.addEventListener( 'orientationchange', onScreenOrientationChangeEvent, false );
+		//window.addEventListener( 'deviceorientation', onDeviceOrientationChangeEvent, false );
+		window.addEventListener('deviceorientationabsolute', _onDeviceOrientationChangeEvent, false);
+		window.addEventListener('deviceorientation', _onDeviceOrientationChangeEvent, false);
+		
 		scope.enabled = false;
 
 	};
@@ -70,7 +77,7 @@ THREE.DeviceOrientationControls = function ( object ) {
 
 		if ( scope.enabled === false ) return;
 
-		var alpha = scope.deviceOrientation.alpha ? THREE.Math.degToRad( scope.deviceOrientation.alpha ) + this.alphaOffset : 0; // Z
+		var alpha = (_deviceOrientation.alpha !== null) ? THREE.Math.degToRad(_deviceOrientation.alpha) + this.deviceAlphaOffsetAngle : 0; // Z
 		var beta = scope.deviceOrientation.beta ? THREE.Math.degToRad( scope.deviceOrientation.beta ) : 0; // X'
 		var gamma = scope.deviceOrientation.gamma ? THREE.Math.degToRad( scope.deviceOrientation.gamma ) : 0; // Y''
 		var orient = scope.screenOrientation ? THREE.Math.degToRad( scope.screenOrientation ) : 0; // O
