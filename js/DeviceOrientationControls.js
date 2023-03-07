@@ -127,5 +127,3 @@ const DeviceOrientationControls = function ( object ) {
 	this.connect();
 
 };
-
-export { DeviceOrientationControls };
