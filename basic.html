@@ -17,9 +17,9 @@
 							longitude: pos.coords.longitude
 						};
 						
-						entity.setAttribute("gps-new-entity-place", position);
+						entity.setAttribute("gps-new-entity-place", {latitude: pos.coords.latitude, longitude: pos.coords.longitude,});
+						console.log("Current Position: " + pos.coords.latitude + " " + pos.coords.longitude);
 						entity.emit("positionChanged", position);
-						console.log("Current Position: " + position);
 					}
 
 					navigator.geolocation.getCurrentPosition(success,
