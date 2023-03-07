@@ -20,9 +20,18 @@
 						entity.setAttribute("gps-new-entity-place", {latitude: pos.coords.latitude, longitude: pos.coords.longitude,});
 						console.log("Current Position: " + pos.coords.latitude + " " + pos.coords.longitude);
 						
-						// Emit the positionChanged event on the entity with the northposition component
+						// Emit the positionChanged event on the entities
 						const northEntity = document.querySelector("#north-position");
 						northEntity.emit("positionChanged", position);
+						
+						const southEntity = document.querySelector("#south-position");
+						southEntity.emit("positionChanged", position);
+						
+						const westEntity = document.querySelector("#west-position");
+						westEntity.emit("positionChanged", position);
+						
+						const eastEntity = document.querySelector("#east-position");
+						eastEntity.emit("positionChanged", position);
 					}
 
 					navigator.geolocation.getCurrentPosition(success,
@@ -40,10 +49,8 @@
 			AFRAME.registerComponent("northposition", {
 				init: function () {
 					const entity = this.el;
-					console.log("North component initiated");
 
 					entity.addEventListener("positionChanged", function(event) {
-						console.log("North event listener triggered");
 						const currentPosition = event.detail;
 						const newPosition = getNewCoordinate(currentPosition.latitude, currentPosition.longitude, 50, "north");
 						entity.setAttribute("gps-new-entity-place", {
@@ -51,6 +58,54 @@
 							longitude: newPosition.longitude
 						});
 						console.log("Current North Position: "+newPosition.latitude+" "+newPosition.longitude);
+					})
+				}
+			})
+			
+			AFRAME.registerComponent("southposition", {
+				init: function () {
+					const entity = this.el;
+
+					entity.addEventListener("positionChanged", function(event) {
+						const currentPosition = event.detail;
+						const newPosition = getNewCoordinate(currentPosition.latitude, currentPosition.longitude, 50, "south");
+						entity.setAttribute("gps-new-entity-place", {
+							latitude: newPosition.latitude,
+							longitude: newPosition.longitude
+						});
+						console.log("Current South Position: "+newPosition.latitude+" "+newPosition.longitude);
+					})
+				}
+			})
+			
+			AFRAME.registerComponent("westposition", {
+				init: function () {
+					const entity = this.el;
+
+					entity.addEventListener("positionChanged", function(event) {
+						const currentPosition = event.detail;
+						const newPosition = getNewCoordinate(currentPosition.latitude, currentPosition.longitude, 50, "west");
+						entity.setAttribute("gps-new-entity-place", {
+							latitude: newPosition.latitude,
+							longitude: newPosition.longitude
+						});
+						console.log("Current West Position: "+newPosition.latitude+" "+newPosition.longitude);
+					})
+				}
+			})
+			
+			AFRAME.registerComponent("eastposition", {
+				init: function () {
+					const entity = this.el;
+
+					entity.addEventListener("positionChanged", function(event) {
+						const currentPosition = event.detail;
+						const newPosition = getNewCoordinate(currentPosition.latitude, currentPosition.longitude, 50, "east");
+						entity.setAttribute("gps-new-entity-place", {
+							latitude: newPosition.latitude,
+							longitude: newPosition.longitude
+						});
+						console.log("Current East Position: "+newPosition.latitude+" "+newPosition.longitude);
 					})
 				}
 			})
@@ -93,9 +148,13 @@
 	<body style="margin: 0;">
 		<a-scene debug vr-mode-ui="enabled: false" arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false" renderer="antialias: true; alpha: true">
 			<a-camera rotation-reader gps-new-camera="gpsMinDistance: 5"></a-camera>
+			
 			<a-box id="current-position" geolocation scale="1 1 1" color="grey"></a-box>
+			
 			<a-box id="north-position" northposition scale="10 10 10" color="blue"></a-box>
-
+			<a-box id="south-position" southposition scale="10 10 10" color="red"></a-box>
+			<a-box id="east-position" eastposition scale="10 10 10" color="green"></a-box>
+			<a-box id="west-position" westposition scale="10 10 10" color="yellow"></a-box>
 		</a-scene>
 	</body>
 </html>
