@@ -19,7 +19,10 @@
 						
 						entity.setAttribute("gps-new-entity-place", {latitude: pos.coords.latitude, longitude: pos.coords.longitude,});
 						console.log("Current Position: " + pos.coords.latitude + " " + pos.coords.longitude);
-						entity.emit("positionChanged", position);
+						
+						// Emit the positionChanged event on the entity with the northposition component
+						const northEntity = document.querySelector("#north-position");
+						northEntity.emit("positionChanged", position);
 					}
 
 					navigator.geolocation.getCurrentPosition(success,
@@ -90,11 +93,7 @@
 	<body style="margin: 0;">
 		<a-scene debug vr-mode-ui="enabled: false" arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false" renderer="antialias: true; alpha: true">
 			<a-camera rotation-reader gps-new-camera="gpsMinDistance: 5"></a-camera>
-			
-			<a-entity ></a-entity>
-			
 			<a-box id="current-position" geolocation scale="1 1 1" color="grey"></a-box>
-			
 			<a-box id="north-position" northposition scale="10 10 10" color="blue"></a-box>
 
 		</a-scene>
