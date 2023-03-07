@@ -1,3 +1,10 @@
+const {
+  Euler,
+  MathUtils,
+  Quaternion,
+  Vector3
+} = THREE;
+
 const DeviceOrientationControls = function ( object ) {
 
 	const scope = this;
