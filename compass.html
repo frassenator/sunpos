@@ -11,18 +11,17 @@
         flex-direction: column;
         height: 100vh;
       }
-	    
-      .start-btn {
-        margin-bottom: auto;
-      }
-	  .heading-text {
+	 
+      .footer {
         margin-bottom: auto;
       }
     </style>
   </head>
   <body>
-    	<button class="start-btn">Start compass</button>
-	<div class="heading-text"></div>
+	<div class="footer">
+    		<button class="start-btn">Start compass</button>
+		<div class="heading-text"></div>
+	</div>
   </body>
   <script>
     const startBtn = document.querySelector(".start-btn");
@@ -57,10 +56,7 @@
 
     function handler(e) {
       compass = e.webkitCompassHeading || Math.abs(e.alpha - 360);
-      //compassCircle.style.transform = `translate(-50%, -50%) rotate(${-compass}deg)`;
-	  
-	  // Custom
-	  headingText.innerHTML = compass;
+      headingText.innerHTML = compass;
     }
 
     function locationHandler(position) {
