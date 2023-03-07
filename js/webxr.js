@@ -2,8 +2,23 @@
 navigator.geolocation.getCurrentPosition(position => {
   const userLat = position.coords.latitude;
   const userLon = position.coords.longitude;
+  
+  const arButton = document.getElementById('start-ar-button');
+  const canvas = document.getElementById('ar-canvas');
+  let xrSession = null;
+  let xrReferenceSpace = null;
 
-  // Initialize the AR session
+  if ('xr' in navigator) {
+    arButton.addEventListener('click', startAR);
+  } else {
+    arButton.textContent = 'AR not supported';
+  }
+
+  async function startAR() {
+    xrSession = await navigator.xr.requestSession('immersive-ar');
+    xrReferenceSpace = await xrSession.requestReferenceSpace('local');
+
+      // Initialize the AR session
   const xrSession = navigator.xr.requestSession('immersive-ar');
 
   // Create a scene using THREE.js
@@ -58,5 +73,6 @@ navigator.geolocation.getCurrentPosition(position => {
       camera.matrix.decompose(camera.position, camera.quaternion, camera.scale);
       renderer.render(scene, camera);
     }
+  }
   }
 });
