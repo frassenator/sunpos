@@ -20,7 +20,7 @@
 						entity.setAttribute("gps-new-entity-place", {latitude: position.latitude, longitude: position.longitude,});
 						console.log("Current Position: " + position.latitude + " " + position.longitude);
 						
-						entity.setAttribute("position", position);
+						//entity.setAttribute("position", position);
 						entity.emit("positionChanged", position);
 					}
 
