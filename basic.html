@@ -40,6 +40,7 @@
 				const entity = this.el;
 				const geolocation = document.querySelector("[geolocation]");
 				const currentPosition = geolocation.getAttribute("geolocation");
+				console.log("Current Position within North Component: " + currentPosition.latitude + " " + currentPosition.longitude);
 
 				const newPosition = getNewCoordinate(currentPosition.latitude, currentPosition.longitude, 50, "north");
 
