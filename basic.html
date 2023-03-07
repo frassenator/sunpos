@@ -3,143 +3,53 @@
 	<head>
 		<script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
 		<!-- <script src="https://raw.githack.com/AR-js-org/AR.js/master/three.js/build/ar-threex-location-only.js"></script> -->
-    	<script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
+    		<script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
 		
 		<script>
-			AFRAME.registerComponent("currentposition", {
-				init: function () {
-					
-					const entity = this.el;
-
-					function success(pos) {
-						var currentPosition = pos.coords;
-						
-						entity.setAttribute("gps-new-entity-place", {
-							latitude: currentPosition.latitude,
-							longitude: currentPosition.longitude
-						});
-						console.log("Current Position: "+currentPosition.latitude+" "+currentPosition.longitude);
-					}
-
-					navigator.geolocation.getCurrentPosition(success,
-						(err) => {
-							console.warn(`ERROR(${err.code}): ${err.message}`);
-						},
-						{
-							enableHighAccuracy: true,
-							timeout: 5000,
-							maximumAge: 0
-						})
-				}
-			})
+		
+			AFRAME.registerComponent("geolocation", {
+			  schema: {
+				latitude: { default: 0 },
+				longitude: { default: 0 },
+			  },
+			  init: function () {
+				navigator.geolocation.getCurrentPosition(
+				  (pos) => {
+					this.el.setAttribute("geolocation", {
+					  latitude: pos.coords.latitude,
+					  longitude: pos.coords.longitude,
+					});
+					entity.setAttribute("gps-new-entity-place", {latitude: pos.coords.latitude, longitude: pos.coords.longitude,});
+				  },
+				  (err) => {
+					console.warn(`ERROR(${err.code}): ${err.message}`);
+				  },
+				  {
+					enableHighAccuracy: true,
+					timeout: 5000,
+					maximumAge: 0,
+				  }
+				);
+			  },
+			});
 			
 			AFRAME.registerComponent("northposition", {
-				init: function () {
-					
-					const entity = this.el;
+			  init: function () {
+				const entity = this.el;
+				const geolocation = document.querySelector("[geolocation]");
+				const currentPosition = geolocation.getAttribute("geolocation");
 
-					function success(pos) {
-						const currentPosition = pos.coords;
-						const newPosition = getNewCoordinate(currentPosition.latitude, currentPosition.longitude, 50, "north");
-						entity.setAttribute("gps-new-entity-place", {
-							latitude: newPosition.latitude,
-							longitude: newPosition.longitude
-						});
-						console.log("Current North Position: "+newPosition.latitude+" "+newPosition.longitude);
-					}
+				const newPosition = getNewCoordinate(currentPosition.latitude, currentPosition.longitude, 50, "north");
 
-					navigator.geolocation.getCurrentPosition(success,
-						(err) => {
-							console.warn(`ERROR(${err.code}): ${err.message}`);
-						},
-						{
-							enableHighAccuracy: true,
-							timeout: 5000,
-							maximumAge: 0
-						})
-				}
-			})
+				entity.setAttribute("gps-new-entity-place", {latitude: newPosition.latitude, longitude: newPosition.longitude,});
+
+				console.log(
+				  "Current North Position: " + newPosition.latitude + " " + newPosition.longitude
+				);
+			  },
+			});
 			
-			AFRAME.registerComponent("southposition", {
-				init: function () {
-					
-					const entity = this.el;
-
-					function success(pos) {
-						const currentPosition = pos.coords;
-						const newPosition = getNewCoordinate(currentPosition.latitude, currentPosition.longitude, 50, "south");
-						entity.setAttribute("gps-new-entity-place", {
-							latitude: newPosition.latitude,
-							longitude: newPosition.longitude
-						});
-						console.log("Current South Position: "+newPosition.latitude+" "+newPosition.longitude);
-					}
-
-					navigator.geolocation.getCurrentPosition(success,
-						(err) => {
-							console.warn(`ERROR(${err.code}): ${err.message}`);
-						},
-						{
-							enableHighAccuracy: true,
-							timeout: 5000,
-							maximumAge: 0
-						})
-				}
-			})
 			
-			AFRAME.registerComponent("eastposition", {
-				init: function () {
-					
-					const entity = this.el;
-
-					function success(pos) {
-						const currentPosition = pos.coords;
-						const newPosition = getNewCoordinate(currentPosition.latitude, currentPosition.longitude, 50, "east");
-						entity.setAttribute("gps-new-entity-place", {
-							latitude: newPosition.latitude,
-							longitude: newPosition.longitude
-						});
-						console.log("Current East Position: "+newPosition.latitude+" "+newPosition.longitude);
-					}
-
-					navigator.geolocation.getCurrentPosition(success,
-						(err) => {
-							console.warn(`ERROR(${err.code}): ${err.message}`);
-						},
-						{
-							enableHighAccuracy: true,
-							timeout: 5000,
-							maximumAge: 0
-						})
-				}
-			})
-			
-			AFRAME.registerComponent("westposition", {
-				init: function () {
-					
-					const entity = this.el;
-
-					function success(pos) {
-						const currentPosition = pos.coords;
-						const newPosition = getNewCoordinate(currentPosition.latitude, currentPosition.longitude, 50, "west");
-						entity.setAttribute("gps-new-entity-place", {
-							latitude: newPosition.latitude,
-							longitude: newPosition.longitude
-						});
-						console.log("Current West Position: "+newPosition.latitude+" "+newPosition.longitude);
-					}
-
-					navigator.geolocation.getCurrentPosition(success,
-						(err) => {
-							console.warn(`ERROR(${err.code}): ${err.message}`);
-						},
-						{
-							enableHighAccuracy: true,
-							timeout: 5000,
-							maximumAge: 0
-						})
-				}
-			})
 					
 			function getNewCoordinate(latitude, longitude, distance, direction) {
 			  const radius = 6371000; // Earth's radius in meters
@@ -180,12 +90,12 @@
 		<a-scene debug vr-mode-ui="enabled: false" arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false" renderer="antialias: true; alpha: true">
 			<a-camera rotation-reader gps-new-camera="gpsMinDistance: 5"></a-camera>
 			
-			<a-box id="current-position" currentposition scale="1 1 1" color="grey"></a-box>
+			<a-entity ></a-entity>
+			
+			<a-box id="current-position" geolocation scale="1 1 1" color="grey"></a-box>
 			
 			<a-box id="north-position" northposition scale="10 10 10" color="blue"></a-box>
-			<a-box id="south-position" southposition scale="10 10 10" color="red"></a-box>
-			<a-box id="east-position" eastposition scale="10 10 10" color="green"></a-box>
-			<a-box id="west-position" westposition scale="10 10 10" color="yellow"></a-box>
+
 		</a-scene>
 	</body>
 </html>
