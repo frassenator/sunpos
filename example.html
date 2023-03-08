@@ -19,8 +19,6 @@
 
 	    // Create a new a-box element for the sun
 	    this.sunBox = document.querySelector("#sun"); 
-	    this.sunBox.setAttribute("color", "yellow");
-	    this.sunBox.setAttribute("scale", "200 200 200");
 
 	    // Bind the update function to this component instance
 	    this.updateSunPosition = this.updateSunPosition.bind(this);
@@ -76,7 +74,7 @@
 <body>
 <a-scene vr-mode-ui='enabled: false' arjs='sourceType: webcam; videoTexture: true; debugUIEnabled: false' renderer='antialias: true; alpha: true'>
     <a-camera gps-new-camera='gpsMinDistance: 5'></a-camera>
-	<a-box id="sun" sun-position></a-box>
+	<a-box id="sun" sun-position scale="50 50 50" color="yellow"></a-box>
 </a-scene>
 </body>
 </html>
