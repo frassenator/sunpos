@@ -9,6 +9,7 @@
     	AFRAME.registerComponent('sun-position', {
 	  init: function () {
 	    // Create a new object to store device orientation data
+		  console.log("Component Initiated");
 	    this.deviceOrientation = {
 	      alpha: 0,
 	      beta: 0,
@@ -36,6 +37,7 @@
 	  },
 
 	  updateSunPosition: function () {
+		  console.log("Update Initiated");
 	    navigator.geolocation.getCurrentPosition(position => {
 	      const lat = position.coords.latitude;
 	      const long = position.coords.longitude;
