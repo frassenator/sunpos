@@ -107,6 +107,7 @@ const DeviceOrientationControls = function ( object ) {
 		if ( device ) {
 
 			const alpha = device.alpha ? MathUtils.degToRad( device.alpha ) + scope.alphaOffset : 0; // Z
+			alert("Alpha: " + alpha);
 			const beta = device.beta ? MathUtils.degToRad( device.beta ) : 0; // X'
 			const gamma = device.gamma ? MathUtils.degToRad( device.gamma ) : 0; // Y''
 
