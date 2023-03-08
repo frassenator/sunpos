@@ -58,6 +58,8 @@ const DeviceOrientationControls = function ( object ) {
 	this.connect = function () {
 
 		onScreenOrientationChangeEvent(); // run once on load
+		
+		alert("Connect launched");
 
 		// iOS 13+
 
@@ -99,6 +101,8 @@ const DeviceOrientationControls = function ( object ) {
 	};
 
 	this.update = function () {
+		
+		alert("Update launched");
 
 		if ( scope.enabled === false ) return;
 
@@ -138,5 +142,6 @@ const DeviceOrientationControls = function ( object ) {
 	};
 
 	this.connect();
+	this.update();
 
 };
