@@ -57,7 +57,7 @@
 		    alert("Alpha: "+alpha);
 
 	      // Calculate the distance between the user and the sun box
-	      const distance = (altitude + 2) / Math.tan(sunAltitude) * 0.5;
+	      const distance = (altitude + 2) / Math.tan(sunAltitude) * 0.1;
 
 	      // Calculate the relative position of the sun box based on the position of the sun in the sky and the device orientation
 	      const x = -Math.cos(sunAzimuth + alpha * (Math.PI / 180)) * distance;
