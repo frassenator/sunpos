@@ -14,6 +14,7 @@
 			  handleOrientation: function(event) {
 			    var camera = document.querySelector('[gps-new-camera]');
 			    var alpha = event.alpha;
+				  console.log("Alpha: " + alpha);
 			    var beta = event.beta;
 			    var gamma = event.gamma;
 			    camera.setAttribute('rotation', {x: beta, y: alpha, z: -gamma});
