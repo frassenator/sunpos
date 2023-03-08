@@ -55,16 +55,15 @@
 
 	      // Get the current device orientation
 	      const alpha = this.deviceOrientation.alpha;
-	      const beta = this.deviceOrientation.beta;
-	      const gamma = this.deviceOrientation.gamma;
+		    alert("Alpha: "+alpha);
 
 	      // Calculate the distance between the user and the sun box
 	      const distance = (altitude + 2) / Math.tan(sunAltitude);
 
 	      // Calculate the relative position of the sun box based on the position of the sun in the sky and the device orientation
-	      const x = -Math.cos(sunAzimuth + gamma * (Math.PI / 180)) * distance;
-	      const y = Math.sin(sunAltitude + beta * (Math.PI / 180)) * distance;
-	      const z = -Math.sin(sunAzimuth + gamma * (Math.PI / 180)) * distance;
+	      const x = -Math.cos(sunAzimuth + alpha * (Math.PI / 180)) * distance;
+	      const y = Math.tan(sunAltitude) * distance;
+	      const z = -Math.sin(sunAzimuth + alpha * (Math.PI / 180)) * distance;
 
 	      // Update the position of the sun box
 	      this.sunBox.setAttribute("position", `${x} ${y} ${z}`);
