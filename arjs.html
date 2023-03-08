@@ -6,41 +6,13 @@
 		<script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
 		<script src="https://raw.githack.com/AR-js-org/AR.js/master/three.js/build/ar-threex-location-only.js"></script>
     		<script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
-		<script>
-			AFRAME.registerComponent('gyroscope-reader', {
-			  init: function() {
-			    this.lastUpdate = 0;
-			    window.addEventListener('deviceorientation', this.handleOrientation.bind(this));
-			  },
-			  handleOrientation: function(event) {
-			    // Calculate the rotation angle based on alpha
-			    var alpha = event.alpha;
-			    var rotationAngle = alpha - 90; // Subtract 90 to make north face forward
-
-			    // Only update the rotation of the scene every 5 seconds
-			    var now = Date.now();
-			    if (now - this.lastUpdate > 5000) {
-			      // Set the rotation of the scene to the calculated angle
-			      var scene = document.querySelector('a-scene');
-			      scene.setAttribute('rotation', {x: 0, y: rotationAngle, z: 0});
-				    alert("New rotation angle: " + rotationAngle);
-
-			      // Update the last update time
-			      this.lastUpdate = now;
-			    }
-
-			    // Request the next animation frame
-			    requestAnimationFrame(this.handleOrientation.bind(this));
-			  }
-			});
-
-		</script>
+		<script src="js/DeviceOrientationControls.js"></script>
 	</head>
 <body>
 
 <a-scene vr-mode-ui='enabled: false' arjs='sourceType: webcam; videoTexture: true; debugUIEnabled: false' renderer='antialias: true; alpha: true'>
 	
-	<a-camera gyroscope-reader gps-new-camera='gpsMinDistance: 5'></a-camera>
+	<a-camera gps-new-camera='gpsMinDistance: 5'></a-camera>
 	<a-entity material='color: red' geometry='primitive: box' gps-new-entity-place="latitude: 59.340398449707735; longitude: 18.01328273825269" scale="2 2 2"></a-entity>
 	<a-entity material='color: yellow' geometry='primitive: box' gps-new-entity-place="latitude: 59.33949912810183; longitude: 18.01328273825269" scale="2 2 2"></a-entity>
 	<a-entity material='color: blue' geometry='primitive: box' gps-new-entity-place="latitude: 59.33994878592833; longitude: 18.01416452418337" scale="2 2 2"></a-entity>
