@@ -36,6 +36,7 @@ THREE.DeviceOrientationControls = function ( object ) {
                         // see: http://lists.w3.org/Archives/Public/public-geolocation/2011Jul/0014.html
                         //
                         compassHeading = this.deviceOrientation.webkitCompassHeading || this.deviceOrientation.compassHeading;
+			alert("Update function Compass Heading: " + compassHeading);
                         if ( compassHeading ) {
 
                                 // Switch compassHeading back to 'alpha' representation
