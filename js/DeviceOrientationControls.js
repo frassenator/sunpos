@@ -103,11 +103,23 @@ const DeviceOrientationControls = function ( object ) {
 		if ( scope.enabled === false ) return;
 
 		const device = scope.deviceOrientation;
+		
+		
 
-		if ( device ) {
+		    if (device) {      
+		      // iOS compass-calibrated 'alpha' patch
+		      // see: http://lists.w3.org/Archives/Public/public-geolocation/2011Jul/0014.html
+		      const heading = device.webkitCompassHeading || device.compassHeading;
 
-			const alpha = device.alpha ? MathUtils.degToRad( device.alpha ) + scope.alphaOffset : 0; // Z
-			alert("Alpha: " + alpha);
+		      const alpha = device.alpha || heading
+			  ? MathUtils.degToRad(
+			      heading
+			      ? 360 - heading
+			      : device.alpha || 0) + scope.alphaOffset
+			  : 0; // Z
+			    alert("Alpha: " + alpha);
+
+
 			const beta = device.beta ? MathUtils.degToRad( device.beta ) : 0; // X'
 			const gamma = device.gamma ? MathUtils.degToRad( device.gamma ) : 0; // Y''
 
