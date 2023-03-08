@@ -3,11 +3,6 @@
 <html>
 	<head>
 		<title>AR.js - Test</title>
-		<style>
-			.footer {
-				margin-bottom: auto;
-			}
-		</style>
 		<script src="js/aframe.1.0.4.js"></script>
 		<script src="js/ar-threex-location-only.js"></script>
     		<script src="js/aframe-ar.js"></script>
@@ -55,7 +50,10 @@
 		</script>
 	</head>
 <body>
-
+	<div style='position: fixed; bottom: 10px; width:100%; text-align: center; z-index: 1;'>
+		<button class="start-btn">Start compass</button>
+		<div class="heading-text"></div>
+	</div>
 <a-scene vr-mode-ui='enabled: false' arjs='sourceType: webcam; videoTexture: true; debugUIEnabled: false' renderer='antialias: true; alpha: true'>
 	
 	<a-camera gps-new-camera='gpsMinDistance: 5' arjs-device-orientation-controls></a-camera>
@@ -66,8 +64,7 @@
 	<a-entity material='color: green' geometry='primitive: box' gps-new-entity-place="latitude: 59.33994878592833; longitude: 18.012400952322015" scale="2 2 2"></a-entity>
 </a-scene>
 	<div class="footer">
-    		<button class="start-btn">Start compass</button>
-		<div class="heading-text"></div>
+    		
 	</div>
 </body>
 </html>
