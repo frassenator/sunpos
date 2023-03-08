@@ -64,14 +64,21 @@
 
 	      // Update the position of the sun box
 	      this.sunBox.setAttribute("position", `${x} ${y} ${z}`);
+		    
+	      // Logging / debugging
 	      console.log("Position", `${x} ${y} ${z}`);
 	      //alert("Position x:" + x + " y:" + y + " z:"+z);
+	      const headingText = document.querySelector(".heading-text");
+	      headingText.innerHTML = "Position x:" + x + " y:" + y + " z:"+z;
 	    });
 	  }
 	});
     </script>
 </head>
 <body>
+<div style='position: fixed; bottom: 10px; width:100%; text-align: center; z-index: 1;'>
+	<div class="heading-text"></div>
+</div>
 <a-scene vr-mode-ui='enabled: false' arjs='sourceType: webcam; videoTexture: true; debugUIEnabled: false' renderer='antialias: true; alpha: true'>
     <a-camera gps-new-camera='gpsMinDistance: 5'></a-camera>
 	<a-box id="sun" sun-position scale="2 2 2" color="yellow"></a-box>
