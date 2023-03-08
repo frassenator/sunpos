@@ -3,9 +3,54 @@
 <html>
 	<head>
 		<title>AR.js - Test</title>
+		<style>
+			.footer {
+				margin-bottom: auto;
+			}
+		</style>
 		<script src="js/aframe.1.0.4.js"></script>
 		<script src="js/ar-threex-location-only.js"></script>
     		<script src="js/aframe-ar.js"></script>
+		<script>
+			const isIOS =
+			navigator.userAgent.match(/(iPod|iPhone|iPad)/) &&
+			navigator.userAgent.match(/AppleWebKit/);
+
+			function init() {
+				startCompass();
+				navigator.geolocation.getCurrentPosition(locationHandler);
+
+				if (!isIOS) {
+					window.addEventListener("deviceorientationabsolute", handler, true);
+				}
+			}
+
+			function startCompass() {
+				if (isIOS) {
+					DeviceOrientationEvent.requestPermission()
+					.then((response) => {
+					if (response === "granted") {
+						window.addEventListener("deviceorientation", handler, true);
+					} else {
+						console.log("Device Motion has to be allowed!");
+					}
+				})
+				.catch(() => console.log("Device motion is not supported"));
+				}
+			}
+
+			function handler(e) {
+				compass = e.webkitCompassHeading || Math.abs(e.alpha - 360);
+				headingText.innerHTML = compass;
+			}
+
+			function locationHandler(position) {
+				const { latitude, longitude } = position.coords;
+				console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+			}
+
+			init();
+		</script>
 	</head>
 <body>
 
@@ -18,6 +63,8 @@
 	<a-entity material='color: blue' geometry='primitive: box' gps-new-entity-place="latitude: 59.33994878592833; longitude: 18.01416452418337" scale="2 2 2"></a-entity>
 	<a-entity material='color: green' geometry='primitive: box' gps-new-entity-place="latitude: 59.33994878592833; longitude: 18.012400952322015" scale="2 2 2"></a-entity>
 </a-scene>
-	
+	<div class="footer">
+		<div class="heading-text"></div>
+	</div>
 </body>
 </html>
