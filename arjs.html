@@ -7,6 +7,9 @@
 		<script src="js/aframe-ar.js"></script>
 		<script src="https://raw.githack.com/AR-js-org/AR.js/master/three.js/build/ar-threex-location-only.js"></script>
 		<script>
+			DeviceOrientationEvent.requestPermission()
+          .then((response) => {
+            if (response === "granted") {
 		THREE.DeviceOrientationControls = function ( object ) {
 
 	this.object = object;
@@ -129,6 +132,12 @@
 	this.update();
 
 };
+            } else {
+              alert("Device Motion has to be allowed!");
+            }
+          })
+          .catch(() => alert("Device motion is not supported"));
+      }
 		</script>
 	</head>
 <body>
