@@ -5,14 +5,21 @@
 <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
 <script type='text/javascript' src='https://raw.githack.com/AR-js-org/AR.js/master/three.js/build/ar-threex-location-only.js'></script>
 <script type='text/javascript' src='https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js'></script>
+    <script>
+        AFRAME.registerComponent("north", {
+            init: function () {
+                const entity = this.el;
+                entity.setAttribute("scale", {x: 1, y: 1, z: 1});
+                entity.setAttribute("position", {x: 0, y: 0, z: 5 });
+                entity.setAttribute('material', { color: 'blue' } );
+            }
+        })
+    </script>
 </head>
 <body>
 <a-scene vr-mode-ui='enabled: false' arjs='sourceType: webcam; videoTexture: true; debugUIEnabled: false' renderer='antialias: true; alpha: true'>
     <a-camera gps-new-camera='gpsMinDistance: 5'></a-camera>
-    <a-box position="0 0 5" scale="1 1 1" color="blue"></a-box>
-    <a-box position="0 0 -5" scale="1 1 1" color="green"></a-box>
-    <a-box position="5 0 0" scale="1 1 1" color="red"></a-box>
-    <a-box position="-5 0 0" scale="1 1 1" color="yellow"></a-box>
+    <a-box north></a-box>
 </a-scene>
 </body>
 </html>
