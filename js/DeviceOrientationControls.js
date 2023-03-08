@@ -1,4 +1,6 @@
 THREE.DeviceOrientationControls = function ( object ) {
+	
+	alert("First line");
 
 	this.object = object;
 
@@ -72,6 +74,8 @@ THREE.DeviceOrientationControls = function ( object ) {
 	this.connect = function() {
 
 		this.onScreenOrientationChangeEvent(); // run once on load
+		
+		alert("Connect");
 
 		window.addEventListener( 'orientationchange', bind( this, this.onScreenOrientationChangeEvent ), false );
 		window.addEventListener( 'deviceorientation', bind( this, this.onDeviceOrientationChangeEvent ), false );
