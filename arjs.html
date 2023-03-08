@@ -12,12 +12,14 @@
 		<script src="js/ar-threex-location-only.js"></script>
     		<script src="js/aframe-ar.js"></script>
 		<script>
+			const startBtn = document.querySelector(".start-btn");
+    			const headingText = document.querySelector(".heading-text");
 			const isIOS =
 			navigator.userAgent.match(/(iPod|iPhone|iPad)/) &&
 			navigator.userAgent.match(/AppleWebKit/);
 
 			function init() {
-				startCompass();
+				startBtn.addEventListener("click", startCompass);
 				navigator.geolocation.getCurrentPosition(locationHandler);
 
 				if (!isIOS) {
@@ -64,6 +66,7 @@
 	<a-entity material='color: green' geometry='primitive: box' gps-new-entity-place="latitude: 59.33994878592833; longitude: 18.012400952322015" scale="2 2 2"></a-entity>
 </a-scene>
 	<div class="footer">
+    		<button class="start-btn">Start compass</button>
 		<div class="heading-text"></div>
 	</div>
 </body>
