@@ -12,14 +12,16 @@
 			    window.addEventListener('deviceorientation', this.handleOrientation.bind(this));
 			  },
 			  handleOrientation: function(event) {
-			    var camera = document.querySelector('[gps-new-camera]');
+			    // Calculate the rotation angle based on alpha
 			    var alpha = event.alpha;
-				  alert("Alpha: " + alpha);
-			    var beta = event.beta;
-			    var gamma = event.gamma;
-			    camera.setAttribute('rotation', {x: beta, y: alpha, z: -gamma});
+			    var rotationAngle = alpha - 90; // Subtract 90 to make north face forward
+
+			    // Set the rotation of the scene to the calculated angle
+			    var scene = document.querySelector('a-scene');
+			    scene.setAttribute('rotation', {x: 0, y: rotationAngle, z: 0});
 			  }
 			});
+
 		</script>
 	</head>
 <body>
