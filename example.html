@@ -17,7 +17,7 @@ AFRAME.registerComponent('sun-position', {
     };
 
     // Create a new a-box element for the sun
-    this.sunBox = document.createElement("a-box");
+    this.sunBox = document.querySelector("#sunbox");
     this.sunBox.setAttribute("color", "yellow");
     this.sunBox.setAttribute("scale", "0.1 0.1 0.1");
     this.sunBox.setAttribute("rotation", "0 0 0");
@@ -86,7 +86,7 @@ AFRAME.registerComponent('sun-position', {
 <body>
 <a-scene vr-mode-ui='enabled: false' arjs='sourceType: webcam; videoTexture: true; debugUIEnabled: false' renderer='antialias: true; alpha: true'>
     <a-camera gps-new-camera='gpsMinDistance: 5'></a-camera>
-    <a-box sun-position></a-box>
+    <a-box id="sunbox" sun-position></a-box>
 </a-scene>
 </body>
 </html>
