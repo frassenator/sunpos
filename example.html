@@ -44,6 +44,9 @@
 
 		  // Calculate the position of the sun in the sky
 		  const sunPosition = SunCalc.getPosition(now, latitude, longitude);
+		    
+		    console.log("Altitude: "+sunPosition.altitude);
+		    console.log("Azimuth: "+sunPosition.azimuth);
 
 		  // Convert the position of the sun to radians
 		  const sunAltitude = sunPosition.altitude * (Math.PI / 180);
