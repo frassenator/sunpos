@@ -67,9 +67,9 @@
 	      //const z = Math.round(-Math.sin(sunAzimuth + alpha * (Math.PI / 180)) * distance);
 		    
 	      // Calculate the X, Y, and Z coordinates of the sun sphere based on the alpha value
-	      const x = Math.round(Math.sin(azimuth + alpha * Math.PI / 180) * Math.cos(altitude) * distance);
-	      const y = Math.round(Math.sin(altitude) * distance);
-	      const z = Math.round(Math.cos(azimuth + alpha * Math.PI / 180) * Math.cos(altitude) * distance);
+	      const x = Math.round(Math.sin(sunAzimuth + alpha * Math.PI / 180) * Math.cos(sunAltitude) * distance);
+	      const y = Math.round(Math.sin(sunAltitude) * distance);
+	      const z = Math.round(Math.cos(sunAzimuth + alpha * Math.PI / 180) * Math.cos(sunAltitude) * distance);
 
 	      // Update the position of the sun box
 	      this.sunBox.setAttribute("position", `${x} ${y} ${z}`);
