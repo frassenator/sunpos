@@ -5,9 +5,9 @@
     <!-- A-Frame -->
     <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
     <!-- Three.js Location -->
-    <script type='text/javascript' src='https://raw.githack.com/AR-js-org/AR.js/master/three.js/build/ar-threex-location-only.js'></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/three.js/build/ar-threex-location-only.js"></script>
     <!-- AR.js -->
-    <script type='text/javascript' src='https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js'></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
     <!-- SunCalc -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/suncalc/1.8.0/suncalc.min.js"></script>
 		
@@ -72,10 +72,10 @@
     </script>
   </head>
   <body>
-    <div style='position: fixed; bottom: 10px; width:100%; text-align: center; z-index: 1;color:white;background-color:black;'>
+    <div style="position: fixed; bottom: 10px; width:100%; text-align: center; z-index: 1;color:white;background-color:black;">
       <div class="debugText">Test</div>
     </div>
-    <a-scene vr-mode-ui='enabled: false' arjs='sourceType: webcam; videoTexture: true; debugUIEnabled: false' renderer='antialias: true; alpha: true'>
+    <a-scene vr-mode-ui="enabled: false" arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false" renderer="antialias: true; alpha: true">
       <a-camera></a-camera>
       <a-box id="sun" sun-position scale="2 2 2" color="yellow"></a-box>
       <a-box scale="1 1 1" color="blue" position="0 1 2"></a-box>
