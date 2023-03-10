@@ -10,7 +10,6 @@
     	AFRAME.registerComponent('sun-position', {
 	  init: function () {
 	    // Create a new object to store device orientation data
-	    console.log("Component Initiated");
 	    this.deviceOrientation = {
 	      alpha: 0,
 	      beta: 0,
@@ -35,50 +34,44 @@
 	  },
 
 	  updateSunPosition: function () {
-		  console.log("Update Initiated");
 	    navigator.geolocation.getCurrentPosition(position => {
-	      const lat = position.coords.latitude;
-	      const long = position.coords.longitude;
-	      const altitude = position.coords.altitude;
+		  const latitude = position.coords.latitude;
+		  const longitude = position.coords.longitude;
+		  const altitude = position.coords.altitude || 0; // Default to 0 if altitude is not available
+		  console.log("Altitude: " + altitude);
 
-	      const now = new Date();
-		    
-	      // Calculate the position of the sun in the sky
-	      const sunPosition = SunCalc.getPosition(now, lat, long);
+		  const now = new Date();
 
-	      // Convert the position of the sun to radians
-	      //const sunAltitude = sunPosition.altitude * (Math.PI / 180);
-	      const sunAltitude = sunPosition.altitude;
-		    console.log("Sun Altitude: "+sunAltitude);
-	      //const sunAzimuth = sunPosition.azimuth * (Math.PI / 180);
-	      const sunAzimuth = sunPosition.azimuth;
-		    console.log("Sun Azimuth: "+sunAzimuth);
+		  // Calculate the position of the sun in the sky
+		  const sunPosition = SunCalc.getPosition(now, latitude, longitude);
 
-	      // Get the current device orientation
-	      const alpha = this.deviceOrientation.alpha;
-	      //alert("Alpha: "+alpha);
+		  // Convert the position of the sun to radians
+		  const sunAltitude = sunPosition.altitude * (Math.PI / 180);
+		  console.log("Sun Altitude: " + sunAltitude);
+		  const sunAzimuth = sunPosition.azimuth * (Math.PI / 180);
+		  console.log("Sun Azimuth: " + sunAzimuth);
 
-	      // Calculate the distance between the user and the sun box
-	      const distance = (altitude + 2) / Math.tan(sunAltitude) * 0.05;
+		  // Get the current device orientation
+		  const alpha = this.deviceOrientation.alpha;
 
-	      // Calculate the relative position of the sun box based on the position of the sun in the sky and the device orientation
-	      //const x = Math.round(-Math.cos(sunAzimuth + alpha * (Math.PI / 180)) * distance);
-	      //const y = Math.round(Math.tan(sunAltitude) * distance);
-	      //const z = Math.round(-Math.sin(sunAzimuth + alpha * (Math.PI / 180)) * distance);
-		    
-	      // Calculate the X, Y, and Z coordinates of the sun sphere based on the alpha value
-	      const x = Math.round(Math.sin(sunAzimuth + alpha * Math.PI / 180) * Math.cos(sunAltitude));
-	      const y = Math.round(Math.sin(sunAltitude));
-	      const z = Math.round(Math.cos(sunAzimuth + alpha * Math.PI / 180) * Math.cos(sunAltitude));
+		  // Calculate the distance between the user and the sun box
+		  const userHeight = 1.8; // Assuming the user is 1.6 meters tall
+		  const distance = (userHeight + altitude) / Math.tan(sunAltitude);
+		  console.log("Distance: " + distance);
 
-	      // Update the position of the sun box
-	      this.sunBox.setAttribute("position", `${x} ${y} ${z}`);
+		  // Calculate the relative position of the sun box based on the position of the sun in the sky and the device orientation
+		  const x = -Math.cos(sunAzimuth + alpha * (Math.PI / 180)) * distance;
+		  const y = Math.tan(Math.atan(Math.sin(sunAltitude) / Math.cos(sunAzimuth + alpha * (Math.PI / 180))) * Math.cos(Math.PI / 2 - lat * (Math.PI / 180))) * distance;
+		  const z = -Math.sin(sunAzimuth + alpha * (Math.PI / 180)) * distance;
+
+		  // Update the position of the sun box
+		  this.sunBox.setAttribute("position", `${x} ${y} ${z}`);
 		    
 	      // Logging / debugging
 	      console.log("Position", `${x} ${y} ${z}`);
 	      //alert("Position x:" + x + " y:" + y + " z:"+z);
 	      const headingText = document.querySelector(".heading-text");
-	      headingText.innerHTML = "v0.11 Position x:" + x + " y:" + y + " z:"+z;
+	      headingText.innerHTML = "v0.12 Position x:" + x + " y:" + y + " z:"+z;
 	    });
 	  }
 	});
