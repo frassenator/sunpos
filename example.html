@@ -48,7 +48,9 @@
 
 	      // Convert the position of the sun to radians
 	      const sunAltitude = sunPosition.altitude * (Math.PI / 180);
+		    console.log("Sun Altitude: "+sunAltitude);
 	      const sunAzimuth = sunPosition.azimuth * (Math.PI / 180);
+		    console.log("Sun Azimuth: "+sunAzimuth);
 
 	      // Get the current device orientation
 	      const alpha = this.deviceOrientation.alpha;
