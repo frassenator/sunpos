@@ -45,7 +45,8 @@
 		const sunPosition = SunCalc.getPosition(now, latitude, longitude);
 
 		// Convert the position of the sun from spherical to cartesian coordinates
-		const r = 149.6e9; // average distance between the sun and the earth
+		//const r = 149.6e9; // average distance between the sun and the earth
+		const r = 149;
 		const theta = (90 - sunPosition.altitude) * (Math.PI / 180);
 		const phi = (sunPosition.azimuth + 180) * (Math.PI / 180);
 		const alpha = this.deviceOrientation.alpha || 0; // Default to 0 if alpha is not available
