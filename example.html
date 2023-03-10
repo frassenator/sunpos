@@ -55,14 +55,14 @@
 		  const alpha = this.deviceOrientation.alpha;
 
 		  // Calculate the distance between the user and the sun box
-		  const userHeight = 1.8; // Assuming the user is 1.6 meters tall
+		  const userHeight = 1.8; // Assuming the user is 1.8 meters tall
 		  const distance = (userHeight + altitude) / Math.tan(sunAltitude);
 		  console.log("Distance: " + distance);
 
 		  // Calculate the relative position of the sun box based on the position of the sun in the sky and the device orientation
-		  const x = Math.round(-Math.cos(sunAzimuth + alpha * (Math.PI / 180)) * distance);
-		  const y = Math.round(Math.tan(Math.atan(Math.sin(sunAltitude) / Math.cos(sunAzimuth + alpha * (Math.PI / 180))) * Math.cos(Math.PI / 2 - latitude * (Math.PI / 180))) * distance);
-		  const z = Math.round(-Math.sin(sunAzimuth + alpha * (Math.PI / 180)) * distance);
+		  const x = Math.Round(-distance * Math.cos(sunAzimuth + alpha * (Math.PI / 180)));
+		  const y = Math.Round(distance * Math.tan(Math.PI / 2 - latitude * (Math.PI / 180)) * Math.sin(sunAltitude));
+		  const z = Math.Round(-distance * Math.sin(sunAzimuth + alpha * (Math.PI / 180)));
 
 		  // Update the position of the sun box
 		  this.sunBox.setAttribute("position", `${x} ${y} ${z}`);
