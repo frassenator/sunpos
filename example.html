@@ -60,9 +60,9 @@
 		  console.log("Distance: " + distance);
 
 		  // Calculate the relative position of the sun box based on the position of the sun in the sky and the device orientation
-		  const x = -Math.cos(sunAzimuth + alpha * (Math.PI / 180)) * distance;
-		  const y = Math.tan(Math.atan(Math.sin(sunAltitude) / Math.cos(sunAzimuth + alpha * (Math.PI / 180))) * Math.cos(Math.PI / 2 - latitude * (Math.PI / 180))) * distance;
-		  const z = -Math.sin(sunAzimuth + alpha * (Math.PI / 180)) * distance;
+		  const x = Math.round(-Math.cos(sunAzimuth + alpha * (Math.PI / 180)) * distance);
+		  const y = Math.round(Math.tan(Math.atan(Math.sin(sunAltitude) / Math.cos(sunAzimuth + alpha * (Math.PI / 180))) * Math.cos(Math.PI / 2 - latitude * (Math.PI / 180))) * distance);
+		  const z = Math.round(-Math.sin(sunAzimuth + alpha * (Math.PI / 180)) * distance);
 
 		  // Update the position of the sun box
 		  this.sunBox.setAttribute("position", `${x} ${y} ${z}`);
