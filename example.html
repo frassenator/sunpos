@@ -1,81 +1,84 @@
 <!DOCTYPE html>
 <html>
-<head>
-<title>AR.js A-Frame Location-based</title>
-<script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
-<script type='text/javascript' src='https://raw.githack.com/AR-js-org/AR.js/master/three.js/build/ar-threex-location-only.js'></script>
-<script type='text/javascript' src='https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js'></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/suncalc/1.8.0/suncalc.min.js"></script>
+  <head>
+    <title>Sun Position AR</title>
+    <!-- A-Frame -->
+    <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+    <!-- Three.js Location -->
+    <script type='text/javascript' src='https://raw.githack.com/AR-js-org/AR.js/master/three.js/build/ar-threex-location-only.js'></script>
+    <!-- AR.js -->
+    <script type='text/javascript' src='https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js'></script>
+    <!-- SunCalc -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/suncalc/1.8.0/suncalc.min.js"></script>
+		
     <script>
-    	AFRAME.registerComponent('sun-position', {
-	  init: function () {
-	    // Create a new object to store device orientation data
-	    this.deviceOrientation = {
-	      alpha: 0,
-	      beta: 0,
-	      gamma: 0
-	    };
-
-	    // Create a new a-box element for the sun
-	    this.sunBox = document.querySelector("#sun"); 
-
-	    // Bind the update function to this component instance
-	    this.updateSunPosition = this.updateSunPosition.bind(this);
-
-	    // Update the position of the sun box every 5 seconds
-	    setInterval(this.updateSunPosition, 5000);
-
-	    // Get the current device orientation and update the deviceOrientation object accordingly
-	    window.addEventListener("deviceorientation", event => {
-	      this.deviceOrientation.alpha = event.alpha;
-	      this.deviceOrientation.beta = event.beta;
-	      this.deviceOrientation.gamma = event.gamma;
-	    });
-	  },
-
-	  updateSunPosition: function () {
-	    navigator.geolocation.getCurrentPosition(position => {
-		const latitude = position.coords.latitude;
-		const longitude = position.coords.longitude;
-		const altitude = position.coords.altitude || 0; // Default to 0 if altitude is not available
-
-		const now = new Date();
-
-		// Calculate the position of the sun in the sky
-		const sunPosition = SunCalc.getPosition(now, latitude, longitude);
-
-		// Convert the position of the sun from spherical to cartesian coordinates
-		//const r = 149.6e9; // average distance between the sun and the earth
-		const r = 149;
-		const theta = (90 - sunPosition.altitude) * (Math.PI / 180);
-		const phi = (sunPosition.azimuth + 180) * (Math.PI / 180);
-		const alpha = this.deviceOrientation.alpha
-
-		const x = Math.round(r * Math.sin(theta) * Math.cos(phi * (Math.PI / 180)));
-		const y = Math.round(r * Math.sin(theta) * Math.sin(phi));
-		const z = Math.round(r * Math.cos(theta));
-		    
-		// Update the position of the sun box
-		this.sunBox.setAttribute("position", `${x} ${y} ${z}`);
-
-		// Logging / debugging
-		console.log("Position", `${x} ${y} ${z}`);
-
-		const headingText = document.querySelector(".heading-text");
-		headingText.innerHTML = "v0.13 Alpha: "+ alpha +" | Position x:" + x + " y:" + y + " z:"+z;
-	    });
-	  }
-	});
+      AFRAME.registerComponent('sun-position', {
+        init: function() {
+					
+          // Create a new object to store device orientation data
+          this.deviceOrientation = {
+            alpha: 0,
+            beta: 0,
+            gamma: 0
+          };
+					
+          // Create a new a-box element for the sun
+          this.sunBox = document.querySelector("#sun");
+					
+          // Bind the update function to this component instance
+          this.updateSunPosition = this.updateSunPosition.bind(this);
+					
+          // Update the position of the sun box every 5 seconds
+          setInterval(this.updateSunPosition, 5000);
+					
+          // Get the current device orientation and update the deviceOrientation object accordingly
+          window.addEventListener("deviceorientation", event => {
+            this.deviceOrientation.alpha = event.alpha;
+          });
+        },
+				
+        updateSunPosition: function() {
+          navigator.geolocation.getCurrentPosition(position => {
+						
+            // Get current latitude and longitude of the user
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+            const altitude = position.coords.altitude || 0; // Default to 0 if altitude is not available
+						
+            const now = new Date();
+						
+            // Calculate the position of the sun in the sky
+            const sunPosition = SunCalc.getPosition(now, latitude, longitude);
+						
+            // Convert the position of the sun from spherical to cartesian coordinates
+            //const r = 149.6e9; // average distance between the sun and the earth
+            const r = 149; // just a smaller value for shorter distances in AR
+            const theta = (90 - sunPosition.altitude) * (Math.PI / 180);
+            const phi = (sunPosition.azimuth + 180) * (Math.PI / 180);
+            const alpha = this.deviceOrientation.alpha
+            const x = Math.round(r * Math.sin(theta) * Math.cos(phi * (Math.PI / 180)));
+            const y = Math.round(r * Math.sin(theta) * Math.sin(phi));
+            const z = Math.round(r * Math.cos(theta));
+						
+            // Update the position of the sun box
+            this.sunBox.setAttribute("position", `${x} ${y} ${z}`);
+            console.log("Position", `${x} ${y} ${z}`);
+						
+            const debugText = document.querySelector(".debugText");
+            headingText.innerHTML = "v0.13 | Alpha: " + alpha + " | Position x:" + x + " y:" + y + " z:" + z;
+          });
+        }
+      });
     </script>
-</head>
-<body>
-<div style='position: fixed; bottom: 10px; width:100%; text-align: center; z-index: 1;color:white;background-color:black;'>
-	<div class="heading-text">Test</div>
-</div>
-<a-scene vr-mode-ui='enabled: false' arjs='sourceType: webcam; videoTexture: true; debugUIEnabled: false' renderer='antialias: true; alpha: true'>
-    <a-camera></a-camera>
-	<a-box id="sun" sun-position scale="2 2 2" color="yellow"></a-box>
-	<a-box scale="1 1 1" color="blue" position="0 1 2"></a-box>
-</a-scene>
-</body>
+  </head>
+  <body>
+    <div style='position: fixed; bottom: 10px; width:100%; text-align: center; z-index: 1;color:white;background-color:black;'>
+      <div class="debugText">Test</div>
+    </div>
+    <a-scene vr-mode-ui='enabled: false' arjs='sourceType: webcam; videoTexture: true; debugUIEnabled: false' renderer='antialias: true; alpha: true'>
+      <a-camera></a-camera>
+      <a-box id="sun" sun-position scale="2 2 2" color="yellow"></a-box>
+      <a-box scale="1 1 1" color="blue" position="0 1 2"></a-box>
+    </a-scene>
+  </body>
 </html>
