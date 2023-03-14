@@ -4,13 +4,25 @@
   </head>
   <body>
     <script>
-      const now = new Date();
-      
-      const latitude = 59.335830;
-      const longitude = 18.064170;
-      
-      const sunPosition = SunCalc.getPosition(now, latitude, longitude);
-      console.log(sunPosition);
+        const now = new Date();
+
+        const latitude = 59.335830;
+        const longitude = 18.064170;
+
+        // Get the current position of the sun
+        const sunPosition = suncalc.getPosition(now, latitude, longitude);
+        console.log(sunPosition);
+
+        // Get the azimuth and altitude of the sun in radians
+        const azimuthRad = sunPosition.azimuth;
+        const altitudeRad = sunPosition.altitude;
+
+        // Convert the azimuth and altitude from radians to degrees
+        const azimuthDeg = azimuthRad * (180 / Math.PI);
+        const altitudeDeg = altitudeRad * (180 / Math.PI);
+
+        console.log('Azimuth:', azimuthDeg, 'degrees');
+        console.log('Altitude:', altitudeDeg, 'degrees');
     </script>
   </body>
 </html>
