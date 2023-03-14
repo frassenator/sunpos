@@ -54,7 +54,7 @@
             // Convert the position of the sun from spherical to cartesian coordinates
             //const r = 149.6e9; // average distance between the sun and the earth
             const r = 149; // just a smaller value for shorter distances in AR
-            const theta = (90 - sunPosition.altitude) * (Math.PI / 180);
+            const theta = 90 - (sunPosition.altitude * (Math.PI / 180));
 		  console.log("Theta: "+theta);
             const phi = sunPosition.azimuth * (Math.PI / 180);
 		  console.log("Phi: "+phi);
@@ -68,7 +68,7 @@
             console.log("Position", `${x} ${y} ${z}`);
 						
             const debugText = document.querySelector(".debugText");
-            debugText.innerHTML = "v0.14 | Alpha: " + alpha + " | Position x:" + x + " y:" + y + " z:" + z;
+            debugText.innerHTML = "v0.15 | Alpha: " + alpha + " | Position x:" + x + " y:" + y + " z:" + z;
           });
         }
       });
