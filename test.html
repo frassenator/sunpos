@@ -6,7 +6,7 @@
   <head>
     <meta charset="UTF-8">
     <title>Astronomia Example</title>
-    <script src="https://unpkg.com/astronomia"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/suncalc/1.8.0/suncalc.min.js"></script>
   </head>
   <body>
     <script>
@@ -16,7 +16,7 @@
 
       // Get the current position of the sun
       const now = new Date();
-      const sunPosition = astronomia.sun.position(now, latitude, longitude);
+      const sunPosition = SunCalc.getPosition(now, latitude, longitude);
 
       // Get the azimuth and altitude of the sun in radians
       const azimuthRad = sunPosition.azimuth;
