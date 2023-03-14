@@ -43,6 +43,8 @@
             // Get current latitude and longitude of the user
             const latitude = position.coords.latitude;
             const longitude = position.coords.longitude;
+		  console.log("Latitude: " + latitude);
+		console.log("Longitude: " + longitude);
             const altitude = position.coords.altitude || 0; // Default to 0 if altitude is not available
 						
             const now = new Date();
