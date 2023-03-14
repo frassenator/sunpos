@@ -15,19 +15,19 @@
         const longitude = 18.0641;
 
       // Get the current position of the sun
-      const now = new Date("2022-03-14 14:00:00");
+      const now = new Date();
       const sunPosition = SunCalc.getPosition(now, latitude, longitude);
-
-      // Get the azimuth and altitude of the sun in radians
-      const azimuthRad = sunPosition.azimuth;
-      const altitudeRad = sunPosition.altitude;
-
-      // Convert the azimuth and altitude from radians to degrees
-      const azimuthDeg = azimuthRad * (180 / Math.PI);
-      const altitudeDeg = altitudeRad * (180 / Math.PI);
-
-      console.log('Azimuth:', azimuthDeg, 'degrees');
-      console.log('Altitude:', altitudeDeg, 'degrees');
+      console.log("Date: " + now);
+      console.log('Azimuth:', sunPosition.azimuth * (180 / Math.PI), 'degrees');
+      console.log('Altitude:', sunPosition.altitude * (180 / Math.PI), 'degrees');
+      
+      const earlier = new Date("2023-03-14 14:00:00");
+      const sunPosition1 = SunCalc.getPosition(earlier, latitude, longitude);
+      console.log("Date: " + earlier);
+      console.log('Azimuth:', sunPosition1.azimuth * (180 / Math.PI), 'degrees');
+      console.log('Altitude:', sunPosition1.altitude * (180 / Math.PI), 'degrees');
+      
+      
     </script>
   </body>
 </html>
