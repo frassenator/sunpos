@@ -51,7 +51,9 @@
 						
             // Calculate the position of the sun in the sky
             const sunPosition = SunCalc.getPosition(now, latitude, longitude);
-	console.log(sunPosition);
+	    console.log("Radians: "+sunPosition);
+	    console.log('Azimuth:', sunPosition.azimuth * (180 / Math.PI), 'degrees');
+            console.log('Altitude:', sunPosition.altitude * (180 / Math.PI), 'degrees');
 						
             // Convert the position of the sun from spherical to cartesian coordinates
             //const r = 149.6e9; // average distance between the sun and the earth
