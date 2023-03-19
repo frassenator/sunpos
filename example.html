@@ -58,24 +58,15 @@
             //const r = 149.6e9; // average distance between the sun and the earth
             const r = 100; // just a smaller value for shorter distances in AR
             
-	    /* Orignal Code
 	    const theta = 90 - (sunPosition.altitude * (180 / Math.PI));
             const phi = 180 + (sunPosition.azimuth * (180 / Math.PI));
 		  console.log("Phi: ", phi ," | Theta: ", theta);
-	    
-            const x = Math.round(r * Math.sin(theta) * Math.cos(phi));
-            const y = Math.round(r * Math.sin(theta) * Math.sin(phi));
-            const z = Math.round(r * Math.cos(theta));
-	    */
-		  
-		const theta = sunPosition.altitude;
-		const phi = sunPosition.azimuth;
-
-		console.log("Phi: "+phi + " | Theta: "+theta);
 
 		const x = Math.round(r * Math.sin(theta) * Math.cos(phi));
-		const y = -Math.round(r * Math.cos(theta)); 
+		const y = -Math.round(r * Math.cos(theta));
 		const z = Math.round(-r * Math.sin(theta) * Math.sin(phi));
+
+
 		  
             // Update the position of the sun box
             this.sunBox.setAttribute("position", `${x} ${y} ${z}`);
