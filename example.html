@@ -65,7 +65,7 @@
 		const azimuthDegrees = 180 + (sunPosition.azimuth * (180 / Math.PI));
 		const altitudeDegrees = sunPosition.altitude * (180 / Math.PI);
 		  
-		  console.log("Azimuth: ", azimuthDegrees ," | Altitude: ", altitudeDegrees);
+		  console.log("Azimuth: ", Math.round(azimuthDegrees) ," | Altitude: ", Math.round(altitudeDegrees));
 
 		const x = Math.round(r * Math.sin(azimuthDegrees) * Math.cos(altitudeDegrees));
 		const y = Math.round(r * Math.sin(altitudeDegrees));
