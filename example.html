@@ -43,7 +43,7 @@
             // Get current latitude and longitude of the user
             const latitude = position.coords.latitude;
             const longitude = position.coords.longitude;
-		console.log("Latitude: " + latitude + " | Longitude: " + longitude);
+		console.log("Latitude: ", latitude ," | Longitude: ", longitude);
             const altitude = position.coords.altitude || 0; // Default to 0 if altitude is not available
 						
             const now = new Date();
@@ -61,7 +61,7 @@
 	    /* Orignal Code
 	    const theta = 90 - (sunPosition.altitude * (180 / Math.PI));
             const phi = 180 + (sunPosition.azimuth * (180 / Math.PI));
-		  console.log("Phi: "+phi + " | Theta: "+theta);
+		  console.log("Phi: ", phi ," | Theta: ", theta);
 	    
             const x = Math.round(r * Math.sin(theta) * Math.cos(phi));
             const y = Math.round(r * Math.sin(theta) * Math.sin(phi));
@@ -70,11 +70,11 @@
 		  
 		const theta = 90 - (sunPosition.altitude * (180 / Math.PI));
 		const phi = sunPosition.azimuth + 180;
-		console.log("Phi: "+phi + " | Theta: "+theta);
+		console.log("Phi: ", phi ," | Theta: ", theta);
 
 		const x = Math.round(r * Math.sin(theta * (Math.PI / 180)) * Math.cos(phi * (Math.PI / 180)));
 		const y = Math.round(-r * Math.sin(theta * (Math.PI / 180)) * Math.sin(phi * (Math.PI / 180))); // negate y-axis to match conventional Cartesian coordinate system
-		const z = Math.round(r * Math.cos(theta * (Math.PI / 180))=;
+		const z = Math.round(r * Math.cos(theta * (Math.PI / 180)));
 		  
 						
             // Update the position of the sun box
