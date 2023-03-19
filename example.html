@@ -52,11 +52,12 @@
             const sunPosition = SunCalc.getPosition(now, latitude, longitude);
 	    console.log('Azimuth:', (sunPosition.azimuth * (180 / Math.PI))+180, 'degrees | Altitude:', sunPosition.altitude * (180 / Math.PI), 'degrees');
 						
-	    const alpha = this.deviceOrientation.alpha
+	    //const alpha = this.deviceOrientation.alpha;
+	    const alpha = 0;
 	    
             // Convert the position of the sun from spherical to cartesian coordinates
             //const r = 149.6e9; // average distance between the sun and the earth
-            const r = 50; // just a smaller value for shorter distances in AR
+            const r = 50;
 		  
             const azimuthDegrees = alpha + 180 + (sunPosition.azimuth * (180 / Math.PI));
             const altitudeDegrees = sunPosition.altitude * (180 / Math.PI);
