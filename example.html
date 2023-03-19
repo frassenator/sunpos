@@ -58,7 +58,7 @@
             //const r = 149.6e9; // average distance between the sun and the earth
             const r = 100; // just a smaller value for shorter distances in AR
             
-	    const theta = 90 - (sunPosition.altitude * (180 / Math.PI));
+	    const theta = sunPosition.altitude * (180 / Math.PI);
             const phi = 180 + (sunPosition.azimuth * (180 / Math.PI));
 		  console.log("Phi: ", phi ," | Theta: ", theta);
 
