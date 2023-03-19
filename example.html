@@ -25,23 +25,13 @@
           // Create a new a-box element for the sun
           this.sunBox = document.querySelector("#sun");
 					
-          // Bind the update function to this component instance
-          this.updateSunPosition = this.updateSunPosition.bind(this);
-					
-          // Update the position of the sun box every 5 seconds
-          //setInterval(this.updateSunPosition, 5000);
-					
           // Get the current device orientation and update the deviceOrientation object accordingly
           window.addEventListener("deviceorientation", event => {
             this.deviceOrientation.alpha = event.alpha;
           });
         },
 	tick: function () {
-		this.updateSunPosition;
-	},
-				
-        updateSunPosition: function() {
-          navigator.geolocation.getCurrentPosition(position => {
+	    navigator.geolocation.getCurrentPosition(position => {
 						
             // Get current latitude and longitude of the user
             const latitude = position.coords.latitude;
