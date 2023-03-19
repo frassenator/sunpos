@@ -57,19 +57,20 @@
             // Convert the position of the sun from spherical to cartesian coordinates
             //const r = 149.6e9; // average distance between the sun and the earth
             const r = 100; // just a smaller value for shorter distances in AR
-            
-	    //const theta = 90 - (sunPosition.altitude * (180 / Math.PI));
-            //const phi = 180 + (sunPosition.azimuth * (180 / Math.PI));
-	    //console.log("Phi: ", phi ," | Theta: ", theta);
 		  
-		const azimuthDegrees = 180 + (sunPosition.azimuth * (180 / Math.PI));
-		const altitudeDegrees = sunPosition.altitude * (180 / Math.PI);
-		  
-		  console.log("Azimuth: ", Math.round(azimuthDegrees) ," | Altitude: ", Math.round(altitudeDegrees));
+            const azimuthDegrees = alpha + 180 + (sunPosition.azimuth * (180 / Math.PI));
+            const altitudeDegrees = sunPosition.altitude * (180 / Math.PI);
 
-		const x = Math.round(r * Math.sin(azimuthDegrees) * Math.cos(altitudeDegrees));
-		const y = Math.round(r * Math.sin(altitudeDegrees));
-		const z = Math.round(-r * Math.cos(azimuthDegrees) * Math.cos(altitudeDegrees));
+            console.log("Azimuth: ", Math.round(azimuthDegrees) ," | Altitude: ", Math.round(altitudeDegrees));
+            let adjustedAzimuth = azimuthDegrees + alpha;
+            adjustedAzimuth = adjustedAzimuth % 360; // Normalize the adjustedAzimuth value
+            if (adjustedAzimuth < 0) {
+		adjustedAzimuth += 360; // Handle negative adjustedAzimuth values
+            }
+		  
+            const x = Math.round(r * Math.sin(adjustedAzimuth) * Math.cos(altitudeDegrees));
+            const y = Math.round(r * Math.sin(altitudeDegrees));
+            const z = Math.round(-r * Math.cos(adjustedAzimuth) * Math.cos(altitudeDegrees));
 
 		  
             // Update the position of the sun box
