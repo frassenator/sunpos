@@ -14,6 +14,9 @@
     <script>
       AFRAME.registerComponent('sun-position', {
         init: function() {
+		
+	  // Reduces the frequency of Tick
+	  this.tick = AFRAME.utils.throttleTick(this.tick, 500, this);
 					
           // Create a new object to store device orientation data
           this.deviceOrientation = {
