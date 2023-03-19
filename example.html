@@ -54,10 +54,10 @@
 						
             // Convert the position of the sun from spherical to cartesian coordinates
             //const r = 149.6e9; // average distance between the sun and the earth
-            const r = 149; // just a smaller value for shorter distances in AR
+            const r = 100; // just a smaller value for shorter distances in AR
             const theta = 90 - (sunPosition.altitude * (180 / Math.PI));
             const phi = 180 + (sunPosition.azimuth * (180 / Math.PI));
-		  console.log("Theta: "+theta + " | Phi: "+phi);
+		  console.log("Phi: "+phi + " | Theta: "+theta);
             const alpha = this.deviceOrientation.alpha
 	    
             const x = Math.round(r * Math.sin(theta) * Math.cos(phi));
