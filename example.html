@@ -20,10 +20,11 @@
 					
           // Create a new object to store device orientation data
           this.deviceOrientation = {
-            alpha: 0,
-            beta: 0,
-            gamma: 0
+            alpha: 0
           };
+		
+          // Set the previous alpha value to null
+          this.prevAlpha = null;
 					
           // Create a new a-box element for the sun
           this.sunBox = document.querySelector("#sun");
@@ -49,6 +50,12 @@
 	    console.log('Azimuth:', (sunPosition.azimuth * (180 / Math.PI))+180, 'degrees | Altitude:', sunPosition.altitude * (180 / Math.PI), 'degrees');
 						
 	    const alpha = this.deviceOrientation.alpha;
+	    // Update the alpha value only if it differs by +/- 10 from the previous value in the tick
+	    if (this.prevAlpha === null || Math.abs(alpha - this.prevAlpha) >= 10) {
+	    	this.prevAlpha = alpha;
+	    } else {
+	    	alpha = this.prevAlpha;
+	    }
 	    
             // Convert the position of the sun from spherical to cartesian coordinates
             //const r = 149.6e9; // average distance between the sun and the earth
