@@ -43,7 +43,7 @@
             // Get current latitude and longitude of the user
             const latitude = position.coords.latitude;
             const longitude = position.coords.longitude;
-		  console.log("Latitude: " + latitude);
+		console.log("Latitude: " + latitude);
 		console.log("Longitude: " + longitude);
             const altitude = position.coords.altitude || 0; // Default to 0 if altitude is not available
 						
@@ -52,7 +52,7 @@
             // Calculate the position of the sun in the sky
             const sunPosition = SunCalc.getPosition(now, latitude, longitude);
 	    console.log(sunPosition);
-	    console.log('Azimuth:', sunPosition.azimuth * (180 / Math.PI), 'degrees');
+	    console.log('Azimuth:', (sunPosition.azimuth * (180 / Math.PI))+180, 'degrees');
             console.log('Altitude:', sunPosition.altitude * (180 / Math.PI), 'degrees');
 						
             // Convert the position of the sun from spherical to cartesian coordinates
