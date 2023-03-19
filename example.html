@@ -68,8 +68,8 @@
             const z = Math.round(r * Math.cos(theta));
 	    */
 		  
-		const theta = Math.PI / 2 - sunPosition.altitude;
-		const phi = Math.PI + sunPosition.azimuth;
+		const theta = sunPosition.altitude;
+		const phi = sunPosition.azimuth;
 
 		console.log("Phi: "+phi + " | Theta: "+theta);
 
