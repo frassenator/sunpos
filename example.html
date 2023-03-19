@@ -67,9 +67,9 @@
 		  
 		  console.log("Azimuth: ", azimuthDegrees ," | Altitude: ", altitudeDegrees);
 
-		const x = r * Math.sin(azimuthDegrees) * Math.cos(altitudeDegrees);
-		const y = r * Math.sin(altitudeDegrees);
-		const z = -r * Math.cos(azimuthDegrees) * Math.cos(altitudeDegrees);
+		const x = Math.round(r * Math.sin(azimuthDegrees) * Math.cos(altitudeDegrees));
+		const y = Math.round(r * Math.sin(altitudeDegrees));
+		const z = Math.round(-r * Math.cos(azimuthDegrees) * Math.cos(altitudeDegrees));
 
 		  
             // Update the position of the sun box
