@@ -72,9 +72,9 @@
 		const phi = sunPosition.azimuth + 180;
 		console.log("Phi: "+phi + " | Theta: "+theta);
 
-		const x = r * Math.sin(theta * (Math.PI / 180)) * Math.cos(phi * (Math.PI / 180));
-		const y = -r * Math.sin(theta * (Math.PI / 180)) * Math.sin(phi * (Math.PI / 180)); // negate y-axis to match conventional Cartesian coordinate system
-		const z = r * Math.cos(theta * (Math.PI / 180));
+		const x = Math.round(r * Math.sin(theta * (Math.PI / 180)) * Math.cos(phi * (Math.PI / 180)));
+		const y = Math.round(-r * Math.sin(theta * (Math.PI / 180)) * Math.sin(phi * (Math.PI / 180))); // negate y-axis to match conventional Cartesian coordinate system
+		const z = Math.round(r * Math.cos(theta * (Math.PI / 180))=;
 		  
 						
             // Update the position of the sun box
