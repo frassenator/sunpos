@@ -68,7 +68,7 @@
             this.sunBox.setAttribute("position", `${x} ${y} ${z}`);
 						
             const debugText = document.querySelector(".debugText");
-            debugText.innerHTML = "Latitude: " +latitude + " Longitude: "+longitude+"<br>Alpha: " + alpha + " Altitude: " + Math.round(altitudeDegrees) + "° Azimuth: "+Math.round(azimuthDegrees)+"° | <br>Position x:" + x + " y:" + y + " z:" + z;
+            debugText.innerHTML = "Latitude: " +latitude + " Longitude: "+longitude+"<br>Alpha: " + Math.round(alpha) + " Altitude: " + Math.round(altitudeDegrees) + "° Azimuth: "+Math.round(azimuthDegrees)+"° | <br>Position x:" + x + " y:" + y + " z:" + z;
           });
         }
       });
