@@ -50,8 +50,8 @@
 	    console.log('Azimuth:', (sunPosition.azimuth * (180 / Math.PI))+180, 'degrees | Altitude:', sunPosition.altitude * (180 / Math.PI), 'degrees');
 						
 	    const alpha = this.deviceOrientation.alpha;
-	    // Update the alpha value only if it differs by +/- 10 from the previous value in the tick
-	    if (this.prevAlpha === null || Math.abs(alpha - this.prevAlpha) >= 10) {
+	    // Update the alpha value only if it differs by +/- 20 from the previous value in the tick
+	    if (this.prevAlpha === null || Math.abs(alpha - this.prevAlpha) >= 20) {
 	    	this.prevAlpha = alpha;
 	    } else {
 	    	alpha = this.prevAlpha;
