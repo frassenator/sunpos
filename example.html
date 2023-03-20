@@ -57,7 +57,7 @@
 		  
             const azimuthDegrees = (180 + sunPosition.azimuth * (180 / Math.PI)) % 360;
             const altitudeDegrees = sunPosition.altitude * (180 / Math.PI);	
-            console.log("Azimuth: ", Math.round(azimuthDegrees) ," | Altitude: ", Math.round(altitudeDegrees));
+            console.log("Azimuth: ", Math.round(azimuthDegrees) ,"° | Altitude: ", Math.round(altitudeDegrees),"°");
 		  
             const x = Math.round(r * Math.sin(azimuthDegrees) * Math.cos(altitudeDegrees));
             const y = Math.round(r * Math.sin(altitudeDegrees));
@@ -68,7 +68,7 @@
             this.sunBox.setAttribute("position", `${x} ${y} ${z}`);
 						
             const debugText = document.querySelector(".debugText");
-            debugText.innerHTML = "Altitude: " + Math.round(altitudeDegrees) + " Azimuth: "+Math.round(azimuthDegrees)+" | Position x:" + x + " y:" + y + " z:" + z;
+            debugText.innerHTML = "Altitude: " + Math.round(altitudeDegrees) + "° Azimuth: "+Math.round(azimuthDegrees)+"° | Position x:" + x + " y:" + y + " z:" + z;
           });
         }
       });
