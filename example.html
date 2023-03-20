@@ -10,6 +10,8 @@
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
     <!-- SunCalc -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/suncalc/1.8.0/suncalc.min.js"></script>
+    <!-- Full Tilt -->
+    <script src="js/fulltilt-min.js"></script>
 		
     <script>
       AFRAME.registerComponent('sun-position', {
@@ -49,7 +51,7 @@
             const sunPosition = SunCalc.getPosition(now, latitude, longitude);
 	    
             // Set the device alpha value
-	    const alpha = this.deviceOrientation.alpha;
+	    const alpha = this.deviceOrientation.webkitCompassHeading || this.deviceOrientation.alpha;
 	    
             // Convert the position of the sun from spherical to cartesian coordinates
             //const r = 149.6e9; // average distance between the sun and the earth
