@@ -40,48 +40,38 @@
             // Get current latitude and longitude of the user
             const latitude = position.coords.latitude;
             const longitude = position.coords.longitude;
-		console.log("Latitude: ", latitude ," | Longitude: ", longitude);
             const altitude = position.coords.altitude || 0; // Default to 0 if altitude is not available
+            console.log("Latitude: ", latitude ," | Longitude: ", longitude);
 						
+            // Datetime for the sun position calculation
             const now = new Date("2023-03-19 10:00:00");
 						
             // Calculate the position of the sun in the sky
             const sunPosition = SunCalc.getPosition(now, latitude, longitude);
-	    console.log('Azimuth:', (sunPosition.azimuth * (180 / Math.PI))+180, 'degrees | Altitude:', sunPosition.altitude * (180 / Math.PI), 'degrees');
-						
+	    
+            // Set the device alpha value
 	    const alpha = this.deviceOrientation.alpha;
-	    // Update the alpha value only if it differs by +/- 20 from the previous value in the tick
-	    if (this.prevAlpha === null || Math.abs(alpha - this.prevAlpha) >= 20) {
-	    	this.prevAlpha = alpha;
-	    } else {
-	    	alpha = this.prevAlpha;
-	    }
 	    
             // Convert the position of the sun from spherical to cartesian coordinates
             //const r = 149.6e9; // average distance between the sun and the earth
             const r = 50;
 		  
             const azimuthDegrees = alpha + 180 + (sunPosition.azimuth * (180 / Math.PI));
-            const altitudeDegrees = sunPosition.altitude * (180 / Math.PI);
-
+            const altitudeDegrees = sunPosition.altitude * (180 / Math.PI);	
             console.log("Azimuth: ", Math.round(azimuthDegrees) ," | Altitude: ", Math.round(altitudeDegrees));
-            let adjustedAzimuth = azimuthDegrees + alpha;
-            adjustedAzimuth = adjustedAzimuth % 360; // Normalize the adjustedAzimuth value
-            if (adjustedAzimuth < 0) {
-		adjustedAzimuth += 360; // Handle negative adjustedAzimuth values
-            }
 		  
-            const x = Math.round(r * Math.sin(adjustedAzimuth) * Math.cos(altitudeDegrees));
+            const x = Math.round(r * Math.sin(azimuthDegrees) * Math.cos(altitudeDegrees));
             const y = Math.round(r * Math.sin(altitudeDegrees));
-            const z = Math.round(-r * Math.cos(adjustedAzimuth) * Math.cos(altitudeDegrees));
+            const z = Math.round(-r * Math.cos(azimuthDegrees) * Math.cos(altitudeDegrees));
+            console.log("Position", `${x} ${y} ${z}`);
 
 		  
             // Update the position of the sun box
             this.sunBox.setAttribute("position", `${x} ${y} ${z}`);
-            console.log("Position", `${x} ${y} ${z}`);
+            
 						
             const debugText = document.querySelector(".debugText");
-            debugText.innerHTML = "Al: " + Math.round(alpha) + " Az: "+Math.round(adjustedAzimuth)+" | Position x:" + x + " y:" + y + " z:" + z;
+            debugText.innerHTML = "Al: " + Math.round(alpha) + " Az: "+Math.round(azimuthDegrees)+" | Position x:" + x + " y:" + y + " z:" + z;
           });
         }
       });
