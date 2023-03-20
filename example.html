@@ -53,7 +53,7 @@
             //const r = 149.6e9; // average distance between the sun and the earth
             const r = 50;
 		  
-            const azimuthDegrees = alpha + 180 + (sunPosition.azimuth * (180 / Math.PI));
+            const azimuthDegrees = 180 + (sunPosition.azimuth * (180 / Math.PI));
             const altitudeDegrees = sunPosition.altitude * (180 / Math.PI);	
             console.log("Azimuth: ", Math.round(azimuthDegrees) ," | Altitude: ", Math.round(altitudeDegrees));
 		  
