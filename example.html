@@ -22,9 +22,6 @@
           this.deviceOrientation = {
             alpha: 0
           };
-		
-          // Set the previous alpha value to null
-          this.prevAlpha = null;
 					
           // Create a new a-box element for the sun
           this.sunBox = document.querySelector("#sun");
@@ -64,14 +61,12 @@
             const y = Math.round(r * Math.sin(altitudeDegrees));
             const z = Math.round(-r * Math.cos(azimuthDegrees) * Math.cos(altitudeDegrees));
             console.log("Position", `${x} ${y} ${z}`);
-
 		  
             // Update the position of the sun box
             this.sunBox.setAttribute("position", `${x} ${y} ${z}`);
-            
 						
             const debugText = document.querySelector(".debugText");
-            debugText.innerHTML = "Al: " + Math.round(alpha) + " Az: "+Math.round(azimuthDegrees)+" | Position x:" + x + " y:" + y + " z:" + z;
+            debugText.innerHTML = "Alpha: " + Math.round(alpha) + " Azimuth: "+Math.round(azimuthDegrees)+" | Position x:" + x + " y:" + y + " z:" + z;
           });
         }
       });
