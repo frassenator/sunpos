@@ -68,16 +68,21 @@
             console.log("Azimuth: ", Math.round(azimuthDegrees) ,"° | Altitude: ", Math.round(altitudeDegrees),"°");
             
             // Calculating x,y & z based on Degrees
-            //const x = Math.round(r * Math.cos(azimuthDegrees) * Math.cos(altitudeDegrees));
-            //const y = Math.round(r * Math.sin(altitudeDegrees));
-            //const z = Math.round(-r * Math.sin(azimuthDegrees) * Math.cos(altitudeDegrees));    
+            const xRad = Math.round(r * Math.cos(azimuthDegrees) * Math.cos(altitudeDegrees));
+            const yRad = Math.round(r * Math.sin(altitudeDegrees));
+            const zRad = Math.round(-r * Math.sin(azimuthDegrees) * Math.cos(altitudeDegrees));   
+            console.log("Position", `${xRad} ${yRad} ${zRad}`);
 		    
             // Calculating x,y & z based on Radians
-            const x = Math.round(r * Math.cos(azimuthRadians) * Math.sin(altitudeRadians));
-            const y = Math.round(r * Math.cos(altitudeRadians));
-            const z = Math.round(-r * Math.sin(azimuthRadians) * Math.sin(altitudeRadians));
-            console.log("Position", `${x} ${y} ${z}`);
+            const xDeg = Math.round(r * Math.cos(azimuthRadians) * Math.sin(altitudeRadians));
+            const yDeg = Math.round(r * Math.cos(altitudeRadians));
+            const zDeg = Math.round(-r * Math.sin(azimuthRadians) * Math.sin(altitudeRadians));
+            console.log("Position", `${xDeg} ${yDeg} ${zDeg}`);
 		  
+            const x = xRad;
+            const y = yRad;
+            const z = zRad;
+		    
             // Update the position of the sun box
             this.sunBox.setAttribute("position", `${x} ${y} ${z}`);
 						
