@@ -28,12 +28,15 @@
         //const r = 149.6e9; // average distance between the sun and the earth
         const r = 50;
 
-        const azimuthDegrees = (180 + (sunPosition.azimuth * 180 / Math.PI)) % 360; // Converting to degrees, changing to azimuth from north rather than south
-        const azimuthRadians = azimuthDegrees * Math.PI / 180; // converting back to radians
-        const altitudeDegrees = sunPosition.altitude * (180 / Math.PI); // convert to degrees
-        const altitudeRadians =  sunPosition.altitude; // just to keep the same naming convention
-
-        console.log("New Azimuth: ", Math.round(azimuthRadians), " rads");
+        //const azimuthDegrees = (180 + (sunPosition.azimuth * 180 / Math.PI)) % 360; // Converting to degrees, changing to azimuth from north rather than south
+        //const azimuthRadians = azimuthDegrees * Math.PI / 180; // converting back to radians
+        //console.log("New Azimuth: ", Math.round(azimuthRadians), " rads");
+        
+        const azimuthRadians = sunPosition.azimuth;
+        const azimuthDegrees = sunPosition.azimuth * (180 / Math.PI);
+        const altitudeDegrees = sunPosition.altitude * (180 / Math.PI);
+        const altitudeRadians =  sunPosition.altitude;
+        
         console.log("Azimuth: ", Math.round(azimuthDegrees) ,"° | Altitude: ", Math.round(altitudeDegrees),"°");
 
         // Calculating x,y & z based on Degrees
