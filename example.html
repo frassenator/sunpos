@@ -60,11 +60,11 @@
 		  
             const azimuthDegrees = (180 + (sunPosition.azimuth * 180 / Math.PI)) % 360; // Converting to degrees, changing to azimuth from north rather than south
             const azimuthRadians = azimuthDegrees * Math.PI / 180; // converting back to radians
-            const altitudeDegrees = sunPosition.altitude * (180 / Math.PI);
-            const altitudeRadians =  sunPosition.altitude;
+            const altitudeDegrees = sunPosition.altitude * (180 / Math.PI); // convert to degrees
+            const altitudeRadians =  sunPosition.altitude; // just to keep the same naming convention
 
-            console.log("Original Azimuth: ", sunPosition.azimuth ," rads | New Azimuth: ", azimuthRadians, " rads");
-            console.log("Altitude: ", altitudeRadians," rads");
+            console.log("Original Azimuth: ", Math.round(sunPosition.azimuth) ," rads | New Azimuth: ", Math.round(azimuthRadians), " rads");
+            console.log("Altitude: ", Math.round(altitudeRadians)," rads");
             console.log("Azimuth: ", Math.round(azimuthDegrees) ,"° | Altitude: ", Math.round(altitudeDegrees),"°");
             
             // Calculating x,y & z based on Degrees
