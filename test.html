@@ -10,24 +10,43 @@
   </head>
   <body>
     <script>
-      // Set the current longitude and latitude
-        const latitude = 59.3359;
-        const longitude = 18.0641;
+        // Set the current longitude and latitude
+        const latitude = 59.33967474856002;
+        const longitude = 18.01284506734603;
+        console.log("Latitude: ", latitude ," | Longitude: ", longitude);
 
-      // Get the current position of the sun
-      const now = new Date();
-      const sunPosition = SunCalc.getPosition(now, latitude, longitude);
-      console.log("Date: " + now);
-      console.log('Azimuth:', sunPosition.azimuth * (180 / Math.PI), 'degrees');
-      console.log('Altitude:', sunPosition.altitude * (180 / Math.PI), 'degrees');
-      
-      const earlier = new Date("2023-03-14 14:00:00");
-      const sunPosition1 = SunCalc.getPosition(earlier, latitude, longitude);
-      console.log("Date: " + earlier);
-      console.log('Azimuth:', sunPosition1.azimuth * (180 / Math.PI), 'degrees');
-      console.log('Altitude:', sunPosition1.altitude * (180 / Math.PI), 'degrees');
-      
-      
+        // Datetime for the sun position calculation
+        const now = new Date("2023-03-21 07:00:00");
+        //const now = new Date();
+        console.log("Date: ", now);
+
+        // Calculate the position of the sun in the sky
+        const sunPosition = SunCalc.getPosition(now, latitude, longitude);
+
+        // Convert the position of the sun from spherical to cartesian coordinates
+        //const r = 149.6e9; // average distance between the sun and the earth
+        const r = 50;
+
+        const azimuthDegrees = (180 + (sunPosition.azimuth * 180 / Math.PI)) % 360; // Converting to degrees, changing to azimuth from north rather than south
+        const azimuthRadians = azimuthDegrees * Math.PI / 180; // converting back to radians
+        const altitudeDegrees = sunPosition.altitude * (180 / Math.PI); // convert to degrees
+        const altitudeRadians =  sunPosition.altitude; // just to keep the same naming convention
+
+        console.log("Original Azimuth: ", Math.round(sunPosition.azimuth) ," rads | New Azimuth: ", Math.round(azimuthRadians), " rads");
+        console.log("Altitude: ", Math.round(altitudeRadians)," rads");
+        console.log("Azimuth: ", Math.round(azimuthDegrees) ,"° | Altitude: ", Math.round(altitudeDegrees),"°");
+
+        // Calculating x,y & z based on Degrees
+        const xDeg = Math.round(r * Math.cos(altitudeDegrees) * Math.cos(azimuthDegrees));
+        const yDeg = Math.round(r * Math.sin(altitudeDegrees));
+        const zDeg = Math.round(r * Math.cos(altitudeDegrees) * Math.sin(azimuthDegrees));   
+        console.log("Position (Degrees)", `${xDeg} ${yDeg} ${zDeg}`);
+
+        // Calculating x,y & z based on Radians
+        const xRad = Math.round(r * Math.sin(altitudeRadians) * Math.cos(azimuthRadians));
+        const yRad = Math.round(r * Math.cos(altitudeRadians));
+        const zRad = Math.round(r * Math.sin(altitudeRadians) * Math.sin(azimuthRadians));
+        console.log("Position (Radians)", `${xRad} ${yRad} ${zRad}`);
     </script>
   </body>
 </html>
