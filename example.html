@@ -62,6 +62,7 @@
             const azimuthRadians = azimuthDegrees * (Math.PI/180); // converting back to radians
             const altitudeDegrees = sunPosition.altitude * (180 / Math.PI);
 
+            console.log("Orignal Azimuth: ", sunPosition.azimuth ," | New Azimuth: ", azimuthRadians);
             console.log("Azimuth: ", Math.round(azimuthDegrees) ,"° | Altitude: ", Math.round(altitudeDegrees),"°");
 		  
             const x = Math.round(r * Math.sin(azimuthRadians) * Math.cos(sunPosition.altitude));
