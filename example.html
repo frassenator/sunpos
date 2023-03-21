@@ -58,7 +58,7 @@
             //const r = 149.6e9; // average distance between the sun and the earth
             const r = 50;
 		  
-            const azimuthDegrees = (180 + (sunPosition.azimuth * (180 / Math.PI))) % 360; // Converting to degrees to add south offset
+            const azimuthDegrees = (180 + (sunPosition.azimuth * (180 / Math.PI))) % 360; // Converting to degrees, changing to azimuth from north rather than south
             const azimuthRadians = azimuthDegrees * (Math.PI/180); // converting back to radians
             const altitudeDegrees = sunPosition.altitude * (180 / Math.PI);
 
