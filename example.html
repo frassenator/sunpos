@@ -51,7 +51,7 @@
             const sunPosition = SunCalc.getPosition(now, latitude, longitude);
 	    
             // Set the device alpha value
-            console.log("WebkitCompass: " + this.deviceOrientation.webkitCompassHeading);
+            //console.log("WebkitCompass: " + this.deviceOrientation.webkitCompassHeading);
 	    const alpha = this.deviceOrientation.webkitCompassHeading || this.deviceOrientation.alpha;
 	    
             // Convert the position of the sun from spherical to cartesian coordinates
