@@ -58,15 +58,15 @@
             //const r = 149.6e9; // average distance between the sun and the earth
             const r = 50;
 		  
-            //const azimuthDegrees = (180 + (sunPosition.azimuth * (180 / Math.PI))) % 360;
-            //const altitudeDegrees = sunPosition.altitude * (180 / Math.PI);	
-            const azimuthDegrees = (180 + sunPosition.azimuth) % 360;
-            const altitudeDegrees = sunPosition.altitude;	
-            console.log("Azimuth: ", Math.round((180 + (sunPosition.azimuth * (180 / Math.PI))) % 360) ,"° | Altitude: ", Math.round(sunPosition.altitude * (180 / Math.PI)),"°");
+            const azimuthDegrees = (180 + (sunPosition.azimuth * (180 / Math.PI))) % 360; // Converting to degrees to add south offset
+            const azimuthRadians = azimuthDegrees * (Math.PI/180); // converting back to radians
+            const altitudeDegrees = sunPosition.altitude * (180 / Math.PI);
+
+            console.log("Azimuth: ", Math.round(azimuthDegrees) ,"° | Altitude: ", Math.round(altitudeDegrees),"°");
 		  
-            const x = Math.round(r * Math.sin(azimuthDegrees) * Math.cos(altitudeDegrees));
-            const y = Math.round(r * Math.sin(altitudeDegrees));
-            const z = Math.round(-r * Math.cos(azimuthDegrees) * Math.cos(altitudeDegrees));
+            const x = Math.round(r * Math.sin(azimuthRadians) * Math.cos(sunPosition.altitude));
+            const y = Math.round(r * Math.sin(sunPosition.altitude));
+            const z = Math.round(-r * Math.cos(azimuthRadians) * Math.cos(sunPosition.altitude));
             console.log("Position", `${x} ${y} ${z}`);
 		  
             // Update the position of the sun box
