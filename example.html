@@ -63,7 +63,8 @@
             const altitudeDegrees = sunPosition.altitude * (180 / Math.PI);
             const altitudeRadians =  sunPosition.altitude;
 
-            console.log("Original Azimuth: ", sunPosition.azimuth ," | New Azimuth: ", azimuthRadians);
+            console.log("Original Azimuth: ", sunPosition.azimuth ," rads | New Azimuth: ", azimuthRadians, " rads");
+            console.log("Altitude: ", altitudeRadians," rads");
             console.log("Azimuth: ", Math.round(azimuthDegrees) ,"° | Altitude: ", Math.round(altitudeDegrees),"°");
             
             // Calculating x,y & z based on Degrees
