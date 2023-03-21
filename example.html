@@ -70,13 +70,13 @@
             // Calculating x,y & z based on Degrees
             const xDeg = Math.round(r * Math.cos(altitudeDegrees) * Math.cos(azimuthDegrees));
             const yDeg = Math.round(r * Math.sin(altitudeDegrees));
-            const zDeg = Math.round(-r * Math.cos(altitudeDegrees) * Math.sin(azimuthDegrees));   
+            const zDeg = Math.round(r * Math.cos(altitudeDegrees) * Math.sin(azimuthDegrees));   
             console.log("Position (Degrees)", `${xDeg} ${yDeg} ${zDeg}`);
 		    
             // Calculating x,y & z based on Radians
             const xRad = Math.round(r * Math.sin(altitudeRadians) * Math.cos(azimuthRadians));
             const yRad = Math.round(r * Math.cos(altitudeRadians));
-            const zRad = Math.round(-r * Math.sin(altitudeRadians) * Math.sin(azimuthRadians));
+            const zRad = Math.round(r * Math.sin(altitudeRadians) * Math.sin(azimuthRadians));
             console.log("Position (Radians)", `${xRad} ${yRad} ${zRad}`);
 		  
             const x = xRad;
